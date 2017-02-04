@@ -1,8 +1,7 @@
-package com.wqy.daily;
+package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -11,17 +10,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.wqy.daily.mvp.ActivityPresenterImpl;
+import com.wqy.daily.R;
 import com.wqy.daily.mvp.ViewImpl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by wqy on 17-2-4.
@@ -52,6 +48,11 @@ public class MainView extends ViewImpl {
     }
 
     @Override
+    public int getFragmentContainerId() {
+        return R.id.content_main;
+    }
+
+    @Override
     public boolean onMenuItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
@@ -68,6 +69,8 @@ public class MainView extends ViewImpl {
     @Override
     public void created() {
         ButterKnife.bind(this, mRootView);
+        Log.d("MainView", "created: mToolBar = " + mToolbar);
+        Log.d("MainView", "created: mDrawerLayout = " + mDrawerLayout);
         ((AppCompatActivity) getContext()).setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 (Activity) getContext(), mDrawerLayout, mToolbar,
@@ -78,19 +81,9 @@ public class MainView extends ViewImpl {
 
     @Override
     public void bindEvent() {
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return MainView.this.onNavigationItemSelected(item);
-            }
-        });
+        mFab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
+        mNavigationView.setNavigationItemSelectedListener(MainView.this::onNavigationItemSelected);
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {

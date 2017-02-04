@@ -1,23 +1,16 @@
 package com.wqy.daily;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.wqy.daily.mvp.ActivityPresenterImpl;
 import com.wqy.daily.mvp.IView;
+import com.wqy.daily.view.MainView;
 
-public class MainActivity extends ActivityPresenterImpl {
+public class MainActivity extends BaseActivity {
+
+    Fragment mPunchFragment;
 
     @Override
     public void onBackPressed() {
@@ -30,7 +23,18 @@ public class MainActivity extends ActivityPresenterImpl {
     }
 
     @Override
-    public IView getView() {
+    public IView getIView() {
         return new MainView();
+    }
+
+    @Override
+    public void created(Bundle savedInstanceState) {
+        mPunchFragment = new PunchFragment();
+        if (mActivityView != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(mActivityView.getFragmentContainerId(), mPunchFragment, PunchFragment.TAG)
+                    .show(mPunchFragment)
+                    .commit();
+        }
     }
 }

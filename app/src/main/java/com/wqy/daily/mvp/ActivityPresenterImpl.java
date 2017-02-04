@@ -14,7 +14,7 @@ import android.view.View;
 public abstract class ActivityPresenterImpl extends AppCompatActivity implements IPresenter {
 
     protected IView mView;
-    private IMenuView mIMenuView;
+    protected IActivityView mActivityView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,7 +22,8 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         create(savedInstanceState);
 
         // create an IView instance
-        mView = getView();
+        mView = getIView();
+        mActivityView = getActivityView();
         mView.bindPresenter(this);
 
         // create and set content view
@@ -38,23 +39,27 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         mView.bindEvent();
     }
 
+    public IActivityView getActivityView() {
+        try {
+            mActivityView = IActivityView.class.cast(mView);
+        } catch (ClassCastException e) {
+            mActivityView = null;
+        }
+        return mActivityView;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        try {
-            mIMenuView = IMenuView.class.cast(mView);
-            int menuId = mIMenuView.getMenuId();
-            if (menuId <= 0) return false;
-            getMenuInflater().inflate(menuId, menu);
-            return true;
-        } catch (ClassCastException e) {
-            mIMenuView = null;
-        }
-        return false;
+        if (mActivityView == null) return false;
+        int menuId = mActivityView.getMenuId();
+        if (menuId <= 0) return false;
+        getMenuInflater().inflate(menuId, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mIMenuView != null && mIMenuView.onMenuItemSelected(item);
+        return mActivityView != null && mActivityView.onMenuItemSelected(item);
     }
 
     @Override

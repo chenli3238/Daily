@@ -6,14 +6,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wqy.daily.mvp.IMenuView;
-import com.wqy.daily.mvp.IPresenter;
-
 /**
  * Created by wqy on 17-2-4.
  */
 
-public abstract class ViewImpl implements IMenuView {
+public abstract class ViewImpl implements IActivityView {
 
     protected IPresenter mIPresenter;
 
@@ -21,7 +18,7 @@ public abstract class ViewImpl implements IMenuView {
 
     @Override
     public View create(LayoutInflater inflater, ViewGroup container) {
-        View view = inflater.inflate(getResId(), container);
+        View view = inflater.inflate(getResId(), container, false);
         mRootView = view;
         return view;
     }
@@ -32,14 +29,24 @@ public abstract class ViewImpl implements IMenuView {
     }
 
     @Override
-    public int getMenuId() {
-        return 0;
-    }
-
-    @Override
     public boolean onMenuItemSelected(MenuItem item) {
         return false;
     }
 
     public abstract Context getContext();
+
+    @Override
+    public void created() {
+
+    }
+
+    @Override
+    public int getMenuId() {
+        return 0;
+    }
+
+    @Override
+    public int getFragmentContainerId() {
+        return 0;
+    }
 }

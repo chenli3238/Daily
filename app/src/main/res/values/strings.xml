@@ -9,4 +9,10 @@
     <string name="drawer_diary">日记</string>
     <string name="drawer_memo">备忘</string>
     <string name="drawer_days_matter">纪念日</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="punch_underway">正在进行</string>
+    <string name="punch_finished">已完成</string>
+    <string name="punch_recycle">回收站</string>
 </resources>

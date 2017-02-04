@@ -14,5 +14,5 @@ public interface IPresenter {
 
     void created(Bundle savedInstanceState);
 
-    IView getView();
+    IView getIView();
 }
