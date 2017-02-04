@@ -30,12 +30,6 @@ public class MainActivity extends ActivityPresenterImpl {
     }
 
     @Override
-    public void created(Bundle savedInstanceState) {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    }
-
-    @Override
     public IView getView() {
         return new MainView();
     }

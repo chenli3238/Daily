@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  * Created by wqy on 17-2-4.
@@ -25,15 +26,16 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         mView.bindPresenter(this);
 
         // create and set content view
-        setContentView(mView.create(getLayoutInflater(), null));
+        View contentView = mView.create(getLayoutInflater(), null);
+        setContentView(contentView);
+
+        created(savedInstanceState);
 
         // bind views
         mView.created();
 
         // bind events
         mView.bindEvent();
-
-        created(savedInstanceState);
     }
 
     @Override
