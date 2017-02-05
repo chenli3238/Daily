@@ -14,6 +14,12 @@ public interface IView {
 
     void created();
 
+    void destroy();
+
+    void start();
+
+    void stop();
+
     int getResId();
 
     void bindPresenter(IPresenter presenter);

@@ -3,6 +3,7 @@ package com.wqy.daily.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
  */
 
 public abstract class FragmentPresenterImpl extends Fragment implements IPresenter {
+
+    public static final String TAG = FragmentPresenterImpl.class.getSimpleName();
 
     protected IView mView;
 
@@ -27,13 +30,13 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
         // create root view
         View rootView = mView.create(inflater, container);
 
-        created(savedInstanceState);
-
         // bind views
         mView.created();
 
         // bind events
         mView.bindEvent();
+
+        created(savedInstanceState);
 
         return rootView;
     }
@@ -46,5 +49,21 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Override
     public void created(Bundle savedInstanceState) {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d(TAG, "onStart: ");
+        mView.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy: ");
+        mView.destroy();
     }
 }

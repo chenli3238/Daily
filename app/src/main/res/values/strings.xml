@@ -15,4 +15,5 @@
     <string name="punch_underway">正在进行</string>
     <string name="punch_finished">已完成</string>
     <string name="punch_recycle">回收站</string>
+    <string name="punch_title">打卡</string>
 </resources>

@@ -41,6 +41,21 @@ public abstract class ViewImpl implements IActivityView {
     }
 
     @Override
+    public void destroy() {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
     public int getMenuId() {
         return 0;
     }

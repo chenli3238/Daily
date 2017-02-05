@@ -7,4 +7,6 @@ import com.wqy.daily.mvp.FragmentPresenterImpl;
  */
 
 public abstract class BaseFragment extends FragmentPresenterImpl {
+
+    public abstract String getTitle();
 }

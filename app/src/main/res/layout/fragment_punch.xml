@@ -5,32 +5,15 @@
     android:layout_height="match_parent"
     tools:context="com.wqy.daily.PunchFragment">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/punch_tab_layout"
+    <TextView
+        android:id="@+id/punch_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/punch_vp"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/tab_height"
-        android:background="@color/colorPrimary"
-        app:tabIndicatorColor="@color/colorAccent"
-        app:tabTextColor="@android:color/white"
-        app:tabSelectedTextColor="@android:color/white">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.TabItem
-            android:id="@+id/punch_tab_underway"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/punch_underway" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/punch_tab_finished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/punch_finished" />
-
-        <android.support.design.widget.TabItem
-            android:id="@+id/punch_tab_recycle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/punch_recycle" />
-
-    </android.support.design.widget.TabLayout>
+    </android.support.v4.view.ViewPager>
 </FrameLayout>

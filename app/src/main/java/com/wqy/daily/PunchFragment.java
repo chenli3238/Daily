@@ -14,4 +14,9 @@ public class PunchFragment extends BaseFragment {
     public IView getIView() {
         return new PunchView();
     }
+
+    @Override
+    public String getTitle() {
+        return getString(R.string.punch_title);
+    }
 }

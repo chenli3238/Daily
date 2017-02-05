@@ -3,6 +3,7 @@ package com.wqy.daily.mvp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +14,17 @@ import android.view.View;
 
 public abstract class ActivityPresenterImpl extends AppCompatActivity implements IPresenter {
 
+    public static final String TAG = ActivityPresenterImpl.class.getSimpleName();
+
     protected IView mView;
     protected IActivityView mActivityView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate: ");
+
         create(savedInstanceState);
 
         // create an IView instance
@@ -30,13 +36,37 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         View contentView = mView.create(getLayoutInflater(), null);
         setContentView(contentView);
 
-        created(savedInstanceState);
-
         // bind views
         mView.created();
 
         // bind events
         mView.bindEvent();
+
+        created(savedInstanceState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy: ");
+        mView.destroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Log.d(TAG, "onStart: ");
+        mView.start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        Log.d(TAG, "onStop: ");
+        mView.stop();
     }
 
     public IActivityView getActivityView() {
