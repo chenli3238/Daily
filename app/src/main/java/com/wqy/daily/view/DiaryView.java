@@ -1,10 +1,12 @@
 package com.wqy.daily.view;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 
 import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
+import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.BusAction;
@@ -42,6 +44,11 @@ public class DiaryView extends ViewImpl {
     @Override
     public void stop() {
         RxBus.get().unregister(this);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
+    public void setFab(FloatingActionButton fab) {
+        fab.setImageResource(R.drawable.ic_create_white_24dp);
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})

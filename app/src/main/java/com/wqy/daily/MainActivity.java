@@ -106,26 +106,10 @@ public class MainActivity extends BaseActivity {
     )
     public void setFragmentByTag(String tag) {
         Log.d(TAG, "setFragmentByTag: " + tag);
-//        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-//        if (getSupportFragmentManager().getFragments() != null) {
-//            // hide all fragments
-//            Observable.from(getSupportFragmentManager().getFragments())
-//                    .subscribe(transaction::hide);
-//        }
-//
-//        if (fragment == null) {
-//            fragment = getFragmentByTag(tag);
-//            transaction.add(mActivityView.getFragmentContainerId(), fragment, tag);
-//        }
-//
-//        transaction.show(fragment);
-//        transaction.commit();
-
         getSupportFragmentManager().beginTransaction()
                 .replace(mActivityView.getFragmentContainerId(),
                         getFragmentByTag(tag), tag)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
 

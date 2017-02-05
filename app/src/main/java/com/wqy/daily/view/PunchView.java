@@ -1,11 +1,13 @@
 package com.wqy.daily.view;
 
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
@@ -94,6 +96,16 @@ public class PunchView extends ViewImpl {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_recycle));
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
+    public void setFab(FloatingActionButton fab) {
+        fab.animate()
+                .translationY(0)
+                .setInterpolator(new OvershootInterpolator(1.f))
+                .setDuration(1000)
+                .start();
+        fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})

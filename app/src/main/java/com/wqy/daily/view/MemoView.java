@@ -1,6 +1,7 @@
 package com.wqy.daily.view;
 
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -85,6 +86,11 @@ public class MemoView extends ViewImpl {
         tabLayout.addTab(tabLayout.newTab());
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
+    public void setFab(FloatingActionButton fab) {
+        fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})

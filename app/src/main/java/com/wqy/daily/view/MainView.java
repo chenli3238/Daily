@@ -89,7 +89,6 @@ public class MainView extends ViewImpl {
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        RxBus.get().post(BusAction.MAKE_INFO, getInfo());
         // Set default fragment as PunchFragment
         RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
     }
@@ -115,7 +114,7 @@ public class MainView extends ViewImpl {
     @Override
     public void bindEvent() {
         mFab.setOnClickListener(view -> {
-            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
+
         });
         mNavigationView.setNavigationItemSelectedListener(MainView.this::onNavigationItemSelected);
     }
@@ -142,22 +141,6 @@ public class MainView extends ViewImpl {
         return true;
     }
 
-
-    public String getInfo() {
-        Log.d(TAG, "getInfo: ");
-        return "Info";
-    }
-
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(BusAction.MAKE_INFO)}
-    )
-    public void makeInfo(String info) {
-        Log.d(TAG, "makeInfo: ");
-        Snackbar.make(mFab, info, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
-
     @Produce(
             thread = EventThread.MAIN_THREAD,
             tags = {@Tag(BusAction.SET_TAB_LAYOUT)}
@@ -174,5 +157,11 @@ public class MainView extends ViewImpl {
     public void hideTabLayout(Object o) {
         Log.d(TAG, "hideTabLayout: ");
         mTabLayout.setVisibility(View.GONE);
+    }
+
+    @Produce(tags = {@Tag(BusAction.SET_FAB)})
+    public FloatingActionButton getFab() {
+        Log.d(TAG, "getFab: ");
+        return mFab;
     }
 }
