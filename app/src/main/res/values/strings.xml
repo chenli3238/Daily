@@ -17,7 +17,7 @@
     <string name="tab_recycle">回收站</string>
     <string name="tab_backward">倒数日</string>
     <string name="tab_forward">正数日</string>
-    <string name="punch_title">打卡</string>
+    <string name="title_punch">打卡</string>
     <string name="title_memo">备忘</string>
     <string name="title_bigday">纪念日</string>
     <string name="title_diary">日记</string>

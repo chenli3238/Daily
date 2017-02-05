@@ -43,4 +43,9 @@ public class DiaryView extends ViewImpl {
     public void stop() {
         RxBus.get().unregister(this);
     }
+
+    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    public String getTitle() {
+        return getContext().getString(R.string.title_diary);
+    }
 }

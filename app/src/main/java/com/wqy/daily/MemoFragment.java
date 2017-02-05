@@ -13,14 +13,9 @@ import com.wqy.daily.view.MemoView;
 
 public class MemoFragment extends BaseFragment {
 
-    public static final String TAG = PunchFragment.class.getSimpleName();
+    public static final String TAG = MemoFragment.class.getSimpleName();
 
     public MemoFragment() {}
-
-    @Override
-    public String getTitle() {
-        return getString(R.string.title_memo);
-    }
 
     @Override
     public IView getIView() {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
@@ -81,5 +82,10 @@ public class BigdayView extends ViewImpl {
         tabLayout.addTab(tabLayout.newTab());
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    public String getTitle() {
+        return getContext().getString(R.string.title_bigday);
     }
 }

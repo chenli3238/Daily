@@ -1,6 +1,7 @@
 package com.wqy.daily;
 
 import android.os.Bundle;
+import android.os.ParcelUuid;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -105,21 +106,33 @@ public class MainActivity extends BaseActivity {
     )
     public void setFragmentByTag(String tag) {
         Log.d(TAG, "setFragmentByTag: " + tag);
-        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentByTag(tag);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
-        if (getSupportFragmentManager().getFragments() != null) {
-            // hide all fragments
-            Observable.from(getSupportFragmentManager().getFragments())
-                    .subscribe(transaction::hide);
-        }
+//        if (getSupportFragmentManager().getFragments() != null) {
+//            // hide all fragments
+//            Observable.from(getSupportFragmentManager().getFragments())
+//                    .subscribe(transaction::hide);
+//        }
+//
+//        if (fragment == null) {
+//            fragment = getFragmentByTag(tag);
+//            transaction.add(mActivityView.getFragmentContainerId(), fragment, tag);
+//        }
+//
+//        transaction.show(fragment);
+//        transaction.commit();
 
-        if (fragment == null) {
-            fragment = getFragmentByTag(tag);
-            transaction.add(mActivityView.getFragmentContainerId(), fragment, tag);
-        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(mActivityView.getFragmentContainerId(),
+                        getFragmentByTag(tag), tag)
+                .commit();
+    }
 
-        transaction.show(fragment);
-        transaction.commit();
+    @Subscribe(
+            tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)}
+    )
+    public void setActivityTitle(String title) {
+        setTitle(title);
     }
 }

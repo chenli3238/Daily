@@ -9,14 +9,9 @@ import com.wqy.daily.view.DiaryView;
 
 public class DiaryFragment extends BaseFragment {
 
-    public static final String TAG = "DiaryFragment";
+    public static final String TAG = DiaryFragment.class.getSimpleName();
 
     public DiaryFragment() {}
-
-    @Override
-    public String getTitle() {
-        return getString(R.string.title_diary);
-    }
 
     @Override
     public IView getIView() {

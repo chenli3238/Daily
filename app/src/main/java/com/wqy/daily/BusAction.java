@@ -13,4 +13,6 @@ public class BusAction {
     public static final String MAKE_INFO = "MAKE_INFO";
 
     public static final String SET_FRAGMENT_IN_MAIN = "SET_FRAGMENT_IN_MAIN";
+
+    public static final String SET_ACTIVITY_TITLE = "SET_ACTIVITY_TITLE";
 }

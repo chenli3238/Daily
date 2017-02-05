@@ -51,7 +51,6 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         Log.d(TAG, "onDestroy: ");
         mView.destroy();
         destroy();
@@ -60,7 +59,6 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Override
     public void onStart() {
         super.onStart();
-
         Log.d(TAG, "onStart: ");
         start();
         mView.start();
@@ -69,7 +67,6 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Override
     public void onStop() {
         super.onStop();
-
         Log.d(TAG, "onStop: ");
         mView.stop();
         stop();

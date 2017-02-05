@@ -13,12 +13,9 @@ import com.wqy.daily.view.BigdayView;
 
 public class BigdayFragment extends BaseFragment {
 
-    public BigdayFragment() {
-    }
+    public static final String TAG = BigdayFragment.class.getSimpleName();
 
-    @Override
-    public String getTitle() {
-        return getString(R.string.title_bigday);
+    public BigdayFragment() {
     }
 
     @Override
