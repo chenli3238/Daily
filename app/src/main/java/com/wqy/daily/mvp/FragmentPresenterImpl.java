@@ -21,6 +21,9 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
+
+        // do some configuration
         create(savedInstanceState);
 
         // create an IView instance
@@ -30,15 +33,46 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
         // create root view
         View rootView = mView.create(inflater, container);
 
+        // do some loading work
+        created(savedInstanceState);
+
         // bind views
         mView.created();
 
         // bind events
         mView.bindEvent();
 
-        created(savedInstanceState);
+        // do some optional work
+        prepared(savedInstanceState);
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy: ");
+        mView.destroy();
+        destroy();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        Log.d(TAG, "onStart: ");
+        start();
+        mView.start();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Log.d(TAG, "onStop: ");
+        mView.stop();
+        stop();
     }
 
     @Override
@@ -52,18 +86,22 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void prepared(Bundle savedInstanceState) {
 
-        Log.d(TAG, "onStart: ");
-        mView.start();
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void start() {
 
-        Log.d(TAG, "onDestroy: ");
-        mView.destroy();
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

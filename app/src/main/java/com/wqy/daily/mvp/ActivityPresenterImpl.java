@@ -25,6 +25,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
 
         Log.d(TAG, "onCreate: ");
 
+        // do some configuration
         create(savedInstanceState);
 
         // create an IView instance
@@ -36,13 +37,17 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         View contentView = mView.create(getLayoutInflater(), null);
         setContentView(contentView);
 
-        // bind views
+        // do some loading work
+        created(savedInstanceState);
+
+        // bind data to views
         mView.created();
 
         // bind events
         mView.bindEvent();
 
-        created(savedInstanceState);
+        // do some optional work
+        prepared(savedInstanceState);
     }
 
     @Override
@@ -51,6 +56,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
 
         Log.d(TAG, "onDestroy: ");
         mView.destroy();
+        destroy();
     }
 
     @Override
@@ -58,6 +64,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         super.onStart();
 
         Log.d(TAG, "onStart: ");
+        start();
         mView.start();
     }
 
@@ -67,6 +74,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
 
         Log.d(TAG, "onStop: ");
         mView.stop();
+        stop();
     }
 
     public IActivityView getActivityView() {
@@ -99,6 +107,26 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
 
     @Override
     public void created(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void prepared(Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void destroy() {
 
     }
 }

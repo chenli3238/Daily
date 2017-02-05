@@ -28,8 +28,13 @@ public class MainActivity extends BaseActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void create(Bundle savedInstanceState) {
+        Log.d(TAG, "create: ");
+    }
+
+    @Override
+    public void created(Bundle savedInstanceState) {
+        Log.d(TAG, "created: ");
         RxBus.get().register(this);
     }
 
@@ -52,11 +57,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public IView getIView() {
         return new MainView();
-    }
-
-    @Override
-    public void created(Bundle savedInstanceState) {
-        Log.d(TAG, "created: ");
     }
 
     private BaseFragment getFragmentByTag(String tag) {
