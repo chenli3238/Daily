@@ -1,10 +1,12 @@
 package com.wqy.daily.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,8 +19,16 @@ import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.mvp.ViewImpl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by wqy on 17-2-4.
@@ -27,9 +37,6 @@ import butterknife.ButterKnife;
 public class PunchView extends ViewImpl {
 
     public static final String TAG = "PunchView";
-
-    @BindView(R.id.punch_tv_content)
-    TextView mTextView;
 
     @BindView(R.id.punch_vp)
     ViewPager mViewPager;
@@ -74,7 +81,21 @@ public class PunchView extends ViewImpl {
     }
 
     public void setViewPager() {
-
+        List<View> views = Arrays.asList(
+                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
+                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
+                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null)
+        );
+        views.get(0).setBackgroundColor(Color.RED);
+        views.get(1).setBackgroundColor(Color.GREEN);
+        views.get(2).setBackgroundColor(Color.BLUE);
+        List<String> titles = Arrays.asList(
+                getContext().getString(R.string.punch_underway),
+                getContext().getString(R.string.punch_finished),
+                getContext().getString(R.string.punch_recycle)
+        );
+        ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
+        mViewPager.setAdapter(adapter);
     }
 
     @Subscribe(
@@ -83,31 +104,11 @@ public class PunchView extends ViewImpl {
     )
     public void setTabLayout(TabLayout tabLayout) {
         Log.d(TAG, "setTabLayout: ");
+        tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText(R.string.punch_underway));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.punch_finished));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.punch_recycle));
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0 : mTextView.setText(R.string.punch_underway);
-                        break;
-                    case 1 : mTextView.setText(R.string.punch_finished);
-                        break;
-                    case 2 : mTextView.setText(R.string.punch_recycle);
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
+        setViewPager();
+        tabLayout.setupWithViewPager(mViewPager);
     }
 }
