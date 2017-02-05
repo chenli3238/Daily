@@ -23,58 +23,46 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by wqy on 17-2-4.
+ * Created by wqy on 17-2-5.
  */
 
-public class PunchView extends ViewImpl {
+public class BigdayView extends ViewImpl {
 
-    public static final String TAG = "PunchView";
+    public static final String TAG = "BigdayView";
 
-    @BindView(R.id.punch_vp)
+    @BindView(R.id.bigday_vp)
     ViewPager mViewPager;
 
     @Override
     public int getResId() {
-        return R.layout.fragment_punch;
+        return R.layout.fragment_bigday;
     }
 
     @Override
     public void created() {
-        Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
     }
 
     @Override
-    public void destroy() {
-        Log.d(TAG, "destroy: ");
-
-    }
-
-    @Override
     public void start() {
-        Log.d(TAG, "start: ");
         RxBus.get().register(this);
     }
 
     @Override
     public void stop() {
-        Log.d(TAG, "stop: ");
         RxBus.get().unregister(this);
     }
 
     public void setViewPager() {
         List<View> views = Arrays.asList(
                 LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
-                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
                 LayoutInflater.from(getContext()).inflate(R.layout.view_test, null)
         );
         views.get(0).setBackgroundColor(Color.RED);
         views.get(1).setBackgroundColor(Color.GREEN);
-        views.get(2).setBackgroundColor(Color.BLUE);
         List<String> titles = Arrays.asList(
-                getContext().getString(R.string.tab_underway),
-                getContext().getString(R.string.tab_finished),
-                getContext().getString(R.string.tab_recycle)
+                getContext().getString(R.string.tab_backward),
+                getContext().getString(R.string.tab_forward)
         );
         ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
         mViewPager.setAdapter(adapter);
@@ -88,9 +76,9 @@ public class PunchView extends ViewImpl {
         Log.d(TAG, "setTabLayout: ");
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_underway));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_finished));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_recycle));
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
     }

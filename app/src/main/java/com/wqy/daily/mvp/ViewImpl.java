@@ -33,7 +33,9 @@ public abstract class ViewImpl implements IActivityView {
         return false;
     }
 
-    public abstract Context getContext();
+    public Context getContext() {
+        return mRootView.getContext();
+    }
 
     @Override
     public void created() {
@@ -52,6 +54,11 @@ public abstract class ViewImpl implements IActivityView {
 
     @Override
     public void stop() {
+
+    }
+
+    @Override
+    public void bindEvent() {
 
     }
 

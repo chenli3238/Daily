@@ -63,8 +63,12 @@ public class MainActivity extends BaseActivity {
         Class clazz = null;
         if (PunchFragment.TAG.equals(tag)) {
             clazz = PunchFragment.class;
+        } else if (DiaryFragment.TAG.equals(tag)) {
+            clazz = DiaryFragment.class;
         } else if (MemoFragment.TAG.equals(tag)) {
             clazz = MemoFragment.class;
+        } else if (BigdayFragment.TAG.equals(tag)) {
+            clazz = BigdayFragment.class;
         }
 
         if (clazz == null) {

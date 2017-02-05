@@ -23,42 +23,33 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by wqy on 17-2-4.
+ * Created by wqy on 17-2-5.
  */
 
-public class PunchView extends ViewImpl {
+public class MemoView extends ViewImpl {
 
-    public static final String TAG = "PunchView";
+    public static final String TAG = "MemoView";
 
-    @BindView(R.id.punch_vp)
+    @BindView(R.id.memo_vp)
     ViewPager mViewPager;
 
     @Override
     public int getResId() {
-        return R.layout.fragment_punch;
+        return R.layout.fragment_memo;
     }
 
     @Override
     public void created() {
-        Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
     }
 
     @Override
-    public void destroy() {
-        Log.d(TAG, "destroy: ");
-
-    }
-
-    @Override
     public void start() {
-        Log.d(TAG, "start: ");
         RxBus.get().register(this);
     }
 
     @Override
     public void stop() {
-        Log.d(TAG, "stop: ");
         RxBus.get().unregister(this);
     }
 
@@ -88,9 +79,9 @@ public class PunchView extends ViewImpl {
         Log.d(TAG, "setTabLayout: ");
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_underway));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_finished));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_recycle));
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
     }

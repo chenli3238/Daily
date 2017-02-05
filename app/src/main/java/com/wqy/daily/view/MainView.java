@@ -1,7 +1,6 @@
 package com.wqy.daily.view;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,13 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.BigdayFragment;
 import com.wqy.daily.BusAction;
+import com.wqy.daily.DiaryFragment;
+import com.wqy.daily.MemoFragment;
 import com.wqy.daily.PunchFragment;
 import com.wqy.daily.R;
 import com.wqy.daily.mvp.ViewImpl;
@@ -75,11 +78,6 @@ public class MainView extends ViewImpl {
     }
 
     @Override
-    public Context getContext() {
-        return mRootView.getContext();
-    }
-
-    @Override
     public void created() {
         Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
@@ -126,14 +124,14 @@ public class MainView extends ViewImpl {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        if (id == R.id.nav_punch) {
+            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
+        } else if (id == R.id.nav_diary) {
+            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, DiaryFragment.TAG);
+        } else if (id == R.id.nav_memo) {
+            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, MemoFragment.TAG);
+        } else if (id == R.id.nav_bidday) {
+            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, BigdayFragment.TAG);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -167,5 +165,14 @@ public class MainView extends ViewImpl {
     public TabLayout getTabLayout() {
         Log.d(TAG, "getToolbar: ");
         return mTabLayout;
+    }
+
+    @Subscribe(
+            thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(BusAction.HIDE_TAB_LAYOUT)}
+    )
+    public void hideTabLayout(Object o) {
+        Log.d(TAG, "hideTabLayout: ");
+        mTabLayout.setVisibility(View.GONE);
     }
 }

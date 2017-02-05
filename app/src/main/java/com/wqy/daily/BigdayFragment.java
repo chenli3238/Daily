@@ -9,21 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wqy.daily.mvp.IView;
-import com.wqy.daily.view.MemoView;
+import com.wqy.daily.view.BigdayView;
 
-public class MemoFragment extends BaseFragment {
+public class BigdayFragment extends BaseFragment {
 
-    public static final String TAG = PunchFragment.class.getSimpleName();
-
-    public MemoFragment() {}
+    public BigdayFragment() {
+    }
 
     @Override
     public String getTitle() {
-        return getString(R.string.title_memo);
+        return getString(R.string.title_bigday);
     }
 
     @Override
     public IView getIView() {
-        return new MemoView();
+        return new BigdayView();
     }
 }

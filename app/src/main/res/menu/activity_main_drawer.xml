@@ -3,19 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_punch"
             android:icon="@drawable/ic_done_black_24dp"
             android:title="@string/drawer_punching" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_diary"
             android:icon="@drawable/ic_mode_edit_black_24dp"
             android:title="@string/drawer_diary" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_memo"
             android:icon="@drawable/ic_note_black_24dp"
             android:title="@string/drawer_memo" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_bidday"
             android:icon="@drawable/ic_date_range_black_24dp"
             android:title="@string/drawer_days_matter" />
     </group>
