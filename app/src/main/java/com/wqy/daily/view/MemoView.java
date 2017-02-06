@@ -67,7 +67,7 @@ public class MemoView extends ViewImpl {
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_underway),
                 getContext().getString(R.string.tab_finished),
-                getContext().getString(R.string.tab_recycle)
+                getContext().getString(R.string.tab_deleted)
         );
         ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
         mViewPager.setAdapter(adapter);

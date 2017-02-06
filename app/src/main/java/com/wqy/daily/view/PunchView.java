@@ -77,7 +77,7 @@ public class PunchView extends ViewImpl {
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_underway),
                 getContext().getString(R.string.tab_finished),
-                getContext().getString(R.string.tab_recycle)
+                getContext().getString(R.string.tab_deleted)
         );
         ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
         mViewPager.setAdapter(adapter);
@@ -93,7 +93,7 @@ public class PunchView extends ViewImpl {
         tabLayout.removeAllTabs();
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_underway));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_finished));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_recycle));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_deleted));
         setViewPager();
         tabLayout.setupWithViewPager(mViewPager);
     }

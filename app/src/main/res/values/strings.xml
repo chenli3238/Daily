@@ -14,7 +14,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tab_underway">正在进行</string>
     <string name="tab_finished">已完成</string>
-    <string name="tab_recycle">回收站</string>
+    <string name="tab_deleted">已删除</string>
     <string name="tab_backward">倒数日</string>
     <string name="tab_forward">正数日</string>
     <string name="title_punch">打卡</string>
