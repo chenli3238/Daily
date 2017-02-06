@@ -99,18 +99,6 @@ public class MainView extends ViewImpl {
     }
 
     @Override
-    public void start() {
-        Log.d(TAG, "start: ");
-//        RxBus.get().register(this);
-    }
-
-    @Override
-    public void stop() {
-        Log.d(TAG, "stop: ");
-//        RxBus.get().unregister(this);
-    }
-
-    @Override
     public void bindEvent() {
         mFab.setOnClickListener(view -> {
 

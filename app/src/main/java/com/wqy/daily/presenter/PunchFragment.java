@@ -13,6 +13,7 @@ import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.PunchEvents;
 import com.wqy.daily.event.PunchInitEvent;
 import com.wqy.daily.model.Event;
+import com.wqy.daily.model.Pager;
 import com.wqy.daily.model.Punch;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.PunchView;
@@ -21,6 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PunchFragment extends BaseFragment {
+
+    private static int PAGE_SIZE = 10;
+
+    Pager mUnderwayPager;
+
+    Pager mFinishedPager;
+
+    Pager mDeletedPager;
 
     public static final String TAG = PunchFragment.class.getSimpleName();
 
@@ -36,11 +45,6 @@ public class PunchFragment extends BaseFragment {
     public void created(Bundle savedInstanceState) {
         Log.d(TAG, "created: ");
         RxBus.get().register(this);
-    }
-
-    @Override
-    public void prepared(Bundle savedInstanceState) {
-//        RxBus.get().register(this);
     }
 
     @Override

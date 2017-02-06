@@ -31,16 +31,12 @@ public class DiaryView extends ViewImpl {
     @Override
     public void created() {
         ButterKnife.bind(this, mRootView);
+        RxBus.get().register(this);
         RxBus.get().post(BusAction.HIDE_TAB_LAYOUT, "");
     }
 
     @Override
-    public void start() {
-        RxBus.get().register(this);
-    }
-
-    @Override
-    public void stop() {
+    public void destroy() {
         RxBus.get().unregister(this);
     }
 

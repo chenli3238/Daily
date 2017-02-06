@@ -43,15 +43,11 @@ public class MemoView extends ViewImpl {
     @Override
     public void created() {
         ButterKnife.bind(this, mRootView);
-    }
-
-    @Override
-    public void start() {
         RxBus.get().register(this);
     }
 
     @Override
-    public void stop() {
+    public void destroy() {
         RxBus.get().unregister(this);
     }
 

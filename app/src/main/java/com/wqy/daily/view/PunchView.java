@@ -130,6 +130,12 @@ public class PunchView extends ViewImpl {
                 .setDuration(1000)
                 .start();
         fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
+        fab.setOnClickListener(v -> {
+            Log.d(TAG, "mUnderWayRV.width = " + mUnderWayRV.getWidth());
+            Log.d(TAG, "mFinishedRV.width = " + mFinishedRV.getWidth());
+            Log.d(TAG, "mDeletedRV.width = " + mDeletedRV.getWidth());
+            Log.d(TAG, "mUnderwayRV item.width = " + mUnderWayRV.getChildAt(0).getWidth());
+        });
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
@@ -148,6 +154,7 @@ public class PunchView extends ViewImpl {
         };
         mUnderwayAdapter.setDataList(events.getEvents());
         mUnderWayRV.setAdapter(mUnderwayAdapter);
+        Log.d(TAG, "initUnderway: " + mUnderWayRV.getWidth());
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_FINISHED)})
@@ -161,6 +168,7 @@ public class PunchView extends ViewImpl {
         };
         mFinishedAdapter.setDataList(events.getEvents());
         mFinishedRV.setAdapter(mFinishedAdapter);
+        Log.d(TAG, "initFinished: " + mFinishedRV.getWidth());
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_DELETED)})
@@ -174,5 +182,6 @@ public class PunchView extends ViewImpl {
         };
         mDeletedAdapter.setDataList(events.getEvents());
         mDeletedRV.setAdapter(mDeletedAdapter);
+        Log.d(TAG, "initDeleted: " + mDeletedRV.getWidth());
     }
 }
