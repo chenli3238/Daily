@@ -49,9 +49,7 @@ public class PunchView extends ViewImpl {
     ViewPager mViewPager;
 
     RecyclerView mUnderwayRV;
-
     RecyclerView mFinishedRV;
-
     RecyclerView mDeletedRV;
 
     ListRecyclerViewAdapter<Event> mUnderwayAdapter = null;
@@ -132,10 +130,6 @@ public class PunchView extends ViewImpl {
                 .start();
         fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
         fab.setOnClickListener(v -> {
-            Log.d(TAG, "mUnderwayRV.width = " + mUnderwayRV.getWidth());
-            Log.d(TAG, "mFinishedRV.width = " + mFinishedRV.getWidth());
-            Log.d(TAG, "mDeletedRV.width = " + mDeletedRV.getWidth());
-            Log.d(TAG, "mUnderwayRV item.width = " + mUnderwayRV.getChildAt(0).getWidth());
         });
     }
 

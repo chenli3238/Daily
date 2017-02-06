@@ -31,4 +31,16 @@ public class BusAction {
     public static final String SET_PUNCH_FINISHED = "SET_PUNCH_FINISHED";
 
     public static final String SET_PUNCH_DELETED = "SET_PUNCH_DELETED";
+
+    public static final String INIT_MEMO_UNDERWAY = "INIT_MEMO_UNDERWAY";
+
+    public static final String INIT_MEMO_FINISHED = "INIT_MEMO_FINISHED";
+
+    public static final String INIT_MEMO_DELETED = "INIT_MEMO_DELETED";
+
+    public static final String SET_MEMO_UNDERWAY = "SET_MEMO_UNDERWAY";
+
+    public static final String SET_MEMO_FINISHED = "SET_MEMO_FINISHED";
+
+    public static final String SET_MEMO_DELETED = "SET_MEMO_DELETED";
 }

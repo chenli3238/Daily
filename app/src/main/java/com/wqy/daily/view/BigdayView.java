@@ -83,7 +83,7 @@ public class BigdayView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
-        fab.setImageResource(R.drawable.ic_note_add_white_24dp);
+        fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})

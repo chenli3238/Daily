@@ -4,18 +4,30 @@ import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.RecyclerView;
+import com.wqy.daily.adapter.GridItemMarginDecoration;
+import com.wqy.daily.adapter.ListRecyclerViewAdapter;
+import com.wqy.daily.adapter.MemoVH;
+import com.wqy.daily.adapter.ViewHolder;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
+import com.wqy.daily.event.MemoEvents;
+import com.wqy.daily.event.MemoInitEvent;
+import com.wqy.daily.event.PunchInitEvent;
+import com.wqy.daily.model.Event;
+import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.ViewImpl;
 
 import java.util.Arrays;
@@ -35,6 +47,14 @@ public class MemoView extends ViewImpl {
     @BindView(R.id.memo_vp)
     ViewPager mViewPager;
 
+    RecyclerView mUnderwayRV;
+    RecyclerView mFinishedRV;
+    RecyclerView mDeletedRV;
+
+    ListRecyclerViewAdapter<Memo> mUnderwayAdapter = null;
+    ListRecyclerViewAdapter<Memo> mFinishedAdapter = null;
+    ListRecyclerViewAdapter<Memo> mDeletedAdapter = null;
+
     @Override
     public int getResId() {
         return R.layout.fragment_memo;
@@ -44,6 +64,14 @@ public class MemoView extends ViewImpl {
     public void created() {
         ButterKnife.bind(this, mRootView);
         RxBus.get().register(this);
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+        mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+        mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+        RxBus.get().post(BusAction.INIT_MEMO_UNDERWAY, new MemoInitEvent());
+        RxBus.get().post(BusAction.INIT_MEMO_FINISHED, new MemoInitEvent());
+        RxBus.get().post(BusAction.INIT_MEMO_DELETED, new MemoInitEvent());
     }
 
     @Override
@@ -53,13 +81,8 @@ public class MemoView extends ViewImpl {
 
     public void setViewPager() {
         List<View> views = Arrays.asList(
-                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
-                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null),
-                LayoutInflater.from(getContext()).inflate(R.layout.view_test, null)
+                mUnderwayRV, mFinishedRV, mDeletedRV
         );
-        views.get(0).setBackgroundColor(Color.RED);
-        views.get(1).setBackgroundColor(Color.GREEN);
-        views.get(2).setBackgroundColor(Color.BLUE);
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_underway),
                 getContext().getString(R.string.tab_finished),
@@ -86,11 +109,62 @@ public class MemoView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
-        fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
+        fab.setImageResource(R.drawable.ic_note_add_white_24dp);
     }
 
     @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_memo);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_UNDERWAY)})
+    public void initUnderway(MemoEvents events) {
+        mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>() {
+            @Override
+            public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.memo_item, null);
+                return new MemoVH(itemView);
+            }
+        };
+        mUnderwayAdapter.setDataList(events.getMemos());
+        mUnderwayRV.setAdapter(mUnderwayAdapter);
+        mUnderwayRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mUnderwayRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_FINISHED)})
+    public void initFinished(MemoEvents events) {
+        mFinishedAdapter = new ListRecyclerViewAdapter<Memo>() {
+            @Override
+            public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.memo_item, null);
+                return new MemoVH(itemView);
+            }
+        };
+        mFinishedAdapter.setDataList(events.getMemos());
+        mFinishedRV.setAdapter(mFinishedAdapter);
+        mFinishedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mFinishedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_DELETED)})
+    public void initDeleted(MemoEvents events) {
+        mDeletedAdapter = new ListRecyclerViewAdapter<Memo>() {
+            @Override
+            public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
+                View itemView = LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.memo_item, null);
+                return new MemoVH(itemView);
+            }
+        };
+        mDeletedAdapter.setDataList(events.getMemos());
+        mDeletedRV.setAdapter(mDeletedAdapter);
+        mDeletedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mDeletedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
     }
 }

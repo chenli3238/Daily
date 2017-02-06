@@ -29,6 +29,7 @@ public class PunchFinishedVH extends  ViewHolder<Event> {
     @Override
     public void bindView(Event data) {
         tvTitle.setText(data.getTitle());
-        tvScore.setText(String.valueOf(data.getScore()));
+        tvScore.setText(String.format("%.1f", data.getScore()));
+
     }
 }
