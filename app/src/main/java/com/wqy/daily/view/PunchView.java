@@ -1,9 +1,10 @@
 package com.wqy.daily.view;
 
-import android.graphics.Color;
+import android.graphics.Rect;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
 import com.wqy.daily.RecyclerView;
@@ -27,7 +29,6 @@ import com.wqy.daily.adapter.ViewHolder;
 import com.wqy.daily.event.PunchEvents;
 import com.wqy.daily.event.PunchInitEvent;
 import com.wqy.daily.model.Event;
-import com.wqy.daily.model.Punch;
 import com.wqy.daily.mvp.ViewImpl;
 
 import java.util.Arrays;
@@ -47,7 +48,7 @@ public class PunchView extends ViewImpl {
     @BindView(R.id.punch_vp)
     ViewPager mViewPager;
 
-    RecyclerView mUnderWayRV;
+    RecyclerView mUnderwayRV;
 
     RecyclerView mFinishedRV;
 
@@ -70,7 +71,7 @@ public class PunchView extends ViewImpl {
         RxBus.get().register(this);
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        mUnderWayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+        mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         RxBus.get().post(BusAction.INIT_PUNCH_UNDERWAY, new PunchInitEvent());
@@ -97,7 +98,7 @@ public class PunchView extends ViewImpl {
     }
 
     public void setViewPager() {
-        List<View> views = Arrays.asList(mUnderWayRV, mFinishedRV, mDeletedRV);
+        List<View> views = Arrays.asList(mUnderwayRV, mFinishedRV, mDeletedRV);
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_underway),
                 getContext().getString(R.string.tab_finished),
@@ -131,10 +132,10 @@ public class PunchView extends ViewImpl {
                 .start();
         fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
         fab.setOnClickListener(v -> {
-            Log.d(TAG, "mUnderWayRV.width = " + mUnderWayRV.getWidth());
+            Log.d(TAG, "mUnderwayRV.width = " + mUnderwayRV.getWidth());
             Log.d(TAG, "mFinishedRV.width = " + mFinishedRV.getWidth());
             Log.d(TAG, "mDeletedRV.width = " + mDeletedRV.getWidth());
-            Log.d(TAG, "mUnderwayRV item.width = " + mUnderWayRV.getChildAt(0).getWidth());
+            Log.d(TAG, "mUnderwayRV item.width = " + mUnderwayRV.getChildAt(0).getWidth());
         });
     }
 
@@ -153,8 +154,11 @@ public class PunchView extends ViewImpl {
             }
         };
         mUnderwayAdapter.setDataList(events.getEvents());
-        mUnderWayRV.setAdapter(mUnderwayAdapter);
-        Log.d(TAG, "initUnderway: " + mUnderWayRV.getWidth());
+        mUnderwayRV.setAdapter(mUnderwayAdapter);
+        mUnderwayRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mUnderwayRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        Log.d(TAG, "initUnderway: " + mUnderwayRV.getWidth());
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_FINISHED)})
@@ -168,6 +172,9 @@ public class PunchView extends ViewImpl {
         };
         mFinishedAdapter.setDataList(events.getEvents());
         mFinishedRV.setAdapter(mFinishedAdapter);
+        mFinishedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mFinishedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
         Log.d(TAG, "initFinished: " + mFinishedRV.getWidth());
     }
 
@@ -182,6 +189,9 @@ public class PunchView extends ViewImpl {
         };
         mDeletedAdapter.setDataList(events.getEvents());
         mDeletedRV.setAdapter(mDeletedAdapter);
+        mDeletedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mDeletedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
         Log.d(TAG, "initDeleted: " + mDeletedRV.getWidth());
     }
 }
