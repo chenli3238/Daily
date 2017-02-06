@@ -1,5 +1,6 @@
-package com.wqy.daily;
+package com.wqy.daily.presenter;
 
+import com.wqy.daily.BaseFragment;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.DiaryView;
 

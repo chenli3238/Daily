@@ -1,28 +1,20 @@
-package com.wqy.daily;
+package com.wqy.daily.presenter;
 
 import android.os.Bundle;
-import android.os.ParcelUuid;
-import android.support.annotation.Nullable;
-import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
-import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.BaseActivity;
+import com.wqy.daily.BaseFragment;
+import com.wqy.daily.R;
+import com.wqy.daily.event.BusAction;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.MainView;
-
-import java.util.Collections;
-import java.util.List;
-
-import rx.Observable;
-import rx.functions.Action1;
 
 
 public class MainActivity extends BaseActivity {
@@ -41,8 +33,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void prepared(Bundle savedInstanceState) {
+//        RxBus.get().register(this);
+    }
+
+    @Override
+    public void destroy() {
         RxBus.get().unregister(this);
     }
 

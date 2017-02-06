@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wqy.daily.PunchFragment">
+    tools:context="com.wqy.daily.presenter.PunchFragment">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/punch_vp"

@@ -3,7 +3,6 @@ package com.wqy.daily.view;
 import android.app.Activity;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,11 +18,11 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.wqy.daily.BigdayFragment;
-import com.wqy.daily.BusAction;
-import com.wqy.daily.DiaryFragment;
-import com.wqy.daily.MemoFragment;
-import com.wqy.daily.PunchFragment;
+import com.wqy.daily.presenter.BigdayFragment;
+import com.wqy.daily.event.BusAction;
+import com.wqy.daily.presenter.DiaryFragment;
+import com.wqy.daily.presenter.MemoFragment;
+import com.wqy.daily.presenter.PunchFragment;
 import com.wqy.daily.R;
 import com.wqy.daily.mvp.ViewImpl;
 
@@ -81,7 +80,7 @@ public class MainView extends ViewImpl {
     public void created() {
         Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
-
+        RxBus.get().register(this);
         ((AppCompatActivity) getContext()).setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 (Activity) getContext(), mDrawerLayout, mToolbar,
@@ -96,19 +95,19 @@ public class MainView extends ViewImpl {
     @Override
     public void destroy() {
         Log.d(TAG, "destroy: ");
-
+        RxBus.get().unregister(this);
     }
 
     @Override
     public void start() {
         Log.d(TAG, "start: ");
-        RxBus.get().register(this);
+//        RxBus.get().register(this);
     }
 
     @Override
     public void stop() {
         Log.d(TAG, "stop: ");
-        RxBus.get().unregister(this);
+//        RxBus.get().unregister(this);
     }
 
     @Override

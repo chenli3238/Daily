@@ -3,13 +3,11 @@ package com.wqy.daily.view;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 
-import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
-import com.hwangjr.rxbus.thread.EventThread;
-import com.wqy.daily.BusAction;
+import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
 import com.wqy.daily.mvp.ViewImpl;
 
