@@ -3,6 +3,7 @@ package com.wqy.daily;
 import android.os.Bundle;
 import android.os.ParcelUuid;
 import android.support.annotation.Nullable;
+import android.support.transition.Fade;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -86,36 +87,17 @@ public class MainActivity extends BaseActivity {
         return fragment;
     }
 
-    @Produce(
-            tags = {@Tag("test")}
-    )
-    public String getTest() {
-        return "test string";
-    }
-
-    @Subscribe(
-            tags = {@Tag("test")}
-    )
-    public void logString(String test) {
-        Log.d(TAG, "logString: " + test);
-    }
-
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(BusAction.SET_FRAGMENT_IN_MAIN)}
-    )
+    @Subscribe(tags = {@Tag(BusAction.SET_FRAGMENT_IN_MAIN)})
     public void setFragmentByTag(String tag) {
         Log.d(TAG, "setFragmentByTag: " + tag);
+        Fragment fragment = getFragmentByTag(tag);
         getSupportFragmentManager().beginTransaction()
                 .replace(mActivityView.getFragmentContainerId(),
-                        getFragmentByTag(tag), tag)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        fragment, tag)
                 .commit();
     }
 
-    @Subscribe(
-            tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)}
-    )
+    @Subscribe(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
     public void setActivityTitle(String title) {
         setTitle(title);
     }
