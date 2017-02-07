@@ -4,7 +4,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,7 +109,7 @@ public class BigdayView extends ViewImpl {
         fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_bigday);
     }

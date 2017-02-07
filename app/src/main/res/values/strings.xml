@@ -30,4 +30,7 @@
     <string name="date_fri">周五</string>
     <string name="date_sat">周六</string>
     <string name="date_sun">周日</string>
+    <string name="cpunch_title_hint">标题</string>
+    <string name="cpunch_desc_hint">描述</string>
+    <string name="cpunch_title">新建打卡</string>
 </resources>

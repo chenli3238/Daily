@@ -1,6 +1,5 @@
 package com.wqy.daily.view;
 
-import android.graphics.Rect;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -30,6 +29,7 @@ import com.wqy.daily.event.PunchEvents;
 import com.wqy.daily.event.PunchInitEvent;
 import com.wqy.daily.model.Event;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.presenter.CreatePunchActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -134,10 +134,11 @@ public class PunchView extends ViewImpl {
                 .start();
         fab.setImageResource(R.drawable.ic_turned_in_white_24dp);
         fab.setOnClickListener(v -> {
+            RxBus.get().post(BusAction.START_ACTIVITY, CreatePunchActivity.class);
         });
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_punch);
     }

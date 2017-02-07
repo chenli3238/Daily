@@ -14,7 +14,9 @@ public class BusAction {
 
     public static final String SET_FRAGMENT_IN_MAIN = "SET_FRAGMENT_IN_MAIN";
 
-    public static final String SET_ACTIVITY_TITLE = "SET_ACTIVITY_TITLE";
+    public static final String SET_MAIN_ACTIVITY_TITLE = "SET_MAIN_ACTIVITY_TITLE";
+
+    public static final String SET_CPUNCH_TITLE = "SET_CPUNCH_TITLE";
 
     public static final String SET_FAB = "SET_FAB";
 
@@ -55,4 +57,10 @@ public class BusAction {
     public static final String INIT_DIARY = "INIT_DIARY";
 
     public static final String SET_DIARY = "SET_DIARY";
+
+    public static final String SET_SUPPORT_ACTIONBAR = "SET_SUPPORT_ACTIONBAR";
+
+    public static final String RESTORE_ACTIONBAR = "RESTORE_ACTIONBAR";
+
+    public static final String START_ACTIVITY = "START_ACTIVITY";
 }

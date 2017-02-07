@@ -1,9 +1,11 @@
 package com.wqy.daily.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
@@ -20,6 +22,8 @@ import com.wqy.daily.view.MainView;
 public class MainActivity extends BaseActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+
+    private ActionBar mActionBar;
 
     @Override
     public void create(Bundle savedInstanceState) {
@@ -93,8 +97,14 @@ public class MainActivity extends BaseActivity {
                 .commit();
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    @Subscribe(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public void setActivityTitle(String title) {
         setTitle(title);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.START_ACTIVITY)})
+    public void startActivity(Class<?> clazz) {
+        Intent intent = new Intent(MainActivity.this, clazz);
+        startActivity(intent);
     }
 }

@@ -43,7 +43,7 @@ public class MainView extends ViewImpl {
     @BindView(R.id.nav_view)
     public NavigationView mNavigationView;
 
-    @BindView(R.id.toolbar)
+    @BindView(R.id.main_toolbar)
     public Toolbar mToolbar;
 
     @BindView(R.id.drawer_layout)
@@ -80,7 +80,7 @@ public class MainView extends ViewImpl {
     public void created() {
         Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
-        ((AppCompatActivity) getContext()).setSupportActionBar(mToolbar);
+        setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 (Activity) getContext(), mDrawerLayout, mToolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -106,6 +106,16 @@ public class MainView extends ViewImpl {
         mNavigationView.setNavigationItemSelectedListener(MainView.this::onNavigationItemSelected);
     }
 
+    @Subscribe(tags = {@Tag(BusAction.SET_SUPPORT_ACTIONBAR)})
+    public void setSupportActionBar(Toolbar toolbar) {
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.RESTORE_ACTIONBAR)})
+    public void restoreActionBar(String s) {
+        setSupportActionBar(mToolbar);
+    }
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -128,10 +138,7 @@ public class MainView extends ViewImpl {
         return true;
     }
 
-    @Produce(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(BusAction.SET_TAB_LAYOUT)}
-    )
+    @Produce(tags = {@Tag(BusAction.SET_TAB_LAYOUT)})
     public TabLayout getTabLayout() {
         Log.d(TAG, "getToolbar: ");
         return mTabLayout;

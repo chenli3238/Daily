@@ -1,6 +1,5 @@
 package com.wqy.daily.view;
 
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -25,8 +24,6 @@ import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.event.MemoEvents;
 import com.wqy.daily.event.MemoInitEvent;
-import com.wqy.daily.event.PunchInitEvent;
-import com.wqy.daily.model.Event;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.ViewImpl;
 
@@ -116,7 +113,7 @@ public class MemoView extends ViewImpl {
         fab.setImageResource(R.drawable.ic_note_add_white_24dp);
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_memo);
     }

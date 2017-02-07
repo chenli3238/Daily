@@ -1,9 +1,6 @@
 package com.wqy.daily.view;
 
-import android.os.ParcelUuid;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +12,6 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.wqy.daily.RecyclerView;
 import com.wqy.daily.adapter.DiaryVH;
-import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.ViewHolder;
 import com.wqy.daily.event.BusAction;
@@ -66,7 +62,7 @@ public class DiaryView extends ViewImpl {
         fab.setImageResource(R.drawable.ic_create_white_24dp);
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_ACTIVITY_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_diary);
     }
