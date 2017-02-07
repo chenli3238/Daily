@@ -51,4 +51,8 @@ public class BusAction {
     public static final String SET_BIGDAY_BACKWARD = "SET_BIGDAY_BACKWARD";
 
     public static final String SET_BIGDAY_FORWARD = "SET_BIGDAY_FORWARD";
+
+    public static final String INIT_DIARY = "INIT_DIARY";
+
+    public static final String SET_DIARY = "SET_DIARY";
 }

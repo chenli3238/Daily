@@ -18,4 +18,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="TimeLine">
+        <item name="lineWidth">8dp</item>
+        <item name="dotPosition">32dp</item>
+        <item name="dotSize">12dp</item>
+        <item name="android:color">#ef5350</item>
+    </style>
+
 </resources>

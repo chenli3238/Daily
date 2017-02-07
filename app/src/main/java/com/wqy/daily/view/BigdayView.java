@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by wqy on 17-2-5.
@@ -45,6 +46,8 @@ public class BigdayView extends ViewImpl {
 
     @BindView(R.id.bigday_vp)
     ViewPager mViewPager;
+
+    private Unbinder mUnbinder;
 
     RecyclerView mBackwardRV;
     RecyclerView mForwardRV;
@@ -59,13 +62,12 @@ public class BigdayView extends ViewImpl {
 
     @Override
     public void created() {
-        ButterKnife.bind(this, mRootView);
-        RxBus.get().register(this);
-
+        mUnbinder = ButterKnife.bind(this, mRootView);
         LayoutInflater inflater = LayoutInflater.from(getContext());
         mBackwardRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mForwardRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
 
+        RxBus.get().register(this);
         RxBus.get().post(BusAction.INIT_BIGDAY_BACKWARD, new BigdayInitEvent());
         RxBus.get().post(BusAction.INIT_BIGDAY_FORWARD, new BigdayInitEvent());
     }
@@ -73,6 +75,7 @@ public class BigdayView extends ViewImpl {
     @Override
     public void destroy() {
         RxBus.get().unregister(this);
+        mUnbinder.unbind();
     }
 
     public void setViewPager() {

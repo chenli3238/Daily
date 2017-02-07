@@ -80,7 +80,6 @@ public class MainView extends ViewImpl {
     public void created() {
         Log.d(TAG, "created: ");
         ButterKnife.bind(this, mRootView);
-        RxBus.get().register(this);
         ((AppCompatActivity) getContext()).setSupportActionBar(mToolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 (Activity) getContext(), mDrawerLayout, mToolbar,
@@ -88,6 +87,7 @@ public class MainView extends ViewImpl {
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        RxBus.get().register(this);
         // Set default fragment as PunchFragment
         RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
     }

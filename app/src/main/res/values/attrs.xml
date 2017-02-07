@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="TimeLine">
+        <attr name="lineWidth" format="dimension"/>
+        <attr name="dotPosition" format="dimension"/>
+        <attr name="dotSize" format="dimension"/>
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0"/>
+            <enum name="vertical" value="1"/>
+        </attr>
+        <attr name="color" format="color"/>
+    </declare-styleable>
+</resources>

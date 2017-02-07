@@ -21,7 +21,6 @@ public class MemoVH extends ViewHolder<Memo> {
 
     static {
         format = new SimpleDateFormat("MM月dd日");
-
     }
 
     @BindView(R.id.memo_title)

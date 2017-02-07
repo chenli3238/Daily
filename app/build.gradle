@@ -42,4 +42,5 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.1.1'
     compile 'com.android.support:recyclerview-v7:25.1.1'
     compile project(':recyclerview-with-footer')
+    compile 'com.daasuu:BubbleLayout:1.1.1'
 }

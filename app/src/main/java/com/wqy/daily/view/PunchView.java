@@ -36,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by wqy on 17-2-4.
@@ -47,6 +48,8 @@ public class PunchView extends ViewImpl {
 
     @BindView(R.id.punch_vp)
     ViewPager mViewPager;
+
+    private Unbinder mUnbinder;
 
     RecyclerView mUnderwayRV;
     RecyclerView mFinishedRV;
@@ -65,13 +68,13 @@ public class PunchView extends ViewImpl {
     @Override
     public void created() {
         Log.d(TAG, "created: ");
-        ButterKnife.bind(this, mRootView);
-        RxBus.get().register(this);
-
+        mUnbinder = ButterKnife.bind(this, mRootView);
         LayoutInflater inflater = LayoutInflater.from(getContext());
         mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+
+        RxBus.get().register(this);
         RxBus.get().post(BusAction.INIT_PUNCH_UNDERWAY, new PunchInitEvent());
         RxBus.get().post(BusAction.INIT_PUNCH_FINISHED, new PunchInitEvent());
         RxBus.get().post(BusAction.INIT_PUNCH_DELETED, new PunchInitEvent());
@@ -81,6 +84,7 @@ public class PunchView extends ViewImpl {
     public void destroy() {
         Log.d(TAG, "destroy: ");
         RxBus.get().unregister(this);
+        mUnbinder.unbind();
     }
 
     @Override

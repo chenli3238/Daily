@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by wqy on 17-2-5.
@@ -46,6 +47,8 @@ public class MemoView extends ViewImpl {
 
     @BindView(R.id.memo_vp)
     ViewPager mViewPager;
+
+    private Unbinder mUnbinder;
 
     RecyclerView mUnderwayRV;
     RecyclerView mFinishedRV;
@@ -62,13 +65,13 @@ public class MemoView extends ViewImpl {
 
     @Override
     public void created() {
-        ButterKnife.bind(this, mRootView);
-        RxBus.get().register(this);
-
+        mUnbinder = ButterKnife.bind(this, mRootView);
         LayoutInflater inflater = LayoutInflater.from(getContext());
         mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+
+        RxBus.get().register(this);
         RxBus.get().post(BusAction.INIT_MEMO_UNDERWAY, new MemoInitEvent());
         RxBus.get().post(BusAction.INIT_MEMO_FINISHED, new MemoInitEvent());
         RxBus.get().post(BusAction.INIT_MEMO_DELETED, new MemoInitEvent());
@@ -77,6 +80,7 @@ public class MemoView extends ViewImpl {
     @Override
     public void destroy() {
         RxBus.get().unregister(this);
+        mUnbinder.unbind();
     }
 
     public void setViewPager() {

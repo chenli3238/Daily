@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingRight="@dimen/margin_8"
+        android:paddingTop="@dimen/margin_8">
+
+        <TextView
+            android:text="3月8日"
+            android:id="@+id/diary_item_date"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/black_87"
+            android:layout_marginBottom="@dimen/margin_8"/>
+
+        <TextView
+            android:text="周三"
+            android:id="@+id/diary_item_day_of_week"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/black_54"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+    <com.wqy.daily.widget.TimeLine
+        android:layout_width="14dp"
+        android:layout_height="match_parent"
+        app:lineWidth="4dp"
+        app:dotSize="14dp"
+        app:orientation="vertical"
+        app:color="@color/colorAccent"
+        app:dotPosition="36dp"/>
+
+    <com.daasuu.bl.BubbleLayout
+        android:padding="@dimen/margin_16"
+        android:paddingBottom="@dimen/margin_8"
+        android:layout_margin="@dimen/margin_8"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:bl_arrowDirection="left"
+        app:bl_arrowHeight="8dp"
+        app:bl_arrowPosition="24dp"
+        app:bl_arrowWidth="8dp"
+        app:bl_cornersRadius="5dp"
+        app:bl_strokeWidth="0dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:text="如果你无法简洁的表达你的想法，那只说明你还不够了解它。
+-- 阿尔伯特·爱因斯坦"
+                android:id="@+id/diary_item_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:maxLines="10"
+                android:textColor="@color/black_87"
+                android:layout_marginBottom="@dimen/margin_16"/>
+
+            <TextView
+                android:text="2015-03-08 12:00"
+                android:id="@+id/diary_item_timestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/black_26"/>
+        </LinearLayout>
+    </com.daasuu.bl.BubbleLayout>
+
+</LinearLayout>
