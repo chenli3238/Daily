@@ -25,4 +25,27 @@
         <item name="android:color">#ef5350</item>
     </style>
 
+    <style name="cpunch_image_view">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">@dimen/margin_16</item>
+        <item name="android:layout_marginRight">@dimen/margin_16</item>
+    </style>
+
+    <style name="cpunch_item_title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_8</item>
+        <item name="android:layout_marginBottom">@dimen/margin_16</item>
+    </style>
+
+    <style name="cpunch_item_value">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black_54</item>
+        <item name="android:layout_marginBottom">@dimen/margin_8</item>
+    </style>
 </resources>

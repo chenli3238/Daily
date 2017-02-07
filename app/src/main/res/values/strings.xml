@@ -34,4 +34,8 @@
     <string name="cpunch_desc_hint">描述</string>
     <string name="title_cpunch">新建打卡</string>
     <string name="cpunch_confirm">确定</string>
+    <string name="cpunch_aim_title">目标打卡次数</string>
+    <string name="cpunch_time_title">打卡时间</string>
+    <string name="cpunch_duration">是否记录打卡时长</string>
+    <string name="cpunch_remind_title">是否提醒</string>
 </resources>

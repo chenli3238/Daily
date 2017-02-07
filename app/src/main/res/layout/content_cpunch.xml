@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".presenter.CreatePunchActivity"
+            tools:showIn="@layout/activity_create_punch">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/cpunch_aim"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/cpunch_image_view"
+                android:src="@drawable/ic_assistant_photo_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/cpunch_item_title"
+                    android:text="@string/cpunch_aim_title"/>
+
+                <TextView
+                    android:id="@+id/cpunch_aim_value"
+                    style="@style/cpunch_item_value"
+                    android:text="7"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cpunch_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/cpunch_image_view"
+                android:src="@drawable/ic_alarm_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/cpunch_item_title"
+                    android:text="@string/cpunch_time_title"/>
+
+                <TextView
+                    android:id="@+id/cpunch_time_value"
+                    style="@style/cpunch_item_value"
+                    android:text="周一，周二，周三  中午12:00"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cpunch_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/cpunch_image_view"
+                android:src="@drawable/ic_mode_edit_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/cpunch_item_title"
+                    android:text="@string/cpunch_duration"/>
+
+                <TextView
+                    android:id="@+id/cpunch_duration_value"
+                    style="@style/cpunch_item_value"
+                    android:text="是"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cpunch_remind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/cpunch_image_view"
+                android:src="@drawable/ic_alarm_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/cpunch_item_title"
+                    android:text="@string/cpunch_remind_title"/>
+
+                <TextView
+                    android:id="@+id/cpunch_remind_value"
+                    style="@style/cpunch_item_value"
+                    android:text="是"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cpunch_priority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                style="@style/cpunch_image_view"
+                android:src="@drawable/ic_star_black_24dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/cpunch_item_title"
+                    android:text="优先级"/>
+
+                <TextView
+                    android:id="@+id/cpunch_priority_value"
+                    style="@style/cpunch_item_value"
+                    android:text="7"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
