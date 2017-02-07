@@ -32,5 +32,6 @@
     <string name="date_sun">周日</string>
     <string name="cpunch_title_hint">标题</string>
     <string name="cpunch_desc_hint">描述</string>
-    <string name="cpunch_title">新建打卡</string>
+    <string name="title_cpunch">新建打卡</string>
+    <string name="cpunch_confirm">确定</string>
 </resources>

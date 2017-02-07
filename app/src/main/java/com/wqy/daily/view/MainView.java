@@ -106,15 +106,6 @@ public class MainView extends ViewImpl {
         mNavigationView.setNavigationItemSelectedListener(MainView.this::onNavigationItemSelected);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SET_SUPPORT_ACTIONBAR)})
-    public void setSupportActionBar(Toolbar toolbar) {
-        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.RESTORE_ACTIONBAR)})
-    public void restoreActionBar(String s) {
-        setSupportActionBar(mToolbar);
-    }
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.

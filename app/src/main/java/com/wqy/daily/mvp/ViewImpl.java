@@ -1,6 +1,9 @@
 package com.wqy.daily.mvp;
 
 import android.content.Context;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +38,14 @@ public abstract class ViewImpl implements IActivityView {
 
     public Context getContext() {
         return mRootView.getContext();
+    }
+
+    public void setSupportActionBar(Toolbar toolbar) {
+        ((AppCompatActivity) getContext()).setSupportActionBar(toolbar);
+    }
+
+    public ActionBar getSupportActionBar() {
+        return ((AppCompatActivity) getContext()).getSupportActionBar();
     }
 
     @Override
