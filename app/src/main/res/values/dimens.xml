@@ -11,4 +11,5 @@
     <dimen name="card_margin">8dp</dimen>
     <dimen name="memo_item_content_height">88dp</dimen>
     <dimen name="card_content_margin">8dp</dimen>
+    <dimen name="bigday_title_size">15sp</dimen>
 </resources>

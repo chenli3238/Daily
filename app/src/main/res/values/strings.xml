@@ -21,4 +21,6 @@
     <string name="title_memo">备忘</string>
     <string name="title_bigday">纪念日</string>
     <string name="title_diary">日记</string>
+    <string name="bigday_backward_title">距离%s还有</string>
+    <string name="bigday_forward_title">%s已经</string>
 </resources>

@@ -122,8 +122,8 @@ public class MemoView extends ViewImpl {
         mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>() {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
-                View itemView = LayoutInflater.from(
-                        parent.getContext()).inflate(R.layout.memo_item, null);
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.memo_item, null);
                 return new MemoVH(itemView);
             }
         };
@@ -139,8 +139,8 @@ public class MemoView extends ViewImpl {
         mFinishedAdapter = new ListRecyclerViewAdapter<Memo>() {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
-                View itemView = LayoutInflater.from(
-                        parent.getContext()).inflate(R.layout.memo_item, null);
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.memo_item, null);
                 return new MemoVH(itemView);
             }
         };
@@ -156,8 +156,8 @@ public class MemoView extends ViewImpl {
         mDeletedAdapter = new ListRecyclerViewAdapter<Memo>() {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
-                View itemView = LayoutInflater.from(
-                        parent.getContext()).inflate(R.layout.memo_item, null);
+                View itemView = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.memo_item, null);
                 return new MemoVH(itemView);
             }
         };
