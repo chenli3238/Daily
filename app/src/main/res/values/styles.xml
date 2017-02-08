@@ -48,4 +48,10 @@
         <item name="android:textColor">@color/black_54</item>
         <item name="android:layout_marginBottom">@dimen/margin_8</item>
     </style>
+
+    <style name="CollapsingToolbarLayoutExpandedTextStyle" parent="AppTheme">
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="android:textSize">0.1sp</item>
+    </style>
+
 </resources>
