@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,6 +17,7 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.TestActivity;
 import com.wqy.daily.presenter.BigdayFragment;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.presenter.DiaryFragment;
@@ -37,7 +37,7 @@ public class MainView extends ViewImpl {
 
     public static final String TAG = "MainView";
 
-    @BindView(R.id.fab)
+    @BindView(R.id.main_fab)
     public FloatingActionButton mFab;
 
     @BindView(R.id.nav_view)
@@ -72,6 +72,8 @@ public class MainView extends ViewImpl {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
+        } if (id == R.id.main_test) {
+            RxBus.get().post(BusAction.START_ACTIVITY, TestActivity.class);
         }
         return super.onMenuItemSelected(item);
     }

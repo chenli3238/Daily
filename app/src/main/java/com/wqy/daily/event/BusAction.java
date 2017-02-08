@@ -69,4 +69,8 @@ public class BusAction {
     public static final String RESTORE_ACTIONBAR = "RESTORE_ACTIONBAR";
 
     public static final String START_ACTIVITY = "START_ACTIVITY";
+
+    public static final String TIME_PICKER_RESULT = "TIME_PICKER_RESULT";
+
+    public static final String DAY_TIME_PICKER_RESULT = "DAY_TIME_PICKER_RESULT";
 }

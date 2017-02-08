@@ -23,6 +23,7 @@
     <string name="title_diary">日记</string>
     <string name="bigday_backward_title">距离%s还有</string>
     <string name="bigday_forward_title">%s已经</string>
+    <string name="date_everyday">每天</string>
     <string name="date_mon">周一</string>
     <string name="date_tue">周二</string>
     <string name="date_wed">周三</string>
@@ -47,4 +48,5 @@
     <string name="cdiary_title">写日记</string>
     <string name="cmemo_remind">添加提醒</string>
     <string name="title_cmemo">新建备忘</string>
+    <string name="comma">,</string>
 </resources>
