@@ -1,4 +1,4 @@
-package com.wqy.daily;
+package com.wqy.daily.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

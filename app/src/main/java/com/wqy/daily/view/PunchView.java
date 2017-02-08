@@ -18,7 +18,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
-import com.wqy.daily.RecyclerView;
+import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.PunchDeletedVH;

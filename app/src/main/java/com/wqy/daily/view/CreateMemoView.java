@@ -2,7 +2,6 @@ package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -20,19 +19,19 @@ import butterknife.ButterKnife;
  * Created by wqy on 17-2-8.
  */
 
-public class CreateDiaryView extends ViewImpl {
+public class CreateMemoView extends ViewImpl {
 
-    @BindView(R.id.cdiary_toolbar)
+    @BindView(R.id.cmemo_toolbar)
     Toolbar mToolbar;
 
     @Override
     public int getResId() {
-        return R.layout.activity_create_diary;
+        return R.layout.activity_create_memo;
     }
 
     @Override
     public int getMenuId() {
-        return R.menu.activity_cdiary;
+        return R.menu.activity_cmemo;
     }
 
     @Override
@@ -55,21 +54,22 @@ public class CreateDiaryView extends ViewImpl {
                 // TODO: 17-2-8 nav to parent activity and fragment
                 NavUtils.navigateUpFromSameTask((Activity) getContext());
                 return true;
-            case R.id.cdiary_confirm:
-                // TODO: 17-2-8 create a diary
+            case R.id.cmemo_confirm:
+                // TODO: 17-2-8 create a memo
                 return true;
-            case R.id.cdiary_edit:
+            case R.id.cmemo_edit:
                 item.setVisible(false);
-                getMenu().findItem(R.id.cdiary_confirm).setVisible(true);
+                getMenu().findItem(R.id.cmemo_confirm).setVisible(true);
                 // TODO: 17-2-8 enable edit
                 return true;
             default:
                 return false;
+
         }
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_CDIARY_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_CMEMO_TITLE)})
     public String setActivityTitle() {
-        return getContext().getString(R.string.cdiary_title);
+        return getContext().getString(R.string.title_cmemo);
     }
 }

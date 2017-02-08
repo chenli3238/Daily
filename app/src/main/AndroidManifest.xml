@@ -46,6 +46,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presenter.MainActivity"/>
         </activity>
+        <activity
+            android:name=".presenter.CreateMemoActivity"
+            android:parentActivityName=".presenter.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presenter.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/cmemo_remind"
+          android:icon="@drawable/ic_alarm_white_24dp"
+          android:title="@string/cmemo_remind"
+          app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/cmemo_image"
+        android:icon="@drawable/ic_image_white_24dp"
+        android:title="@string/cdiary_image"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/cmemo_edit"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:title="@string/cdiary_edit"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/cmemo_confirm"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/cpunch_confirm"
+        app:showAsAction="ifRoom"/>
+
+</menu>

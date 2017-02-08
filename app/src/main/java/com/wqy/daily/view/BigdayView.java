@@ -14,7 +14,7 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.wqy.daily.RecyclerView;
+import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.BigdayBackwardVH;
 import com.wqy.daily.adapter.BigdayForwardVH;
 import com.wqy.daily.adapter.BigdayInitEvent;
@@ -28,7 +28,6 @@ import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.presenter.CreateBigdayActivity;
-import com.wqy.daily.presenter.CreatePunchActivity;
 
 import java.util.Arrays;
 import java.util.List;

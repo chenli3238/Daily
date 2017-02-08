@@ -45,4 +45,6 @@
     <string name="cdiary_image">添加图片</string>
     <string name="cdiary_edit">编辑</string>
     <string name="cdiary_title">写日记</string>
+    <string name="cmemo_remind">添加提醒</string>
+    <string name="title_cmemo">新建备忘</string>
 </resources>

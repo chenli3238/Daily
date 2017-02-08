@@ -10,7 +10,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
-import com.wqy.daily.RecyclerView;
+import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.DiaryVH;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.ViewHolder;

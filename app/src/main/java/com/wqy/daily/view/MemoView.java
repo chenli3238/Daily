@@ -14,7 +14,8 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
-import com.wqy.daily.RecyclerView;
+import com.wqy.daily.presenter.CreateMemoActivity;
+import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.MemoVH;
@@ -111,6 +112,7 @@ public class MemoView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
         fab.setImageResource(R.drawable.ic_note_add_white_24dp);
+        fab.setOnClickListener(v -> RxBus.get().post(BusAction.START_ACTIVITY, CreateMemoActivity.class));
     }
 
     @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})

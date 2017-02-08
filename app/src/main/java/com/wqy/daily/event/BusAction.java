@@ -22,6 +22,8 @@ public class BusAction {
 
     public static final String SET_CDIARY_TITLE = "SET_CDIARY_TITLE";
 
+    public static final String SET_CMEMO_TITLE = "SET_CMEMO_TITLE";
+
     public static final String SET_FAB = "SET_FAB";
 
     public static final String ANIMATION_FAB = "ANIMATION_FAB";

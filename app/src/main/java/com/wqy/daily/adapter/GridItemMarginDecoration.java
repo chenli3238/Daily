@@ -3,8 +3,7 @@ package com.wqy.daily.adapter;
 import android.graphics.Rect;
 import android.view.View;
 
-import com.wqy.daily.R;
-import com.wqy.daily.RecyclerView;
+import com.wqy.daily.widget.RecyclerView;
 
 /**
  * Created by wqy on 17-2-6.
