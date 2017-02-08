@@ -1,5 +1,6 @@
 package com.wqy.daily.mvp;
 
+import android.view.Menu;
 import android.view.MenuItem;
 
 /**
@@ -9,6 +10,10 @@ import android.view.MenuItem;
 public interface IActivityView extends IView {
 
     int getMenuId();
+
+    Menu getMenu();
+
+    void setMenu(Menu menu);
 
     boolean onMenuItemSelected(MenuItem item);
 

@@ -92,6 +92,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         int menuId = mActivityView.getMenuId();
         if (menuId <= 0) return false;
         getMenuInflater().inflate(menuId, menu);
+        mActivityView.setMenu(menu);
         return true;
     }
 

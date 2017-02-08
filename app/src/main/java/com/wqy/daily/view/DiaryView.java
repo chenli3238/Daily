@@ -19,6 +19,7 @@ import com.wqy.daily.R;
 import com.wqy.daily.event.DiaryEvent;
 import com.wqy.daily.model.Diary;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.presenter.CreateDiaryActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +61,7 @@ public class DiaryView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
         fab.setImageResource(R.drawable.ic_create_white_24dp);
+        fab.setOnClickListener(v -> RxBus.get().post(BusAction.START_ACTIVITY, CreateDiaryActivity.class));
     }
 
     @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})

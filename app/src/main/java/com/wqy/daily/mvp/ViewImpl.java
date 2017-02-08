@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ public abstract class ViewImpl implements IActivityView {
     protected IPresenter mIPresenter;
 
     protected View mRootView;
+
+    protected Menu mMenu;
 
     @Override
     public View create(LayoutInflater inflater, ViewGroup container) {
@@ -46,6 +49,16 @@ public abstract class ViewImpl implements IActivityView {
 
     public ActionBar getSupportActionBar() {
         return ((AppCompatActivity) getContext()).getSupportActionBar();
+    }
+
+    @Override
+    public void setMenu(Menu menu) {
+        mMenu = menu;
+    }
+
+    @Override
+    public Menu getMenu() {
+        return mMenu;
     }
 
     @Override

@@ -42,4 +42,7 @@
     <string name="cbigday_time_title">设置时间</string>
     <string name="cbigday_tags_title">设置标签</string>
     <string name="title_cbigday">新建纪念日</string>
+    <string name="cdiary_image">添加图片</string>
+    <string name="cdiary_edit">编辑</string>
+    <string name="cdiary_title">写日记</string>
 </resources>
