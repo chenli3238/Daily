@@ -1,5 +1,7 @@
 package com.wqy.daily.view;
 
+import android.app.Activity;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -51,6 +53,7 @@ public class CreateDiaryView extends ViewImpl {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // nav to parent
+                NavUtils.navigateUpFromSameTask((Activity) getContext());
                 return true;
             case R.id.cdiary_confirm:
                 // create a diary
