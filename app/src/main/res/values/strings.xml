@@ -38,4 +38,8 @@
     <string name="cpunch_time_title">打卡时间</string>
     <string name="cpunch_duration">是否记录打卡时长</string>
     <string name="cpunch_remind_title">是否提醒</string>
+    <string name="cbigday_title_hint">标题</string>
+    <string name="cbigday_time_title">设置时间</string>
+    <string name="cbigday_tags_title">设置标签</string>
+    <string name="title_cbigday">新建纪念日</string>
 </resources>

@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
@@ -18,58 +16,22 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by wqy on 17-2-7.
+ * Created by wqy on 17-2-8.
  */
 
-public class CreatePunchView extends ViewImpl {
+public class CreateBigdayView extends ViewImpl {
 
-    @BindView(R.id.cpunch_toolbar)
+    @BindView(R.id.cbigday_toolbar)
     Toolbar mToolbar;
-
-    @BindView(R.id.cpunch_title)
-    TextView tvTitle;
-
-    @BindView(R.id.cpunch_desc)
-    TextView tvDesc;
-
-    @BindView(R.id.cpunch_aim)
-    View vAim;
-
-    @BindView(R.id.cpunch_aim_value)
-    TextView tvAim;
-
-    @BindView(R.id.cpunch_time)
-    View vTime;
-
-    @BindView(R.id.cpunch_time_value)
-    TextView tvTime;
-
-    @BindView(R.id.cpunch_duration)
-    View vDuration;
-
-    @BindView(R.id.cpunch_duration_value)
-    TextView tvDuration;
-
-    @BindView(R.id.cpunch_remind)
-    View vRemind;
-
-    @BindView(R.id.cpunch_remind_value)
-    TextView tvRemind;
-
-    @BindView(R.id.cpunch_priority)
-    View vPriority;
-
-    @BindView(R.id.cpunch_priority_value)
-    TextView tvPriority;
 
     @Override
     public int getResId() {
-        return R.layout.activity_create_punch;
+        return R.layout.activity_create_bigday;
     }
 
     @Override
     public int getMenuId() {
-        return R.menu.activity_cpunch;
+        return R.menu.activity_cbigday;
     }
 
     @Override
@@ -91,16 +53,16 @@ public class CreatePunchView extends ViewImpl {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask((Activity) getContext());
                 return true;
-            case R.id.cpunch_confirm:
-                // create a new punch event
+            case R.id.cbigday_confirm:
+                // create a new bigday
                 return true;
             default:
                 return false;
         }
     }
 
-    @Produce(tags = {@Tag(BusAction.SET_CPUNCH_TITLE)})
+    @Produce(tags = {@Tag(BusAction.SET_CBIGDAY_TITLE)})
     public String setActivityTitle() {
-        return getContext().getString(R.string.title_cpunch);
+        return getContext().getString(R.string.title_cbigday);
     }
 }

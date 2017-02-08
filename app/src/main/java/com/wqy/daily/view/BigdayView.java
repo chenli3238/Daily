@@ -27,6 +27,8 @@ import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.presenter.CreateBigdayActivity;
+import com.wqy.daily.presenter.CreatePunchActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -107,6 +109,7 @@ public class BigdayView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
         fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
+        fab.setOnClickListener(v -> RxBus.get().post(BusAction.START_ACTIVITY, CreateBigdayActivity.class));
     }
 
     @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
