@@ -25,6 +25,8 @@ import java.util.Objects;
 
 public class NumberPickerFragment extends DialogFragment {
     public static final String TAG = NumberPickerFragment.class.getSimpleName();
+    public static final String ARG_VALUES = "VALUES";
+    public static final String ARG_MAX_VALUE = "MAX_VALUE";
 
     private static int MAX_VALUE;
     View mView;
@@ -33,14 +35,15 @@ public class NumberPickerFragment extends DialogFragment {
     String[] mDisplayedValues;
 
     public NumberPickerFragment() {
-        Bundle bundle = getArguments();
-        mDisplayedValues = bundle.getStringArray("values");
-        MAX_VALUE = bundle.getInt("maxValue", mDisplayedValues.length - 1);
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        mDisplayedValues = bundle.getStringArray(ARG_VALUES);
+        MAX_VALUE = bundle.getInt(ARG_MAX_VALUE, mDisplayedValues.length - 1);
+
         mView = LayoutInflater.from(getContext()).inflate(R.layout.picker_number_picker, null);
         mNumberPicker = (NumberPicker) mView.findViewById(R.id.picker_number);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())

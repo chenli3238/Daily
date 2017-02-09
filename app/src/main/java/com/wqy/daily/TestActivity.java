@@ -10,12 +10,7 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.wqy.daily.event.BusAction;
-import com.wqy.daily.event.DayTimePickerEvent;
-import com.wqy.daily.event.NumberPickerEvent;
-import com.wqy.daily.event.TimePickerEvent;
-import com.wqy.daily.widget.DayTimePickerFragment;
-import com.wqy.daily.widget.NoticeDialogFragment;
-import com.wqy.daily.widget.NumberPickerFragment;
+import com.wqy.daily.widget.BooleanPickerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +29,12 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
         mFab.setOnClickListener(v -> {
-            DialogFragment fragment = new NumberPickerFragment();
-            fragment.show(getSupportFragmentManager(), DayTimePickerFragment.TAG);
+            DialogFragment fragment = new BooleanPickerFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(BooleanPickerFragment.ARG_EVENT_TAG, BusAction.PUNCH_KEEP_TIME);
+            bundle.putString(BooleanPickerFragment.ARG_MESSAGE, getString(R.string.cpunch_duration));
+            fragment.setArguments(bundle);
+            fragment.show(getSupportFragmentManager(), BooleanPickerFragment.TAG);
         });
 
         RxBus.get().register(this);
@@ -46,8 +45,8 @@ public class TestActivity extends AppCompatActivity {
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.NUMBER_PICKER_RESULT)})
-    public void onTimePickerResult(NumberPickerEvent event) {
-        tv.setText(CommonUtils.getNumberString(getResources(), event));
+    @Subscribe(tags = {@Tag(BusAction.PUNCH_KEEP_TIME)})
+    public void onTimePickerResult(Boolean event) {
+        tv.setText(CommonUtils.getBooleanString(getResources(), event));
     }
 }

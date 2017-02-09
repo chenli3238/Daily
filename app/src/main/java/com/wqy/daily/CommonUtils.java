@@ -76,4 +76,12 @@ public class CommonUtils {
         }
         return String.valueOf(event.getNumber());
     }
+
+    public static String getBooleanString(@NonNull Resources resources, @NonNull Boolean b) {
+        if (b) {
+            return resources.getString(R.string.yes);
+        } else {
+            return resources.getString(R.string.no);
+        }
+    }
 }

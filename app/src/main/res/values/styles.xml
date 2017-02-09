@@ -90,4 +90,8 @@
 
         <item name="item_multiChooseable">true</item>
     </style>
+
+    <style name="FlowLayout.SingleChoose" parent="FlowLayout">
+        <item name="item_multiChooseable">false</item>
+    </style>
 </resources>
