@@ -78,6 +78,8 @@ public class BusAction {
 
     public static final String NUMBER_PICKER_RESULT = "NUMBER_PICKER_RESULT";
 
+    public static final String TAG_PICKER_RESULT = "TAG_PICKER_RESULT";
+
     public static final String PUNCH_KEEP_TIME = "PUNCH_KEEP_TIME";
 
     public static final String PUNCH_REMIND = "PUNCH_REMIND";

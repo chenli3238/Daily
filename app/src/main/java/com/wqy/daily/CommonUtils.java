@@ -84,4 +84,16 @@ public class CommonUtils {
             return resources.getString(R.string.no);
         }
     }
+
+    public static final String getTagString(@NonNull Resources resources, @NonNull String[] tags) {
+        String divider = resources.getString(R.string.comma);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tags.length; i++) {
+            sb.append(tags[i]);
+            if (i < tags.length - 1) {
+                sb.append(divider);
+            }
+        }
+        return sb.toString();
+    }
 }

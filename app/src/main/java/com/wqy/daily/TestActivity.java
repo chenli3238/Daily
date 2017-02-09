@@ -15,8 +15,10 @@ import com.wqy.daily.widget.BooleanPickerFragment;
 import com.wqy.daily.widget.DateTimePickerFragment;
 import com.wqy.daily.widget.DayTimePickerFragment;
 import com.wqy.daily.widget.ListPickerFragment;
+import com.wqy.daily.widget.TagPickerFragment;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -39,8 +41,8 @@ public class TestActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         items = getResources().getStringArray(R.array.priority);
         mFab.setOnClickListener(v -> {
-            DialogFragment fragment = new DateTimePickerFragment();
-            fragment.show(getSupportFragmentManager(), DateTimePickerFragment.TAG);
+            DialogFragment fragment = new TagPickerFragment();
+            fragment.show(getSupportFragmentManager(), TagPickerFragment.TAG);
         });
 
         RxBus.get().register(this);
@@ -51,9 +53,8 @@ public class TestActivity extends AppCompatActivity {
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.DATE_TIME_PICKER_RESULLT)})
-    public void onTimePickerResult(Calendar event) {
-        SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm");
-        tv.setText(format.format(event.getTime()));
+    @Subscribe(tags = {@Tag(BusAction.TAG_PICKER_RESULT)})
+    public void onTimePickerResult(String[] tags) {
+        tv.setText(CommonUtils.getTagString(getResources(), tags));
     }
 }

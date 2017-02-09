@@ -4,12 +4,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TimePicker;
 
@@ -29,7 +31,7 @@ import java.util.List;
  * Created by wqy on 17-2-8.
  */
 
-public class DayTimePickerFragment extends NoticeDialogFragment {
+public class DayTimePickerFragment extends DialogFragment {
 
     public static final String TAG = DayTimePickerFragment.class.getSimpleName();
 
