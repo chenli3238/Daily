@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <MultiAutoCompleteTextView
+    <com.wqy.daily.widget.TagView
         android:id="@+id/picker_auto_complete"
         android:layout_margin="@dimen/margin_16"
         android:layout_width="match_parent"

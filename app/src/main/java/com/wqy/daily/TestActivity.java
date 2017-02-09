@@ -50,6 +50,7 @@ public class TestActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         RxBus.get().unregister(this);
     }
 

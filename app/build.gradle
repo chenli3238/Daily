@@ -44,4 +44,5 @@ dependencies {
     compile project(':recyclerview-with-footer')
     compile 'com.daasuu:BubbleLayout:1.1.1'
     compile 'liji.library.dev:multilinechooselib:1.4.0'
+    compile "com.splitwise:tokenautocomplete:2.0.8@aar"
 }
