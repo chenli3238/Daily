@@ -1,4 +1,4 @@
-package com.wqy.daily.event;
+package com.wqy.daily.model;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * Created by wqy on 17-2-8.
  */
 
-public class DayTimePickerEvent {
+public class DayTime {
 
     private List<Integer> days;
 
@@ -14,7 +14,7 @@ public class DayTimePickerEvent {
 
     private int minute;
 
-    public DayTimePickerEvent(List<Integer> days, int hour, int minute) {
+    public DayTime(List<Integer> days, int hour, int minute) {
         this.days = days;
         this.hour = hour;
         this.minute = minute;

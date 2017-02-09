@@ -70,6 +70,8 @@ public class BusAction {
 
     public static final String START_ACTIVITY = "START_ACTIVITY";
 
+    public static final String SHOW_DIALOG = "SHOW_DIALOG";
+
     public static final String TIME_PICKER_RESULT = "TIME_PICKER_RESULT";
 
     public static final String DAY_TIME_PICKER_RESULT = "DAY_TIME_PICKER_RESULT";
@@ -80,9 +82,17 @@ public class BusAction {
 
     public static final String TAG_PICKER_RESULT = "TAG_PICKER_RESULT";
 
-    public static final String PUNCH_KEEP_TIME = "PUNCH_KEEP_TIME";
+    public static final String PUNCH_TITLE = "PUNCH_TITLE";
+
+    public static final String PUNCH_DESC = "PUNCH_DESC";
+
+    public static final String PUNCH_AIM = "PUNCH_AIM";
+
+    public static final String PUNCH_DURATION = "PUNCH_DURATION";
 
     public static final String PUNCH_REMIND = "PUNCH_REMIND";
 
     public static final String PUNCH_PRIORITY = "PUNCH_PRIORITY";
+
+    public static final String PUNCH_CREATE = "PUNCH_CREATE";
 }

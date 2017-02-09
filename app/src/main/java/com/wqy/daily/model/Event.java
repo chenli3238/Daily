@@ -6,11 +6,20 @@ package com.wqy.daily.model;
 
 public class Event {
 
+    public static final int ENDLESS = -1;
+
     private String title;
 
     private String desc;
 
+    private DayTime punchTime;
+
     private Priority priority;
+
+    /**
+     * 目标打卡次数, -1 表示不限次数。
+     */
+    private int aim;
 
     private float keepRate;
 
@@ -21,6 +30,8 @@ public class Event {
     private boolean deleted;
 
     private float score;
+
+    private boolean remind;
 
     private Reminder reminder;
 
@@ -38,6 +49,14 @@ public class Event {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public DayTime getPunchTime() {
+        return punchTime;
+    }
+
+    public void setPunchTime(DayTime punchTime) {
+        this.punchTime = punchTime;
     }
 
     public Priority getPriority() {
@@ -72,6 +91,14 @@ public class Event {
         this.deleted = deleted;
     }
 
+    public boolean isRemind() {
+        return remind;
+    }
+
+    public void setRemind(boolean remind) {
+        this.remind = remind;
+    }
+
     public Reminder getReminder() {
         return reminder;
     }
@@ -94,6 +121,23 @@ public class Event {
 
     public void setScore(float score) {
         this.score = score;
+    }
+
+    public void setEndless() {
+        aim = ENDLESS;
+    }
+
+    public int getAim() {
+        return aim;
+    }
+
+    public void setAim(int aim) {
+        this.aim = aim;
+    }
+
+    public boolean isEndless() {
+        return aim == ENDLESS;
+
     }
 
     public enum Priority {

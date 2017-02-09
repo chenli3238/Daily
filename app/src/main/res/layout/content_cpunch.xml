@@ -134,7 +134,7 @@
 
                 <TextView
                     style="@style/cpunch_item_title"
-                    android:text="优先级"/>
+                    android:text="@string/cpunch_priority"/>
 
                 <TextView
                     android:id="@+id/cpunch_priority_value"

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -25,8 +26,13 @@ public class ListPickerFragment extends DialogFragment {
     public static final String TAG = ListPickerFragment.class.getSimpleName();
 
     public static final String ARG_TITLE = "TITLE";
+
+    // require
     public static final String ARG_ITEM_TITLES = "ITEM_TITLES";
+
+    // require
     public static final String ARG_EVENT_TAG = "EVENT_TAG";
+
     public static final String ARG_DEFAULT_VALUE = "DEFAULT_VALUE";
 
     private String mTitle;
@@ -71,11 +77,12 @@ public class ListPickerFragment extends DialogFragment {
     void init() {
         Bundle args = getArguments();
         mTitle = args.getString(ARG_TITLE);
-        mItemTitles = args.getStringArrayList(ARG_ITEM_TITLES);
+        mItemTitles = Arrays.asList(args.getStringArray(ARG_ITEM_TITLES));
         if (mItemTitles == null) {
-            mItemTitles = Arrays.asList(args.getStringArray(ARG_ITEM_TITLES));
+            mItemTitles = args.getStringArrayList(ARG_ITEM_TITLES);
         }
         mEventTag = args.getString(ARG_EVENT_TAG);
         mDefaultValue = args.getInt(ARG_DEFAULT_VALUE, 0);
+        Log.d(TAG, "init: eventTag = " + mEventTag);
     }
 }

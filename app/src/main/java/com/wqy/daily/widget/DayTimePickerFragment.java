@@ -1,29 +1,22 @@
 package com.wqy.daily.widget;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.TimePicker;
 
 import com.hwangjr.rxbus.RxBus;
 import com.ihidea.multilinechooselib.MultiLineChooseLayout;
 import com.wqy.daily.R;
-import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.event.BusAction;
-import com.wqy.daily.event.DayTimePickerEvent;
+import com.wqy.daily.model.DayTime;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -83,7 +76,7 @@ public class DayTimePickerFragment extends DialogFragment {
 
     void confirm() {
         mDays = mMultiLineChooseLayout.getAllItemSelectedIndex();
-        DayTimePickerEvent event = new DayTimePickerEvent(mDays, mHour, mMinute);
+        DayTime event = new DayTime(mDays, mHour, mMinute);
         RxBus.get().post(BusAction.DAY_TIME_PICKER_RESULT, event);
     }
 }

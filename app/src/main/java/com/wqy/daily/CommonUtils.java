@@ -3,7 +3,7 @@ package com.wqy.daily;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
-import com.wqy.daily.event.DayTimePickerEvent;
+import com.wqy.daily.model.DayTime;
 import com.wqy.daily.event.NumberPickerEvent;
 
 import java.util.Calendar;
@@ -49,7 +49,7 @@ public class CommonUtils {
         }
     }
 
-    public static String getDayTimeString(@NonNull Resources resources, @NonNull DayTimePickerEvent event) {
+    public static String getDayTimeString(@NonNull Resources resources, @NonNull DayTime event) {
         String[] a = resources.getStringArray(R.array.day_of_week);
         String divider = resources.getString(R.string.comma);
 

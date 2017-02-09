@@ -15,7 +15,10 @@ import com.wqy.daily.R;
 
 public class BooleanPickerFragment extends DialogFragment {
     public static final String TAG = BooleanPickerFragment.class.getSimpleName();
+
     public static final String ARG_MESSAGE = "MESSAGE";
+
+    // required
     public static final String ARG_EVENT_TAG = "EVENT_TAG";
 
     private String mMessage;

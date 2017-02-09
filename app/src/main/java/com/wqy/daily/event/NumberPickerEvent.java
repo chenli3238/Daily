@@ -21,4 +21,8 @@ public class NumberPickerEvent {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public boolean isMaxValue() {
+        return number == MAX_VALUE;
+    }
 }

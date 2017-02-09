@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="day_of_week">
+    <string-array name="day_of_week">
         <item>@string/date_mon</item>
         <item>@string/date_tue</item>
         <item>@string/date_wed</item>
@@ -8,20 +8,20 @@
         <item>@string/date_fri</item>
         <item>@string/date_sat</item>
         <item>@string/date_sun</item>
-    </array>
+    </string-array>
 
-    <array name="cpunch_numbers">
+    <string-array name="cpunch_aims">
         <item>7</item>
         <item>14</item>
         <item>21</item>
         <item>30</item>
         <item>60</item>
         <item>不限</item>
-    </array>
+    </string-array>
 
-    <array name="priority">
+    <string-array name="priority">
         <item>@string/priority_high</item>
         <item>@string/priority_default</item>
         <item>@string/priority_low</item>
-    </array>
+    </string-array>
 </resources>
