@@ -43,4 +43,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.1.1'
     compile project(':recyclerview-with-footer')
     compile 'com.daasuu:BubbleLayout:1.1.1'
+    compile 'liji.library.dev:multilinechooselib:1.4.0'
 }

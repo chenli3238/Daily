@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="day_of_week">
-        <item>每天</item>
         <item>@string/date_mon</item>
         <item>@string/date_tue</item>
         <item>@string/date_wed</item>

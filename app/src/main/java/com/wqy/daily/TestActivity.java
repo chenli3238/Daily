@@ -13,6 +13,7 @@ import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DayTimePickerEvent;
 import com.wqy.daily.event.TimePickerEvent;
 import com.wqy.daily.widget.DayTimePickerFragment;
+import com.wqy.daily.widget.NoticeDialogFragment;
 import com.wqy.daily.widget.TimePickerFragment;
 
 import java.util.Locale;
@@ -34,8 +35,11 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
         mFab.setOnClickListener(v -> {
-            DialogFragment fragment = new DayTimePickerFragment();
+            NoticeDialogFragment fragment = new DayTimePickerFragment();
             fragment.show(getSupportFragmentManager(), TimePickerFragment.TAG);
+            fragment.setNoticeDialogListener(dialog -> {
+
+            });
         });
 
         RxBus.get().register(this);

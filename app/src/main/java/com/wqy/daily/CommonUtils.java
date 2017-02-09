@@ -56,13 +56,16 @@ public class CommonUtils {
         List<Integer> days = event.getDays();
         int size = days == null ? 0 : days.size();
 
-        for (int i = 0; i < size; i++) {
-            sb.append(a[days.get(i)]);
-            if (i < size - 1) {
-                sb.append(divider);
+        if (size == 7) {
+            sb.append(resources.getString(R.string.date_everyday));
+        } else {
+            for (int i = 0; i < size; i++) {
+                sb.append(a[days.get(i)]);
+                if (i < size - 1) {
+                    sb.append(divider);
+                }
             }
         }
-
         return String.format("%s  %d:%d", sb.toString(), event.getHour(), event.getMinute());
     }
 }

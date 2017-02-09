@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:windowBackground">@color/grey</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -54,4 +54,40 @@
         <item name="android:textSize">0.1sp</item>
     </style>
 
+    <style name="FlowLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_16</item>
+
+        <item name="item_textColor">@color/black_87</item>
+
+        <item name="item_textSize">16sp</item>
+
+        <item name="item_backgroundColor">@android:color/white</item>
+
+        <item name="item_selectedTextColor">@color/grey</item>
+
+        <item name="item_selectedBackgroundColor">@color/colorAccent</item>
+
+        <item name="item_radius">4dp</item>
+
+        <item name="item_strokeColor">@null</item>
+
+        <item name="item_selectedStrokeColor">@null</item>
+
+        <item name="item_strokeWidth">0px</item>
+
+        <item name="item_horizontalSpacing">8dp</item>
+
+        <item name="item_horizontalPadding">8dp</item>
+
+        <item name="item_verticalPadding">8dp</item>
+
+        <item name="item_width">wrap_content</item>
+        <item name="item_height">wrap_content</item>
+
+        <item name="item_maxEms">5</item>
+
+        <item name="item_multiChooseable">true</item>
+    </style>
 </resources>

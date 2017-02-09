@@ -27,17 +27,14 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        return new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+        return new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                RxBus.get().post(BusAction.TIME_PICKER_RESULT, new TimePickerEvent(hourOfDay, minute));
             }
-        }, year, month, day);
+        }, hour, minute, true);
     }
 
     @Override
