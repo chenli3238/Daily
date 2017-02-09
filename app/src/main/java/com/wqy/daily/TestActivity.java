@@ -10,8 +10,14 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.wqy.daily.event.BusAction;
+import com.wqy.daily.event.DateTimeEvent;
 import com.wqy.daily.widget.BooleanPickerFragment;
+import com.wqy.daily.widget.DateTimePickerFragment;
+import com.wqy.daily.widget.DayTimePickerFragment;
 import com.wqy.daily.widget.ListPickerFragment;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,13 +39,8 @@ public class TestActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         items = getResources().getStringArray(R.array.priority);
         mFab.setOnClickListener(v -> {
-            DialogFragment fragment = new ListPickerFragment();
-            Bundle bundle = new Bundle();
-            bundle.putStringArray(ListPickerFragment.ARG_ITEM_TITLES, items);
-            bundle.putString(ListPickerFragment.ARG_EVENT_TAG, BusAction.PUNCH_PRIORITY);
-            bundle.putInt(ListPickerFragment.ARG_DEFAULT_VALUE, 1);
-            fragment.setArguments(bundle);
-            fragment.show(getSupportFragmentManager(), ListPickerFragment.TAG);
+            DialogFragment fragment = new DateTimePickerFragment();
+            fragment.show(getSupportFragmentManager(), DateTimePickerFragment.TAG);
         });
 
         RxBus.get().register(this);
@@ -50,8 +51,9 @@ public class TestActivity extends AppCompatActivity {
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.PUNCH_PRIORITY)})
-    public void onTimePickerResult(Integer event) {
-        tv.setText(items[event]);
+    @Subscribe(tags = {@Tag(BusAction.DATE_TIME_PICKER_RESULLT)})
+    public void onTimePickerResult(Calendar event) {
+        SimpleDateFormat format = new SimpleDateFormat("yy/MM/dd HH:mm");
+        tv.setText(format.format(event.getTime()));
     }
 }

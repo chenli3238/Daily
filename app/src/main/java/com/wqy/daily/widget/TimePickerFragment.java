@@ -19,7 +19,7 @@ import java.util.Calendar;
  * Created by wqy on 17-2-8.
  */
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimePickerFragment extends DialogFragment {
     public static final String TAG = TimePickerFragment.class.getSimpleName();
 
     @NonNull
@@ -29,17 +29,8 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
-        return new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                RxBus.get().post(BusAction.TIME_PICKER_RESULT, new TimePickerEvent(hourOfDay, minute));
-            }
-        }, hour, minute, true);
+        return new TimePickerDialog(getContext(), (view, hourOfDay, minute1) ->
+                RxBus.get().post(BusAction.TIME_PICKER_RESULT, new TimePickerEvent(hourOfDay, minute1)), hour, minute, true);
     }
 
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        RxBus.get().post(BusAction.TIME_PICKER_RESULT,
-                new TimePickerEvent(hourOfDay, minute));
-    }
 }
