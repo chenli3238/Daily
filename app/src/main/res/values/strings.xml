@@ -49,4 +49,5 @@
     <string name="cmemo_remind">添加提醒</string>
     <string name="title_cmemo">新建备忘</string>
     <string name="comma">,</string>
+    <string name="cpunch_max">不限</string>
 </resources>

@@ -9,4 +9,13 @@
         <item>@string/date_sat</item>
         <item>@string/date_sun</item>
     </array>
+
+    <array name="cpunch_numbers">
+        <item>7</item>
+        <item>14</item>
+        <item>21</item>
+        <item>30</item>
+        <item>60</item>
+        <item>不限</item>
+    </array>
 </resources>

@@ -34,12 +34,8 @@ public class DayTimePickerFragment extends NoticeDialogFragment {
     public static final String TAG = DayTimePickerFragment.class.getSimpleName();
 
     View mView;
-    Button mPositiveButton;
-    Button mNeutralButton;
     TimePicker mTimePicker;
     MultiLineChooseLayout mMultiLineChooseLayout;
-
-    PagerAdapter mAdapter;
 
     List<Integer> mDays;
 

@@ -73,4 +73,6 @@ public class BusAction {
     public static final String TIME_PICKER_RESULT = "TIME_PICKER_RESULT";
 
     public static final String DAY_TIME_PICKER_RESULT = "DAY_TIME_PICKER_RESULT";
+
+    public static final String NUMBER_PICKER_RESULT = "NUMBER_PICKER_RESULT";
 }

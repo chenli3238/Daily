@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.wqy.daily.event.DayTimePickerEvent;
+import com.wqy.daily.event.NumberPickerEvent;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -67,5 +68,12 @@ public class CommonUtils {
             }
         }
         return String.format("%s  %d:%d", sb.toString(), event.getHour(), event.getMinute());
+    }
+
+    public static String getNumberString(@NonNull Resources resources, @NonNull NumberPickerEvent event) {
+        if (event.getNumber() == NumberPickerEvent.MAX_VALUE) {
+            return resources.getString(R.string.cpunch_max);
+        }
+        return String.valueOf(event.getNumber());
     }
 }
