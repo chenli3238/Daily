@@ -52,4 +52,7 @@
     <string name="cpunch_max">不限</string>
     <string name="yes">是</string>
     <string name="no">否</string>
+    <string name="priority_high">高</string>
+    <string name="priority_default">默认</string>
+    <string name="priority_low">低</string>
 </resources>

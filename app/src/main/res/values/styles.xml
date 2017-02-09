@@ -93,5 +93,7 @@
 
     <style name="FlowLayout.SingleChoose" parent="FlowLayout">
         <item name="item_multiChooseable">false</item>
+        <item name="item_strokeWidth">1dp</item>
+        <item name="item_strokeColor">@color/colorAccent</item>
     </style>
 </resources>

@@ -18,4 +18,10 @@
         <item>60</item>
         <item>不限</item>
     </array>
+
+    <array name="priority">
+        <item>@string/priority_high</item>
+        <item>@string/priority_default</item>
+        <item>@string/priority_low</item>
+    </array>
 </resources>

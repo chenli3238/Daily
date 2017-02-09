@@ -11,6 +11,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.widget.BooleanPickerFragment;
+import com.wqy.daily.widget.ListPickerFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,18 +24,22 @@ public class TestActivity extends AppCompatActivity {
     @BindView(R.id.test_tv)
     TextView tv;
 
+    String[] items;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
+        items = getResources().getStringArray(R.array.priority);
         mFab.setOnClickListener(v -> {
-            DialogFragment fragment = new BooleanPickerFragment();
+            DialogFragment fragment = new ListPickerFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(BooleanPickerFragment.ARG_EVENT_TAG, BusAction.PUNCH_KEEP_TIME);
-            bundle.putString(BooleanPickerFragment.ARG_MESSAGE, getString(R.string.cpunch_duration));
+            bundle.putStringArray(ListPickerFragment.ARG_ITEM_TITLES, items);
+            bundle.putString(ListPickerFragment.ARG_EVENT_TAG, BusAction.PUNCH_PRIORITY);
+            bundle.putInt(ListPickerFragment.ARG_DEFAULT_VALUE, 1);
             fragment.setArguments(bundle);
-            fragment.show(getSupportFragmentManager(), BooleanPickerFragment.TAG);
+            fragment.show(getSupportFragmentManager(), ListPickerFragment.TAG);
         });
 
         RxBus.get().register(this);
@@ -45,8 +50,8 @@ public class TestActivity extends AppCompatActivity {
         RxBus.get().unregister(this);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.PUNCH_KEEP_TIME)})
-    public void onTimePickerResult(Boolean event) {
-        tv.setText(CommonUtils.getBooleanString(getResources(), event));
+    @Subscribe(tags = {@Tag(BusAction.PUNCH_PRIORITY)})
+    public void onTimePickerResult(Integer event) {
+        tv.setText(items[event]);
     }
 }

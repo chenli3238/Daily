@@ -79,4 +79,6 @@ public class BusAction {
     public static final String PUNCH_KEEP_TIME = "PUNCH_KEEP_TIME";
 
     public static final String PUNCH_REMIND = "PUNCH_REMIND";
+
+    public static final String PUNCH_PRIORITY = "PUNCH_PRIORITY";
 }

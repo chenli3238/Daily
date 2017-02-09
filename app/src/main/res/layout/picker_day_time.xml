@@ -4,8 +4,6 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-
-
     <TimePicker
         android:id="@+id/picker_dt_time"
         android:layout_width="match_parent"

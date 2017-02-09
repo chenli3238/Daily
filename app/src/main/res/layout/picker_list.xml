@@ -4,4 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <com.ihidea.multilinechooselib.MultiLineChooseLayout
+        android:id="@+id/picker_list"
+        style="@style/FlowLayout.SingleChoose"/>
 </LinearLayout>
