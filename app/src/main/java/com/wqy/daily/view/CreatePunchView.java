@@ -8,6 +8,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -98,7 +100,38 @@ public class CreatePunchView extends ViewImpl {
 
     @Override
     public void bindEvent() {
+        tvTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                verifyTitle();
+            }
+        });
+        tvDesc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                verifyDesc();
+            }
+        });
     }
 
     @Override
@@ -128,6 +161,37 @@ public class CreatePunchView extends ViewImpl {
 
     private void confirm() {
         Log.d(TAG, "confirm: ");
+        if (verifyTitle() && verifyDesc()) {
+
+            RxBus.get().post(BusAction.PUNCH_CREATE, "");
+        }
+    }
+
+    private boolean verifyTitle() {
+        String title = tvTitle.getText().toString();
+        boolean lengthNotNull = title != null && title.length() > 0;
+        if (!lengthNotNull) {
+            tilTitle.setError(mResources.getString(R.string.cpunch_title_required));
+
+            return false;
+        }
+        boolean lengthLessThanMax = title.length() < tilTitle.getCounterMaxLength();
+        if (!lengthLessThanMax) {
+            tilTitle.setError(mResources.getString(R.string.cpunch_out_of_maxlen));
+            return false;
+        }
+        tilTitle.setError(null);
+        return true;
+    }
+
+    private boolean verifyDesc() {
+        boolean ok = tvDesc.getText().toString().length() < tilDesc.getCounterMaxLength();
+        if (!ok) {
+            tilDesc.setError(mResources.getString(R.string.cpunch_out_of_maxlen));
+            return false;
+        }
+        tilDesc.setError(null);
+        return true;
     }
 
     private void showDialog(String tag, DialogFragment fragment) {

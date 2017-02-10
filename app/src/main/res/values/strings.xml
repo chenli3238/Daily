@@ -56,4 +56,6 @@
     <string name="priority_default">默认</string>
     <string name="priority_low">低</string>
     <string name="cpunch_priority">优先级</string>
+    <string name="cpunch_out_of_maxlen">超过长度限制</string>
+    <string name="cpunch_title_required">请输入标题</string>
 </resources>

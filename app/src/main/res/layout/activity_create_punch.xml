@@ -42,7 +42,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/cpunch_title_hint"
                     android:maxLines="2"
-                    android:textSize="16sp"/>
+                    android:textSize="16sp"
+                    android:textColorHint="@android:color/white"/>
 
 
             </android.support.design.widget.TextInputLayout>
@@ -62,7 +63,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/cpunch_desc_hint"
                     android:textSize="16sp"
-                    android:maxLines="5"/>
+                    android:maxLines="5"
+                    android:textColorHint="@android:color/white"/>
 
 
             </android.support.design.widget.TextInputLayout>
