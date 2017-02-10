@@ -32,6 +32,7 @@ import java.util.List;
 
 public class DateTimePickerFragment extends ViewPagerPickerFragment {
     public static final String TAG = DateTimePickerFragment.class.getSimpleName();
+    public static final String ARG_EVENT_TAG = "EVENT_TAG";
 
     private TimePicker mTimePicker;
     private DatePicker mDatePicker;
@@ -42,6 +43,8 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
     private int mHour;
     private int mMinute;
     Calendar mCalendar;
+
+    private String mEventTag;
 
     @Override
     protected void confirm() {
@@ -56,8 +59,10 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
         mCalendar.set(Calendar.MINUTE, mMinute);
         mCalendar.set(Calendar.SECOND, 0);
 
+        mEventTag = getArguments().getString(ARG_EVENT_TAG,
+                BusAction.DATE_TIME_PICKER_RESULLT);
         // TODO: 17-2-10 use ARG_EVENT_TAG to replace this action
-        RxBus.get().post(BusAction.DATE_TIME_PICKER_RESULLT, mCalendar);
+        RxBus.get().post(mEventTag, mCalendar.getTime());
     }
 
 
@@ -66,6 +71,13 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
         mCalendar = Calendar.getInstance();
         LayoutInflater inflater = LayoutInflater.from(getContext());
         mTimePicker = (TimePicker) inflater.inflate(R.layout.time_picker, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTimePicker.setHour(0);
+            mTimePicker.setMinute(0);
+        } else {
+            mTimePicker.setCurrentHour(0);
+            mTimePicker.setCurrentMinute(0);
+        }
         mDatePicker = (DatePicker) inflater.inflate(R.layout.date_picker, null);
         mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = mCalendar.get(Calendar.MINUTE);

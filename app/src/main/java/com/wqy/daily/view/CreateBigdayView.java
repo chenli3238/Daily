@@ -2,6 +2,7 @@ package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
@@ -21,11 +23,13 @@ import com.wqy.daily.CommonUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.ShowDialogEvent;
+import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.widget.DateTimePickerFragment;
 import com.wqy.daily.widget.TagPickerFragment;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,13 +57,23 @@ public class CreateBigdayView extends ViewImpl {
     @BindView(R.id.cbigday_desc)
     TextInputEditText etDesc;
 
+    @BindView(R.id.cbigday_time)
+    View vTime;
+
     @BindView(R.id.cbigday_time_value)
     TextView tvTime;
+
+    @BindView(R.id.cbigday_tags)
+    View vTags;
 
     @BindView(R.id.cbigday_tags_value)
     TextView tvTags;
 
     private Resources mResources;
+
+    private boolean mEditable = true;
+
+    private Bigday mBigday;
 
 
     @Override
@@ -111,8 +125,11 @@ public class CreateBigdayView extends ViewImpl {
                 return true;
             case R.id.cbigday_confirm:
                 // create a new bigday
-                confirm();
-                return true;
+                if (mEditable) {
+                    confirm();
+                    NavUtils.navigateUpFromSameTask((Activity) getContext());
+                    return true;
+                }
             default:
                 return false;
         }
@@ -121,11 +138,35 @@ public class CreateBigdayView extends ViewImpl {
     private void confirm() {
         Log.d(TAG, "confirm: ");
         if (verifyTitle() && verifyDesc()) {
-            RxBus.get().post(BusAction.BIGDAY_TITLE_DESC, new String[] {
-                    etTitle.getText().toString(),
-                    etDesc.getText().toString()
-            });
-            RxBus.get().post(BusAction.CREATE_BIGDAY, "");
+            mBigday.setTitle(etTitle.getText().toString());
+            mBigday.setDesc(etDesc.getText().toString());
+            mBigday.setTags(tvTags.getText().toString());
+//            mBigday.setDate();
+            RxBus.get().post(BusAction.SAVE_BIGDAY, mBigday);
+        }
+    }
+
+    public void enableEdit() {
+        etTitle.setEnabled(true);
+        etDesc.setEnabled(true);
+        vTime.setClickable(true);
+        vTags.setClickable(true);
+    }
+
+    public void disableEdit() {
+        etTitle.setEnabled(false);
+        etDesc.setEnabled(false);
+        vTime.setClickable(false);
+        vTags.setClickable(false);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.CBIGDAY_EDITABLE)})
+    public void setEditable(Boolean editable) {
+        mEditable = editable;
+        if (mEditable) {
+            enableEdit();
+        } else {
+            disableEdit();
         }
     }
 
@@ -169,23 +210,37 @@ public class CreateBigdayView extends ViewImpl {
     public void showDateTimeDialog() {
         Log.d(TAG, "showDateTimeDialog: ");
         DialogFragment fragment = new DateTimePickerFragment();
+        Bundle args = new Bundle();
+        args.putString(DateTimePickerFragment.ARG_EVENT_TAG,
+                BusAction.CBIGDAY_TIME);
+        fragment.setArguments(args);
         showDialog(DateTimePickerFragment.TAG, fragment);
-
     }
 
     @OnClick(R.id.cbigday_tags)
     public void showTagDialog() {
         Log.d(TAG, "showTagDialog: ");
         DialogFragment fragment = new TagPickerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(TagPickerFragment.ARG_EVENT_TAG,
+                BusAction.CBIGDAY_TAGS);
+        fragment.setArguments(bundle);
         showDialog(TagPickerFragment.TAG, fragment);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.DATE_TIME_PICKER_RESULLT)})
-    public void setTime(Calendar event) {
-        tvTime.setText(CommonUtils.getDateTimeString(mResources, event));
+    @Subscribe(tags = {@Tag(BusAction.CBIGDAY_SET_BIGDAY)})
+    public void setBigday(Bigday bigday) {
+        Log.d(TAG, "setBigday: ");
+        mBigday = bigday;
     }
 
-    @Subscribe(tags = {@Tag(BusAction.TAG_PICKER_RESULT)})
+    @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TIME)})
+    public void setTime(Date event) {
+        tvTime.setText(CommonUtils.getDateTimeString(mResources, event));
+        mBigday.setDate(event);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TAGS)})
     public void setTags(String[] tags) {
         tvTags.setText(CommonUtils.getTagString(mResources, tags));
     }

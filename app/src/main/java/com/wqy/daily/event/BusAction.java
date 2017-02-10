@@ -94,6 +94,8 @@ public class BusAction {
 
     public static final String CREATE_BIGDAY = "CREATE_BIGDAY";
 
+    public static final String VIEW_BIGDAY = "VIEW_BIGDAY";
+
     public static final String CREATE_DIARY = "CREATE_DIARY";
 
     public static final String CREATE_MEMO = "CREATE_MEMO";
@@ -101,4 +103,23 @@ public class BusAction {
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 
     public static final String CDIARY_EDITABLE = "CDIARY_EDITABLE";
+
+    // set editable in CreateBigdayView
+    public static final String CBIGDAY_EDITABLE = "CBIGDAY_EDITABLE";
+
+    // set the title EditText in CreateBigdayView
+    public static final String CBIGDAY_TITLE = "CBIGDAY_TITLE";
+
+    // set the desc EditText in CreateBigdayView
+    public static final String CBIGDAY_DESC = "CBIGDAY_DESC";
+
+    public static final String CBIGDAY_TIME = "CBIGDAY_TIME";
+
+    public static final String CBIGDAY_TAGS = "CBIGDAY_TAGS";
+
+    // Save bigday in CreateBigdayActivity
+    public static final String SAVE_BIGDAY = "SAVE_BIGDAY";
+
+    // Set the bigday in CreateBigdayView
+    public static final String CBIGDAY_SET_BIGDAY = "CBIGDAY_SET_BIGDAY";
 }

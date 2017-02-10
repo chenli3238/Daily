@@ -25,11 +25,13 @@ import java.util.List;
 public class TagPickerFragment extends DialogFragment {
 
     public static final String TAG = TagPickerFragment.class.getSimpleName();
+    public static final String ARG_EVENT_TAG = "EVENT_TAG";
 
     private View mView;
     private TagView mTagView;
     private List<String> mItems;
     private ArrayAdapter<String> mAdapter;
+    private String mTagEvent;
 
     @NonNull
     @Override
@@ -58,6 +60,8 @@ public class TagPickerFragment extends DialogFragment {
 
         List<String> objs = mTagView.getObjects();
         String[] tags = objs.toArray(new String[0]);
-        RxBus.get().post(BusAction.TAG_PICKER_RESULT, tags);
+        mTagEvent = getArguments().getString(ARG_EVENT_TAG,
+                BusAction.TAG_PICKER_RESULT);
+        RxBus.get().post(mTagEvent, tags);
     }
 }

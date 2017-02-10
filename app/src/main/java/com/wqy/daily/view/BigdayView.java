@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -108,7 +109,7 @@ public class BigdayView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
         fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
-        fab.setOnClickListener(v -> RxBus.get().post(BusAction.START_ACTIVITY, CreateBigdayActivity.class));
+        fab.setOnClickListener(v -> RxBus.get().post(BusAction.CREATE_BIGDAY, ""));
     }
 
     @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})

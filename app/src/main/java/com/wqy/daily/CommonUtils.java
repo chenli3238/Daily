@@ -17,6 +17,14 @@ import java.util.List;
 
 public class CommonUtils {
 
+    public static Calendar getTodayBegin() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        return c;
+    }
+
     public static int backwardDays(Date date) {
         Calendar today = Calendar.getInstance();
         long delta = date.getTime() - today.getTimeInMillis();
@@ -98,8 +106,13 @@ public class CommonUtils {
         return sb.toString();
     }
 
-    public static String getDateTimeString(@NonNull Resources resources, @NonNull Calendar calendar) {
+    public static String[] splitTagString(@NonNull Resources resources, @NonNull String tags) {
+        String divider = resources.getString(R.string.comma);
+        return tags.split(divider);
+    }
+
+    public static String getDateTimeString(@NonNull Resources resources, @NonNull Date date) {
         SimpleDateFormat format = new SimpleDateFormat(resources.getString(R.string.format_date_time));
-        return format.format(calendar.getTime());
+        return format.format(date);
     }
 }

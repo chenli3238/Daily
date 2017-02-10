@@ -1,24 +1,36 @@
 package com.wqy.daily.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.App;
 import com.wqy.daily.BaseFragment;
+import com.wqy.daily.CommonUtils;
+import com.wqy.daily.R;
 import com.wqy.daily.adapter.BigdayInitEvent;
 import com.wqy.daily.event.BigdayEvent;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.model.Bigday;
+import com.wqy.daily.model.BigdayDao;
+import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.BigdayView;
+
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class BigdayFragment extends BaseFragment {
+
+    private DaoSession mDaoSession;
+    private List<Bigday> mBackwards = null;
+    private List<Bigday> mFordwards = null;
 
     public static final String TAG = BigdayFragment.class.getSimpleName();
 
@@ -32,6 +44,7 @@ public class BigdayFragment extends BaseFragment {
 
     @Override
     public void created(Bundle savedInstanceState) {
+        mDaoSession = ((App) getActivity().getApplicationContext()).getDaoSession();
         RxBus.get().register(this);
     }
 
@@ -62,14 +75,40 @@ public class BigdayFragment extends BaseFragment {
     @Subscribe(thread = EventThread.IO,
             tags = {@Tag(BusAction.INIT_BIGDAY_BACKWARD)})
     public void getBigdayBackward(BigdayInitEvent event) {
-        BigdayEvent e = new BigdayEvent(createBigday(10, true));
-        RxBus.get().post(BusAction.SET_BIGDAY_BACKWARD, e);
+        if (mBackwards == null) {
+            mBackwards = mDaoSession.getBigdayDao().queryBuilder()
+                    .where(BigdayDao.Properties.Date.gt(
+                            CommonUtils.getTodayBegin().getTime()
+                    )).list();
+        }
+        RxBus.get().post(BusAction.SET_BIGDAY_BACKWARD,
+                new BigdayEvent(mBackwards));
     }
 
     @Subscribe(thread = EventThread.IO,
             tags = {@Tag(BusAction.INIT_BIGDAY_FORWARD)})
     public void getBigdayForward(BigdayInitEvent event) {
-        BigdayEvent e = new BigdayEvent(createBigday(10, false));
-        RxBus.get().post(BusAction.SET_BIGDAY_FORWARD, e);
+        if (mFordwards == null) {
+            mFordwards = mDaoSession.getBigdayDao().queryBuilder()
+                    .where(BigdayDao.Properties.Date.lt(
+                            CommonUtils.getTodayBegin().getTime()
+                    )).list();
+        }
+        RxBus.get().post(BusAction.SET_BIGDAY_FORWARD,
+                new BigdayEvent(mFordwards));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.CREATE_BIGDAY)})
+    public void createBigday(String s) {
+        Intent intent = new Intent(getContext(), CreateBigdayActivity.class);
+        intent.setAction(getString(R.string.action_edit));
+        startActivity(intent);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.VIEW_BIGDAY)})
+    public void viewBigday(Bigday bigday) {
+        Intent intent = new Intent(getContext(), CreateBigdayActivity.class);
+        intent.setAction(getString(R.string.action_view));
+        intent.putExtra(CreateBigdayActivity.EXTRA_BIGDAY_ID, bigday.getId());
     }
 }

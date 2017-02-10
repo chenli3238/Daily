@@ -59,4 +59,7 @@
     <string name="cpunch_out_of_maxlen">超过长度限制</string>
     <string name="cpunch_title_required">请输入标题</string>
     <string name="format_date_time">yy/MM/dd HH:mm</string>
+
+    <string name="action_edit">com.wqy.action.EDIT</string>
+    <string name="action_view">com.wqy.action.VIEW</string>
 </resources>

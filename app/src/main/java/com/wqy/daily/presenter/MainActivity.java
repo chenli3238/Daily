@@ -107,4 +107,6 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(MainActivity.this, clazz);
         startActivity(intent);
     }
+
+
 }
