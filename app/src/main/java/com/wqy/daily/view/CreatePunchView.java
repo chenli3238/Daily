@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -100,33 +99,13 @@ public class CreatePunchView extends ViewImpl {
 
     @Override
     public void bindEvent() {
-        tvTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+        tvTitle.addTextChangedListener(new AfterTextChangeListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 verifyTitle();
             }
         });
-        tvDesc.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
+        tvDesc.addTextChangedListener(new AfterTextChangeListener() {
             @Override
             public void afterTextChanged(Editable s) {
                 verifyDesc();
@@ -162,8 +141,11 @@ public class CreatePunchView extends ViewImpl {
     private void confirm() {
         Log.d(TAG, "confirm: ");
         if (verifyTitle() && verifyDesc()) {
-
-            RxBus.get().post(BusAction.PUNCH_CREATE, "");
+            RxBus.get().post(BusAction.PUNCH_TITLE_DESC, new String[] {
+                    tvTitle.getText().toString(),
+                    tvDesc.getText().toString()
+            });
+            RxBus.get().post(BusAction.CREATE_PUNCH, "");
         }
     }
 
@@ -283,5 +265,19 @@ public class CreatePunchView extends ViewImpl {
         if (priority < mPriorities.length) {
             tvPriority.setText(mPriorities[priority]);
         }
+    }
+
+    private abstract class AfterTextChangeListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
     }
 }

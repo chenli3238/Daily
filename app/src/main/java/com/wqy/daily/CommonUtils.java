@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.wqy.daily.model.DayTime;
 import com.wqy.daily.event.NumberPickerEvent;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +86,7 @@ public class CommonUtils {
         }
     }
 
-    public static final String getTagString(@NonNull Resources resources, @NonNull String[] tags) {
+    public static String getTagString(@NonNull Resources resources, @NonNull String[] tags) {
         String divider = resources.getString(R.string.comma);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tags.length; i++) {
@@ -95,5 +96,10 @@ public class CommonUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static String getDateTimeString(@NonNull Resources resources, @NonNull Calendar calendar) {
+        SimpleDateFormat format = new SimpleDateFormat(resources.getString(R.string.format_date_time));
+        return format.format(calendar.getTime());
     }
 }

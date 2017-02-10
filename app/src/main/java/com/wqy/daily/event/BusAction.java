@@ -82,9 +82,7 @@ public class BusAction {
 
     public static final String TAG_PICKER_RESULT = "TAG_PICKER_RESULT";
 
-    public static final String PUNCH_TITLE = "PUNCH_TITLE";
-
-    public static final String PUNCH_DESC = "PUNCH_DESC";
+    public static final String PUNCH_TITLE_DESC = "PUNCH_TITLE_DESC";
 
     public static final String PUNCH_AIM = "PUNCH_AIM";
 
@@ -94,5 +92,9 @@ public class BusAction {
 
     public static final String PUNCH_PRIORITY = "PUNCH_PRIORITY";
 
-    public static final String PUNCH_CREATE = "PUNCH_CREATE";
+    public static final String CREATE_PUNCH = "CREATE_PUNCH";
+
+    public static final String CREATE_BIGDAY = "CREATE_BIGDAY";
+
+    public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 }

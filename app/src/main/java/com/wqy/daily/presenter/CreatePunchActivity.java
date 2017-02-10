@@ -46,16 +46,11 @@ public class CreatePunchActivity extends BaseActivity {
         event.getFragment().show(getSupportFragmentManager(), event.getTag());
     }
 
-    @Subscribe(tags = {@Tag(BusAction.PUNCH_TITLE)})
-    public void setPunchTitle(String title) {
-        Log.d(TAG, "setPunchTitle: " + title);
-        mEvent.setTitle(title);
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.PUNCH_DESC)})
-    public void setPunchDesc(String desc) {
-        Log.d(TAG, "setPunchDesc: " + desc);
-        mEvent.setDesc(desc);
+    @Subscribe(tags = {@Tag(BusAction.PUNCH_TITLE_DESC)})
+    public void setTitleDesc(String[] event) {
+        Log.d(TAG, "setTitleDesc: ");
+        mEvent.setTitle(event[0]);
+        mEvent.setDesc(event[1]);
     }
 
     @Subscribe(tags = {@Tag(BusAction.PUNCH_AIM)})
@@ -101,7 +96,7 @@ public class CreatePunchActivity extends BaseActivity {
         }
     }
 
-    @Subscribe(tags = {@Tag(BusAction.PUNCH_CREATE)})
+    @Subscribe(tags = {@Tag(BusAction.CREATE_PUNCH)})
     public void createPunch(String s) {
         Log.d(TAG, "createPunch: ");
         // TODO: 17-2-9 register reminder
