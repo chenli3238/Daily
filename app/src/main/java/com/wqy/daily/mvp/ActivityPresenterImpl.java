@@ -88,6 +88,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d(TAG, "onCreateOptionsMenu: ");
         if (mActivityView == null) return false;
         int menuId = mActivityView.getMenuId();
         if (menuId <= 0) return false;

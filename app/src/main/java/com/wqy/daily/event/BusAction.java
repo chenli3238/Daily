@@ -96,5 +96,9 @@ public class BusAction {
 
     public static final String CREATE_BIGDAY = "CREATE_BIGDAY";
 
+    public static final String CREATE_DIARY = "CREATE_DIARY";
+
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
+
+    public static final String CDIARY_EDITABLE = "CDIARY_EDITABLE";
 }
