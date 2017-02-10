@@ -1,7 +1,9 @@
 package com.wqy.daily.mvp;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
+import com.wqy.daily.model.Diary;
 import com.wqy.daily.mvp.IView;
 
 /**
@@ -29,4 +31,6 @@ public interface IPresenter {
     void destroy();
 
     IView getIView();
+
+    void showDialog(String tag, DialogFragment fragment);
 }

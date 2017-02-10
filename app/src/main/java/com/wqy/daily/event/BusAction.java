@@ -70,8 +70,6 @@ public class BusAction {
 
     public static final String START_ACTIVITY = "START_ACTIVITY";
 
-    public static final String SHOW_DIALOG = "SHOW_DIALOG";
-
     public static final String TIME_PICKER_RESULT = "TIME_PICKER_RESULT";
 
     public static final String DAY_TIME_PICKER_RESULT = "DAY_TIME_PICKER_RESULT";
@@ -97,6 +95,8 @@ public class BusAction {
     public static final String CREATE_BIGDAY = "CREATE_BIGDAY";
 
     public static final String CREATE_DIARY = "CREATE_DIARY";
+
+    public static final String CREATE_MEMO = "CREATE_MEMO";
 
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 

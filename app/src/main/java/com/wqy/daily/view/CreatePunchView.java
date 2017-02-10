@@ -177,8 +177,7 @@ public class CreatePunchView extends ViewImpl {
     }
 
     private void showDialog(String tag, DialogFragment fragment) {
-        RxBus.get().post(BusAction.SHOW_DIALOG,
-                new ShowDialogEvent(tag, fragment));
+        mIPresenter.showDialog(tag, fragment);
     }
 
     private void showListPickerDialog(int titleId, int itemArrayId, int defaultValue, String eventTag) {

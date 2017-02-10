@@ -41,11 +41,6 @@ public class CreatePunchActivity extends BaseActivity {
         setTitle(title);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SHOW_DIALOG)})
-    public void showDialog(ShowDialogEvent event) {
-        event.getFragment().show(getSupportFragmentManager(), event.getTag());
-    }
-
     @Subscribe(tags = {@Tag(BusAction.PUNCH_TITLE_DESC)})
     public void setTitleDesc(String[] event) {
         Log.d(TAG, "setTitleDesc: ");

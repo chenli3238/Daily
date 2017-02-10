@@ -162,8 +162,7 @@ public class CreateBigdayView extends ViewImpl {
     }
 
     private void showDialog(String tag, DialogFragment fragment) {
-        RxBus.get().post(BusAction.SHOW_DIALOG,
-                new ShowDialogEvent(tag, fragment));
+        mIPresenter.showDialog(tag, fragment);
     }
 
     @OnClick(R.id.cbigday_time)

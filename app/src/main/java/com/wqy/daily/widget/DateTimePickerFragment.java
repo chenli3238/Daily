@@ -56,6 +56,7 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
         mCalendar.set(Calendar.MINUTE, mMinute);
         mCalendar.set(Calendar.SECOND, 0);
 
+        // TODO: 17-2-10 use ARG_EVENT_TAG to replace this action
         RxBus.get().post(BusAction.DATE_TIME_PICKER_RESULLT, mCalendar);
     }
 

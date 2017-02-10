@@ -2,6 +2,7 @@ package com.wqy.daily.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -130,5 +131,10 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public void showDialog(String tag, DialogFragment fragment) {
+        fragment.show(getSupportFragmentManager(), tag);
     }
 }

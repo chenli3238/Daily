@@ -2,6 +2,7 @@ package com.wqy.daily.mvp;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -100,5 +101,11 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
     @Override
     public void destroy() {
 
+    }
+
+    // TODO: 17-2-10 check whether it works or not
+    @Override
+    public void showDialog(String tag, DialogFragment fragment) {
+        fragment.show(getActivity().getSupportFragmentManager(), tag);
     }
 }
