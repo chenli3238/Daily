@@ -1,5 +1,7 @@
 package com.wqy.daily.model;
 
+import org.greenrobot.greendao.annotation.Id;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,9 @@ import java.util.Date;
  */
 
 public class Punch {
+
+    @Id
+    private Long id;
 
     private Date date;
 

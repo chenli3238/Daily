@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -45,4 +46,9 @@ dependencies {
     compile 'com.daasuu:BubbleLayout:1.1.1'
     compile 'liji.library.dev:multilinechooselib:1.4.0'
     compile "com.splitwise:tokenautocomplete:2.0.8@aar"
+    compile 'org.greenrobot:greendao:3.2.0'
+}
+
+greendao {
+    schemaVersion 1
 }
