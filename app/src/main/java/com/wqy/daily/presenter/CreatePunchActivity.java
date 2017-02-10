@@ -11,7 +11,6 @@ import com.wqy.daily.CommonUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.NumberPickerEvent;
 import com.wqy.daily.model.DayTime;
-import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Event;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.CreatePunchView;
@@ -67,13 +66,13 @@ public class CreatePunchActivity extends BaseActivity {
     @Subscribe(tags = {@Tag(BusAction.PUNCH_DURATION)})
     public void setPunchDuration(Boolean b) {
         Log.d(TAG, "setPunchDuration: " + b);
-        mEvent.setKeepTime(b);
+        mEvent.setKeepDuration(b);
     }
 
     @Subscribe(tags = {@Tag(BusAction.PUNCH_REMIND)})
     public void setPunchRemind(Boolean remind) {
         Log.d(TAG, "setPunchRemind: " + remind);
-        mEvent.setRemind(remind);
+        mEvent.setRemindme(remind);
     }
 
     @Subscribe(tags = {@Tag(BusAction.PUNCH_PRIORITY)})

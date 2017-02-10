@@ -43,7 +43,7 @@ public class CreateMemoActivity extends BaseActivity {
 
     @Subscribe(tags = {@Tag(BusAction.DATE_TIME_PICKER_RESULLT)})
     public void setRemind(Calendar event) {
-        Log.d(TAG, "setRemind: ");
+        Log.d(TAG, "setRemindme: ");
         mMemo.setDate(event.getTime());
     }
 
