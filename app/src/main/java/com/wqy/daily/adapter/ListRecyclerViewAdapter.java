@@ -23,6 +23,10 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Vi
         }
     }
 
+    public List<T> getDataList() {
+        return mDataList;
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder<T> holder, int position) {
         holder.bindView(mDataList.get(position));

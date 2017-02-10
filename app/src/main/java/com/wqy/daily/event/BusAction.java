@@ -102,6 +102,8 @@ public class BusAction {
 
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 
+    public static final String BIGDAY_DATASET_CHANGED = "BIGDAY_DATASET_CHANGED";
+
     public static final String CDIARY_EDITABLE = "CDIARY_EDITABLE";
 
     // set editable in CreateBigdayView
@@ -122,4 +124,5 @@ public class BusAction {
 
     // Set the bigday in CreateBigdayView
     public static final String CBIGDAY_SET_BIGDAY = "CBIGDAY_SET_BIGDAY";
+    public static final String NOTIFY_DATASET_CHANGED = "NOTIFY_DATASET_CHANGED";
 }

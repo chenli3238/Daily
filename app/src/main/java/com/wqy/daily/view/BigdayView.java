@@ -15,6 +15,7 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.BigdayBackwardVH;
 import com.wqy.daily.adapter.BigdayForwardVH;
@@ -36,6 +37,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import rx.Observable;
+import rx.functions.Action1;
 
 /**
  * Created by wqy on 17-2-5.
@@ -124,6 +127,12 @@ public class BigdayView extends ViewImpl {
             public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View item = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.bigday_backward_item, null);
+                item.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mBackwardRV.getChildAdapterPosition(v);
+                    Bigday bigday = mBackwardAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
+                });
                 return new BigdayBackwardVH(item);
             }
         };
@@ -149,5 +158,18 @@ public class BigdayView extends ViewImpl {
         mForwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mForwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mForwardRV.setOnItemClickListener(itemView -> {
+            Log.d(TAG, "onItemClickListener: ");
+            int position = mForwardRV.getChildAdapterPosition(itemView);
+            Bigday bigday = mForwardAdapter.getDataList().get(position);
+            RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
+        });
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.NOTIFY_DATASET_CHANGED)})
+    public void onDatasetChanged(DatasetChangedEvent<Long> event) {
+        Log.d(TAG, "onDatasetChanged: ");
+        mForwardAdapter.notifyDataSetChanged();
+        mBackwardAdapter.notifyDataSetChanged();
     }
 }

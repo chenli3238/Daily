@@ -90,8 +90,6 @@ public class MainView extends ViewImpl {
         toggle.syncState();
 
         RxBus.get().register(this);
-        // Set default fragment as PunchFragment
-        RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
     }
 
     @Override
@@ -102,25 +100,25 @@ public class MainView extends ViewImpl {
 
     @Override
     public void bindEvent() {
-        mFab.setOnClickListener(view -> {
-
-        });
         mNavigationView.setNavigationItemSelectedListener(MainView.this::onNavigationItemSelected);
     }
 
+    private void setFragment(String tag) {
+        RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, tag);
+    }
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_punch) {
-            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, PunchFragment.TAG);
+            setFragment(PunchFragment.TAG);
         } else if (id == R.id.nav_diary) {
-            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, DiaryFragment.TAG);
+            setFragment(DiaryFragment.TAG);
         } else if (id == R.id.nav_memo) {
-            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, MemoFragment.TAG);
+            setFragment(MemoFragment.TAG);
         } else if (id == R.id.nav_bidday) {
-            RxBus.get().post(BusAction.SET_FRAGMENT_IN_MAIN, BigdayFragment.TAG);
+            setFragment(BigdayFragment.TAG);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

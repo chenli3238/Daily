@@ -1,6 +1,7 @@
 package com.wqy.daily.view;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -25,6 +26,8 @@ import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.presenter.BigdayFragment;
+import com.wqy.daily.presenter.MainActivity;
 import com.wqy.daily.widget.DateTimePickerFragment;
 import com.wqy.daily.widget.TagPickerFragment;
 
@@ -40,7 +43,7 @@ import butterknife.OnClick;
  */
 
 public class CreateBigdayView extends ViewImpl {
-    public static final String TAG = CreatePunchView.class.getSimpleName();
+    public static final String TAG = CreateBigdayView.class.getSimpleName();
 
     @BindView(R.id.cbigday_toolbar)
     Toolbar mToolbar;
@@ -117,17 +120,23 @@ public class CreateBigdayView extends ViewImpl {
         });
     }
 
+    private void navigateUp() {
+//        ((Activity) getContext()).getIntent().putExtra(MainActivity.CURRENT_FRAGMENT, BigdayFragment.TAG);
+//        NavUtils.navigateUpFromSameTask((Activity) getContext());
+        ((Activity) getContext()).finish();
+    }
+
     @Override
     public boolean onMenuItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask((Activity) getContext());
+                navigateUp();
                 return true;
             case R.id.cbigday_confirm:
                 // create a new bigday
                 if (mEditable) {
                     confirm();
-                    NavUtils.navigateUpFromSameTask((Activity) getContext());
+                    navigateUp();
                     return true;
                 }
             default:
@@ -232,6 +241,11 @@ public class CreateBigdayView extends ViewImpl {
     public void setBigday(Bigday bigday) {
         Log.d(TAG, "setBigday: ");
         mBigday = bigday;
+        etTitle.setText(mBigday.getTitle());
+        etDesc.setText(mBigday.getDesc());
+        tvTime.setText(CommonUtils.getDateTimeString(getContext().getResources(),
+                mBigday.getDate()));
+        tvTags.setText(mBigday.getTags());
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TIME)})

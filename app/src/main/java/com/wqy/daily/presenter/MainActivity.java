@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
@@ -22,8 +21,10 @@ import com.wqy.daily.view.MainView;
 public class MainActivity extends BaseActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String CURRENT_FRAGMENT = "CURRENT_FRAGMENT";
+    public static final String DEFAULT_FRAGMENT = PunchFragment.TAG;
 
-    private ActionBar mActionBar;
+    private String mFragmentTag = PunchFragment.TAG; // default fragment
 
     @Override
     public void create(Bundle savedInstanceState) {
@@ -33,12 +34,17 @@ public class MainActivity extends BaseActivity {
     @Override
     public void created(Bundle savedInstanceState) {
         Log.d(TAG, "created: ");
+        mFragmentTag = getIntent().getStringExtra(CURRENT_FRAGMENT);
+        if (mFragmentTag == null) {
+            mFragmentTag = DEFAULT_FRAGMENT;
+        }
         RxBus.get().register(this);
     }
 
     @Override
     public void prepared(Bundle savedInstanceState) {
 //        RxBus.get().register(this);
+        setFragmentByTag(mFragmentTag);
     }
 
     @Override
@@ -95,6 +101,7 @@ public class MainActivity extends BaseActivity {
                 .replace(mActivityView.getFragmentContainerId(),
                         fragment, tag)
                 .commit();
+        getIntent().putExtra(CURRENT_FRAGMENT, tag);
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})

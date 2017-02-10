@@ -9,11 +9,13 @@ import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
+import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseActivity;
 import com.wqy.daily.CommonUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
+import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.model.DaoMaster;
@@ -51,6 +53,7 @@ public class CreateBigdayActivity extends BaseActivity {
         if (action == null || action.equals(getString(R.string.action_edit))) {
             RxBus.get().post(BusAction.CBIGDAY_EDITABLE, Boolean.TRUE);
             bigday = new Bigday();
+            bigday.setDate(new Date());
         } else {
             long id = getIntent().getLongExtra(EXTRA_BIGDAY_ID, 0);
             bigday = mDaoSession.getBigdayDao().load(id);
@@ -68,9 +71,19 @@ public class CreateBigdayActivity extends BaseActivity {
         setTitle(title);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SAVE_BIGDAY)})
+    @Subscribe(thread = EventThread.IO,
+            tags = {@Tag(BusAction.SAVE_BIGDAY)})
     public void saveBigday(Bigday bigday) {
         Log.d(TAG, "saveBigday: ");
+        DatasetChangedEvent<Long> event = new DatasetChangedEvent<>();
+        Long key = bigday.getId();
+        if (key == null) {
+            event.setAction(DatasetChangedEvent.INSERT);
+        } else {
+            event.setAction(DatasetChangedEvent.UPDATE);
+        }
+        event.setKeys(new Long[]{key});
         mDaoSession.getBigdayDao().save(bigday);
+        RxBus.get().post(BusAction.BIGDAY_DATASET_CHANGED, event);
     }
 }
