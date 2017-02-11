@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateBigdayActivity extends BaseActivity {
+    public static final String TAG = CreateBigdayActivity.class.getSimpleName();
 
     public static final String EXTRA_BIGDAY_ID = "bigdayId";
 

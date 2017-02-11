@@ -6,22 +6,27 @@ package com.wqy.daily.model;
 
 public class Pager {
 
-    private long limit;
+    public static final long MIN_ID = 0;
+
+    private int limit;
+
+    private int offset;
 
     private long lastId;
 
     public Pager() {}
 
-    public Pager(long limit, long lastId) {
+    public Pager(int limit) {
         this.limit = limit;
-        this.lastId = lastId;
+        lastId = MIN_ID;
+        offset = 0;
     }
 
-    public long getLimit() {
+    public int getLimit() {
         return limit;
     }
 
-    public void setLimit(long limit) {
+    public void setLimit(int limit) {
         this.limit = limit;
     }
 
@@ -31,5 +36,26 @@ public class Pager {
 
     public void setLastId(long lastId) {
         this.lastId = lastId;
+    }
+
+    public void reset() {
+        lastId = MIN_ID;
+        offset = 0;
+    }
+
+    public boolean loadingFirstPage() {
+        return lastId == MIN_ID;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public void addOffset(int offset) {
+        this.offset += offset;
     }
 }

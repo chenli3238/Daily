@@ -17,6 +17,8 @@ import com.cjj.loadmore.RecyclerViewWithFooter;
 public class RecyclerView extends RecyclerViewWithFooter {
     public static final String TAG = RecyclerView.class.getSimpleName();
 
+    private boolean mIsRefreshing;
+
     private GestureDetectorCompat mGestureDetector;
     private OnItemClickListener mOnItemClickListener = null;
 
@@ -33,7 +35,6 @@ public class RecyclerView extends RecyclerViewWithFooter {
         mGestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                Log.d(TAG, "onSingleTapUp: " + mOnItemClickListener);
                 if (mOnItemClickListener != null) {
                     View view = RecyclerView.this.findChildViewUnder(e.getX(), e.getY());
                     mOnItemClickListener.onItemClick(view);
@@ -45,10 +46,24 @@ public class RecyclerView extends RecyclerViewWithFooter {
         addOnItemTouchListener(new SimpleOnItemTouchListener() {
             @Override
             public boolean onInterceptTouchEvent(android.support.v7.widget.RecyclerView rv, MotionEvent e) {
-                Log.d(TAG, "onInterceptTouchEvent: ");
                 return mGestureDetector.onTouchEvent(e);
             }
         });
+        setOnTouchListener((v, event) -> {
+            if (mIsRefreshing) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    public boolean isRefreshing() {
+        return mIsRefreshing;
+    }
+
+    public void setRefreshing(boolean refreshing) {
+        mIsRefreshing = refreshing;
     }
 
     public OnItemClickListener getOnItemClickListener() {

@@ -122,7 +122,7 @@ public class MemoView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_UNDERWAY)})
     public void initUnderway(MemoEvents events) {
-        mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>() {
+        mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>(mUnderwayRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
@@ -139,7 +139,7 @@ public class MemoView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_FINISHED)})
     public void initFinished(MemoEvents events) {
-        mFinishedAdapter = new ListRecyclerViewAdapter<Memo>() {
+        mFinishedAdapter = new ListRecyclerViewAdapter<Memo>(mFinishedRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
@@ -156,7 +156,7 @@ public class MemoView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_DELETED)})
     public void initDeleted(MemoEvents events) {
-        mDeletedAdapter = new ListRecyclerViewAdapter<Memo>() {
+        mDeletedAdapter = new ListRecyclerViewAdapter<Memo>(mDeletedRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())

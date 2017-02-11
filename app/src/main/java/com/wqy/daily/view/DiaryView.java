@@ -71,7 +71,7 @@ public class DiaryView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_DIARY)})
     public void setDiary(DiaryEvent event) {
-        mAdapter = new ListRecyclerViewAdapter<Diary>() {
+        mAdapter = new ListRecyclerViewAdapter<Diary>(mRecyclerView) {
             @Override
             public ViewHolder<Diary> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View item = LayoutInflater.from(parent.getContext())

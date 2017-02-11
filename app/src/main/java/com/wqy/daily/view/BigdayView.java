@@ -3,10 +3,10 @@ package com.wqy.daily.view;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,7 +19,6 @@ import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.BigdayBackwardVH;
 import com.wqy.daily.adapter.BigdayForwardVH;
-import com.wqy.daily.adapter.BigdayInitEvent;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.ViewHolder;
@@ -29,7 +28,6 @@ import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
-import com.wqy.daily.presenter.CreateBigdayActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Observable;
-import rx.functions.Action1;
 
 /**
  * Created by wqy on 17-2-5.
@@ -52,6 +48,9 @@ public class BigdayView extends ViewImpl {
     ViewPager mViewPager;
 
     private Unbinder mUnbinder;
+
+    SwipeRefreshLayout mBackwardLayout;
+    SwipeRefreshLayout mForwardLayout;
 
     RecyclerView mBackwardRV;
     RecyclerView mForwardRV;
@@ -68,12 +67,78 @@ public class BigdayView extends ViewImpl {
     public void created() {
         mUnbinder = ButterKnife.bind(this, mRootView);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        mBackwardRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
-        mForwardRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+
+        mBackwardLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
+        mBackwardRV = (RecyclerView) mBackwardLayout.findViewById(R.id.swipe_refresh_rv);
+        mForwardLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
+        mForwardRV = (RecyclerView) mForwardLayout.findViewById(R.id.swipe_refresh_rv);
+        init();
 
         RxBus.get().register(this);
-        RxBus.get().post(BusAction.INIT_BIGDAY_BACKWARD, new BigdayInitEvent());
-        RxBus.get().post(BusAction.INIT_BIGDAY_FORWARD, new BigdayInitEvent());
+        RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD, new BigdayEvent(BigdayEvent.REFRESH));
+        RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD, new BigdayEvent(BigdayEvent.REFRESH));
+    }
+
+    private void init() {
+        mBackwardAdapter = new ListRecyclerViewAdapter<Bigday>(mBackwardRV) {
+            @Override
+            public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
+                View item = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.bigday_backward_item, null);
+                item.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mBackwardRV.getChildAdapterPosition(v);
+                    Bigday bigday = mBackwardAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
+                });
+                return new BigdayBackwardVH(item);
+            }
+        };
+
+        mBackwardRV.setAdapter(mBackwardAdapter);
+        mBackwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
+        mBackwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mBackwardRV.setOnLoadMoreListener(() -> {
+            Log.d(TAG, "onLoadMore: ");
+            mBackwardRV.setLoading();
+            RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD,
+                    new BigdayEvent(BigdayEvent.LOAD_MORE));
+        });
+        mBackwardLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: ");
+            refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
+        });
+
+
+        mForwardAdapter = new ListRecyclerViewAdapter<Bigday>(mForwardRV) {
+            @Override
+            public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
+                View item = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.bigday_forward_item, null);
+                item.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mForwardRV.getChildAdapterPosition(v);
+                    Bigday bigday = mForwardAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
+                });
+                return new BigdayForwardVH(item);
+            }
+        };
+
+        mForwardRV.setAdapter(mForwardAdapter);
+        mForwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        mForwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mForwardRV.setOnLoadMoreListener(() -> {
+            Log.d(TAG, "onLoadMore: ");
+            mForwardRV.setLoading();
+            RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD,
+                    new BigdayEvent(BigdayEvent.LOAD_MORE));
+        });
+        mForwardLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: ");
+            refreshData(BusAction.LOAD_BIGDAY_FORWARD);
+        });
     }
 
     @Override
@@ -84,7 +149,7 @@ public class BigdayView extends ViewImpl {
 
     public void setViewPager() {
         List<View> views = Arrays.asList(
-                mBackwardRV, mForwardRV
+                mBackwardLayout, mForwardLayout
         );
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_backward),
@@ -121,55 +186,48 @@ public class BigdayView extends ViewImpl {
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_BACKWARD)})
-    public void setUnderway(BigdayEvent event) {
-        mBackwardAdapter = new ListRecyclerViewAdapter<Bigday>() {
-            @Override
-            public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
-                View item = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.bigday_backward_item, null);
-                item.setOnClickListener(v -> {
-                    Log.d(TAG, "onClick: ");
-                    int position = mBackwardRV.getChildAdapterPosition(v);
-                    Bigday bigday = mBackwardAdapter.getDataList().get(position);
-                    RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
-                });
-                return new BigdayBackwardVH(item);
-            }
-        };
-        mBackwardAdapter.setDataList(event.getBigdays());
-        mBackwardRV.setAdapter(mBackwardAdapter);
-        mBackwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
-        mBackwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+    public void setBigdayBackward(BigdayEvent event) {
+        Log.d(TAG, "setBigdayBackward: " + event.getAction());
+        switch (event.getAction()) {
+            case BigdayEvent.LOAD_MORE:
+                mBackwardAdapter.appendData(event.getBigdays());
+                if (event.isNoMore()) {
+                    mBackwardRV.setEnd(getContext().getString(R.string.footer_no_more));
+                }
+                break;
+            case BigdayEvent.REFRESH:
+                mBackwardAdapter.setDataList(event.getBigdays());
+                mBackwardLayout.setRefreshing(false);
+                break;
+        }
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_FORWARD)})
     public void setBigdayForward(BigdayEvent event) {
-        mForwardAdapter = new ListRecyclerViewAdapter<Bigday>() {
-            @Override
-            public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
-                View item = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.bigday_forward_item, null);
-                return new BigdayForwardVH(item);
-            }
-        };
-        mForwardAdapter.setDataList(event.getBigdays());
-        mForwardRV.setAdapter(mForwardAdapter);
-        mForwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
-        mForwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
-        mForwardRV.setOnItemClickListener(itemView -> {
-            Log.d(TAG, "onItemClickListener: ");
-            int position = mForwardRV.getChildAdapterPosition(itemView);
-            Bigday bigday = mForwardAdapter.getDataList().get(position);
-            RxBus.get().post(BusAction.VIEW_BIGDAY, bigday);
-        });
+        Log.d(TAG, "setBigdayForward: " + event.getAction());
+        switch (event.getAction()) {
+            case BigdayEvent.LOAD_MORE:
+                mForwardAdapter.appendData(event.getBigdays());
+                if (event.isNoMore()) {
+                    mForwardRV.setEnd(getContext().getString(R.string.footer_no_more));
+                }
+                break;
+            case BigdayEvent.REFRESH:
+                mForwardAdapter.setDataList(event.getBigdays());
+                mForwardLayout.setRefreshing(false);
+                break;
+        }
     }
 
-    @Subscribe(tags = {@Tag(BusAction.NOTIFY_DATASET_CHANGED)})
+    private void refreshData(String action) {
+        RxBus.get().post(action,
+                new BigdayEvent(BigdayEvent.REFRESH));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
     public void onDatasetChanged(DatasetChangedEvent<Long> event) {
         Log.d(TAG, "onDatasetChanged: ");
-        mForwardAdapter.notifyDataSetChanged();
-        mBackwardAdapter.notifyDataSetChanged();
+        refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
+        refreshData(BusAction.LOAD_BIGDAY_FORWARD);
     }
 }

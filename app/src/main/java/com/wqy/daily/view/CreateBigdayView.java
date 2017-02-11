@@ -1,6 +1,7 @@
 package com.wqy.daily.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.wqy.daily.CommonUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
+import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
@@ -77,6 +79,8 @@ public class CreateBigdayView extends ViewImpl {
     private boolean mEditable = true;
 
     private Bigday mBigday;
+
+    private ProgressDialog mProgressDialog;
 
 
     @Override
@@ -136,7 +140,6 @@ public class CreateBigdayView extends ViewImpl {
                 // create a new bigday
                 if (mEditable) {
                     confirm();
-                    navigateUp();
                     return true;
                 }
             default:
@@ -151,8 +154,15 @@ public class CreateBigdayView extends ViewImpl {
             mBigday.setDesc(etDesc.getText().toString());
             mBigday.setTags(tvTags.getText().toString());
 //            mBigday.setDate();
+            mProgressDialog = ProgressDialog.show(getContext(), null, getContext().getString(R.string.saving_data));
             RxBus.get().post(BusAction.SAVE_BIGDAY, mBigday);
         }
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
+    public void onDatasetChanged(DatasetChangedEvent<Long> event) {
+        mProgressDialog.dismiss();
+        navigateUp();
     }
 
     public void enableEdit() {

@@ -52,9 +52,9 @@ public class BusAction {
 
     public static final String SET_MEMO_DELETED = "SET_MEMO_DELETED";
 
-    public static final String INIT_BIGDAY_BACKWARD = "INIT_BIGDAY_BACKWARD";
+    public static final String LOAD_BIGDAY_BACKWARD = "LOAD_BIGDAY_BACKWARD";
 
-    public static final String INIT_BIGDAY_FORWARD = "INIT_BIGDAY_FORWARD";
+    public static final String LOAD_BIGDAY_FORWARD = "LOAD_BIGDAY_FORWARD";
 
     public static final String SET_BIGDAY_BACKWARD = "SET_BIGDAY_BACKWARD";
 

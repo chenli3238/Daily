@@ -78,6 +78,8 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
             mTimePicker.setCurrentHour(0);
             mTimePicker.setCurrentMinute(0);
         }
+        mCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        mCalendar.set(Calendar.MINUTE, 0);
         mDatePicker = (DatePicker) inflater.inflate(R.layout.date_picker, null);
         mHour = mCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = mCalendar.get(Calendar.MINUTE);

@@ -145,7 +145,7 @@ public class PunchView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_UNDERWAY)})
     public void initUnderway(PunchEvents events) {
-        mUnderwayAdapter = new ListRecyclerViewAdapter<Event>() {
+        mUnderwayAdapter = new ListRecyclerViewAdapter<Event>(mUnderwayRV) {
             @Override
             public ViewHolder<Event> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.punch_underway_item, null);
@@ -162,7 +162,7 @@ public class PunchView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_FINISHED)})
     public void initFinished(PunchEvents events) {
-        mFinishedAdapter = new ListRecyclerViewAdapter<Event>() {
+        mFinishedAdapter = new ListRecyclerViewAdapter<Event>(mFinishedRV) {
             @Override
             public ViewHolder<Event> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.punch_finished_item, null);
@@ -179,7 +179,7 @@ public class PunchView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.SET_PUNCH_DELETED)})
     public void initDeleted(PunchEvents events) {
-        mDeletedAdapter = new ListRecyclerViewAdapter<Event>() {
+        mDeletedAdapter = new ListRecyclerViewAdapter<Event>(mDeletedRV) {
             @Override
             public ViewHolder<Event> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.punch_deleted_item, null);

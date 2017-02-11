@@ -10,10 +10,20 @@ import java.util.List;
 
 public class BigdayEvent {
 
-    List<Bigday> mBigdays;
+    public static final int LOAD_MORE = 1;
+    public static final int REFRESH = 2;
 
-    public BigdayEvent(List<Bigday> bigdays) {
-        mBigdays = bigdays;
+    private int action;
+
+    private boolean noMore = false;
+
+    private List<Bigday> mBigdays;
+
+    public BigdayEvent() {
+    }
+
+    public BigdayEvent(int action) {
+        this.action = action;
     }
 
     public List<Bigday> getBigdays() {
@@ -22,5 +32,21 @@ public class BigdayEvent {
 
     public void setBigdays(List<Bigday> bigdays) {
         mBigdays = bigdays;
+    }
+
+    public int getAction() {
+        return action;
+    }
+
+    public void setAction(int action) {
+        this.action = action;
+    }
+
+    public boolean isNoMore() {
+        return noMore;
+    }
+
+    public void setNoMore(boolean noMore) {
+        this.noMore = noMore;
     }
 }
