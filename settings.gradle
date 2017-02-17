@@ -1,1 +1,1 @@
-include ':app', ':recyclerview-with-footer'
+include ':app', ':material-swipe-refresh-layout'

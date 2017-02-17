@@ -3,13 +3,14 @@ package com.wqy.daily.view;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cjj.MaterialRefreshLayout;
+import com.cjj.MaterialRefreshListener;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -28,6 +29,7 @@ import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.widget.SwipeRefreshLayout;
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,6 +82,11 @@ public class BigdayView extends ViewImpl {
     }
 
     private void init() {
+        initBackward();
+        initForward();
+    }
+
+    public void initBackward() {
         mBackwardAdapter = new ListRecyclerViewAdapter<Bigday>(mBackwardRV) {
             @Override
             public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -99,18 +106,25 @@ public class BigdayView extends ViewImpl {
         mBackwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mBackwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
-        mBackwardRV.setOnLoadMoreListener(() -> {
-            Log.d(TAG, "onLoadMore: ");
-            mBackwardRV.setLoading();
-            RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD,
-                    new BigdayEvent(BigdayEvent.LOAD_MORE));
-        });
-        mBackwardLayout.setOnRefreshListener(() -> {
-            Log.d(TAG, "onRefresh: ");
-            refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
-        });
+        mBackwardLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                Log.d(TAG, "onRefresh: ");
+                refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
+            }
 
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                Log.d(TAG, "onLoadMore: ");
+                RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD,
+                        new BigdayEvent(BigdayEvent.LOAD_MORE));
+            }
+        });
+        mBackwardLayout.setLoadMore(true);
+    }
 
+    public void initForward() {
+        int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mForwardAdapter = new ListRecyclerViewAdapter<Bigday>(mForwardRV) {
             @Override
             public ViewHolder<Bigday> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -129,16 +143,21 @@ public class BigdayView extends ViewImpl {
         mForwardRV.setAdapter(mForwardAdapter);
         mForwardRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mForwardRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
-        mForwardRV.setOnLoadMoreListener(() -> {
-            Log.d(TAG, "onLoadMore: ");
-            mForwardRV.setLoading();
-            RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD,
-                    new BigdayEvent(BigdayEvent.LOAD_MORE));
+        mForwardLayout.setMaterialRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh(MaterialRefreshLayout materialRefreshLayout) {
+                Log.d(TAG, "onRefresh: ");
+                refreshData(BusAction.LOAD_BIGDAY_FORWARD);
+            }
+
+            @Override
+            public void onRefreshLoadMore(MaterialRefreshLayout materialRefreshLayout) {
+                Log.d(TAG, "onLoadMore: ");
+                RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD,
+                        new BigdayEvent(BigdayEvent.LOAD_MORE));
+            }
         });
-        mForwardLayout.setOnRefreshListener(() -> {
-            Log.d(TAG, "onRefresh: ");
-            refreshData(BusAction.LOAD_BIGDAY_FORWARD);
-        });
+        mForwardLayout.setLoadMore(true);
     }
 
     @Override
@@ -191,13 +210,11 @@ public class BigdayView extends ViewImpl {
         switch (event.getAction()) {
             case BigdayEvent.LOAD_MORE:
                 mBackwardAdapter.appendData(event.getBigdays());
-                if (event.isNoMore()) {
-                    mBackwardRV.setEnd(getContext().getString(R.string.footer_no_more));
-                }
+                mBackwardLayout.finishRefreshLoadMore();
                 break;
             case BigdayEvent.REFRESH:
                 mBackwardAdapter.setDataList(event.getBigdays());
-                mBackwardLayout.setRefreshing(false);
+                mBackwardLayout.finishRefresh();
                 break;
         }
     }
@@ -208,13 +225,11 @@ public class BigdayView extends ViewImpl {
         switch (event.getAction()) {
             case BigdayEvent.LOAD_MORE:
                 mForwardAdapter.appendData(event.getBigdays());
-                if (event.isNoMore()) {
-                    mForwardRV.setEnd(getContext().getString(R.string.footer_no_more));
-                }
+                mForwardLayout.finishRefreshLoadMore();
                 break;
             case BigdayEvent.REFRESH:
                 mForwardAdapter.setDataList(event.getBigdays());
-                mForwardLayout.setRefreshing(false);
+                mForwardLayout.finishRefresh();
                 break;
         }
     }

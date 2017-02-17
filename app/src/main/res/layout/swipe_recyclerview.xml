@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<com.wqy.daily.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:isLoadMore="true"
+    app:wave_show="true">
 
     <com.wqy.daily.widget.RecyclerView
         android:id="@+id/swipe_refresh_rv"
@@ -11,4 +14,4 @@
         android:layout_height="match_parent">
 
     </com.wqy.daily.widget.RecyclerView>
-</android.support.v4.widget.SwipeRefreshLayout>
+</com.wqy.daily.widget.SwipeRefreshLayout>

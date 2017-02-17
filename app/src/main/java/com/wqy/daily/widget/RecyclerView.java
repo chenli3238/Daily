@@ -8,13 +8,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.cjj.loadmore.RecyclerViewWithFooter;
-
 /**
  * Created by wqy on 17-2-6.
  */
 
-public class RecyclerView extends RecyclerViewWithFooter {
+public class RecyclerView extends android.support.v7.widget.RecyclerView {
     public static final String TAG = RecyclerView.class.getSimpleName();
 
     private boolean mIsRefreshing;

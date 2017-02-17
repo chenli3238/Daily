@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -20,7 +22,13 @@ public class ExampleInstrumentedTest {
     public void useAppContext() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-
         assertEquals("com.wqy.daily", appContext.getPackageName());
+    }
+
+    @Test
+    public void testResources() {
+        Context context = InstrumentationRegistry.getContext();
+        String s = context.getResources().getString(R.string.app_name);
+        Assert.assertNotNull(s);
     }
 }

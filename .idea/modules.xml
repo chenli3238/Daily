@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Daily.iml" filepath="$PROJECT_DIR$/Daily.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/recyclerview-with-footer/recyclerview-with-footer.iml" filepath="$PROJECT_DIR$/recyclerview-with-footer/recyclerview-with-footer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/material-swipe-refresh-layout/material-swipe-refresh-layout.iml" filepath="$PROJECT_DIR$/material-swipe-refresh-layout/material-swipe-refresh-layout.iml" />
     </modules>
   </component>
 </project>
