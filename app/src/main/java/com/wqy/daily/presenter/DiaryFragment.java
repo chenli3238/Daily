@@ -28,7 +28,7 @@ public class DiaryFragment extends BaseFragment {
     public DiaryFragment() {}
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new DiaryView();
     }
 

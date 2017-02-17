@@ -25,7 +25,7 @@ public class MemoFragment extends BaseFragment {
     public MemoFragment() {}
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new MemoView();
     }
 

@@ -34,7 +34,7 @@ public class CreateBigdayActivity extends BaseActivity {
     DaoSession mDaoSession;
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new CreateBigdayView();
     }
 

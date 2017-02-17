@@ -28,7 +28,7 @@ public abstract class FragmentPresenterImpl extends Fragment implements IPresent
         create(savedInstanceState);
 
         // create an IView instance
-        mView = getIView();
+        mView = createIView();
         mView.bindPresenter(this);
 
         // create root view

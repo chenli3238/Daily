@@ -30,7 +30,7 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
         create(savedInstanceState);
 
         // create an IView instance
-        mView = getIView();
+        mView = createIView();
         mActivityView = getActivityView();
         mView.bindPresenter(this);
 
@@ -131,6 +131,11 @@ public abstract class ActivityPresenterImpl extends AppCompatActivity implements
     @Override
     public void destroy() {
 
+    }
+
+    @Override
+    public IView getIView() {
+        return mView;
     }
 
     @Override

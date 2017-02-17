@@ -21,7 +21,7 @@ public class CreateMemoActivity extends BaseActivity {
     private Memo mMemo;
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new CreateMemoView();
     }
 

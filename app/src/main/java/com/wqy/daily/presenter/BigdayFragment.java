@@ -42,7 +42,7 @@ public class BigdayFragment extends BaseFragment {
     }
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new BigdayView();
     }
 

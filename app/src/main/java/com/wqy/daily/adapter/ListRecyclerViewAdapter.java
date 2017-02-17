@@ -25,18 +25,20 @@ public abstract class ListRecyclerViewAdapter<T> extends RecyclerView.Adapter<Vi
     public void setDataList(List<T> dataList) {
         if (dataList == null) return;
         mRecyclerView.setRefreshing(true);
-        if (mDataList != null) {
+        if (mDataList == null) {
+            mDataList = dataList;
+        } else {
             int preSize = mDataList.size();
             mDataList.clear();
             notifyItemRangeRemoved(0, preSize);
+            mDataList.addAll(dataList);
         }
-        mDataList = dataList;
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, dataList.size());
         mRecyclerView.setRefreshing(false);
     }
 
     public void appendData(List<T> dataList) {
-        if (dataList != null) return;
+        if (dataList == null) return;
         if (mDataList == null) {
             setDataList(dataList);
         } else {

@@ -30,6 +30,8 @@ public interface IPresenter {
 
     void destroy();
 
+    IView createIView();
+
     IView getIView();
 
     void showDialog(String tag, DialogFragment fragment);

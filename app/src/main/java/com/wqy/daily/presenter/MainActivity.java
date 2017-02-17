@@ -3,6 +3,7 @@ package com.wqy.daily.presenter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -24,7 +25,7 @@ public class MainActivity extends BaseActivity {
     public static final String CURRENT_FRAGMENT = "CURRENT_FRAGMENT";
     public static final String DEFAULT_FRAGMENT = PunchFragment.TAG;
 
-    private String mFragmentTag = PunchFragment.TAG; // default fragment
+    private String currentFragmentTag = PunchFragment.TAG; // default fragment
 
     @Override
     public void create(Bundle savedInstanceState) {
@@ -34,9 +35,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void created(Bundle savedInstanceState) {
         Log.d(TAG, "created: ");
-        mFragmentTag = getIntent().getStringExtra(CURRENT_FRAGMENT);
-        if (mFragmentTag == null) {
-            mFragmentTag = DEFAULT_FRAGMENT;
+        currentFragmentTag = getIntent().getStringExtra(CURRENT_FRAGMENT);
+        if (currentFragmentTag == null) {
+            currentFragmentTag = DEFAULT_FRAGMENT;
         }
         RxBus.get().register(this);
     }
@@ -44,7 +45,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void prepared(Bundle savedInstanceState) {
 //        RxBus.get().register(this);
-        setFragmentByTag(mFragmentTag);
+        setFragmentByTag(currentFragmentTag);
     }
 
     @Override
@@ -63,11 +64,11 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new MainView();
     }
 
-    private BaseFragment getFragmentByTag(String tag) {
+    private BaseFragment createFragmentByTag(String tag) {
         Class clazz = null;
         if (PunchFragment.TAG.equals(tag)) {
             clazz = PunchFragment.class;
@@ -96,12 +97,11 @@ public class MainActivity extends BaseActivity {
     @Subscribe(tags = {@Tag(BusAction.SET_FRAGMENT_IN_MAIN)})
     public void setFragmentByTag(String tag) {
         Log.d(TAG, "setFragmentByTag: " + tag);
-        Fragment fragment = getFragmentByTag(tag);
+        Fragment fragment = createFragmentByTag(tag);
         getSupportFragmentManager().beginTransaction()
                 .replace(mActivityView.getFragmentContainerId(),
                         fragment, tag)
                 .commit();
-        getIntent().putExtra(CURRENT_FRAGMENT, tag);
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
@@ -114,6 +114,4 @@ public class MainActivity extends BaseActivity {
         Intent intent = new Intent(MainActivity.this, clazz);
         startActivity(intent);
     }
-
-
 }

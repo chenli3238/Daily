@@ -36,7 +36,7 @@ public class PunchFragment extends BaseFragment {
     }
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new PunchView();
     }
 

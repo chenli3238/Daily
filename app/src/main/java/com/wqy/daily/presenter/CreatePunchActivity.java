@@ -20,7 +20,7 @@ public class CreatePunchActivity extends BaseActivity {
     private Event mEvent;
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new CreatePunchView();
     }
 

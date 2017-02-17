@@ -20,7 +20,7 @@ public class CreateDiaryActivity extends BaseActivity {
 
 
     @Override
-    public IView getIView() {
+    public IView createIView() {
         return new CreateDiaryView();
     }
 
