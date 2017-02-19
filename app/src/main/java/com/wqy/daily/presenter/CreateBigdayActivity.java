@@ -1,5 +1,8 @@
 package com.wqy.daily.presenter;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +17,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseActivity;
 import com.wqy.daily.CommonUtils;
+import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
@@ -87,6 +91,14 @@ public class CreateBigdayActivity extends BaseActivity {
         }
         event.setKeys(new Long[]{key});
         mDaoSession.getBigdayDao().save(bigday);
+        setReminder(bigday);
         RxBus.get().post(BusAction.BIGDAY_DATASET_CHANGED, event);
+    }
+
+    private void setReminder(Bigday bigday) {
+        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent intent = NavigationUtils.viewBigday(CreateBigdayActivity.this, bigday);
+        PendingIntent pi = PendingIntent.getActivity(CreateBigdayActivity.this, 0, intent, 0);
+        manager.set(AlarmManager.RTC_WAKEUP, bigday.getDate().getTime(), pi);
     }
 }

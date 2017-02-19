@@ -58,6 +58,7 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
         mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
         mCalendar.set(Calendar.MINUTE, mMinute);
         mCalendar.set(Calendar.SECOND, 0);
+        mCalendar.set(Calendar.MILLISECOND, 0);
 
         mEventTag = getArguments().getString(ARG_EVENT_TAG,
                 BusAction.DATE_TIME_PICKER_RESULLT);

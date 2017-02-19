@@ -3,8 +3,6 @@ package com.wqy.daily.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.cjj.MaterialRefreshLayout;
-
 /**
  * Created by wqy on 17-2-17.
  */

@@ -11,6 +11,7 @@ import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseFragment;
 import com.wqy.daily.CommonUtils;
+import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BigdayEvent;
 import com.wqy.daily.event.BusAction;
@@ -125,17 +126,14 @@ public class BigdayFragment extends BaseFragment {
 
     @Subscribe(tags = {@Tag(BusAction.CREATE_BIGDAY)})
     public void createBigday(String s) {
-        Intent intent = new Intent(getContext(), CreateBigdayActivity.class);
-        intent.setAction(getString(R.string.action_edit));
+        Intent intent = NavigationUtils.editBigday(getContext());
         startActivity(intent);
     }
 
     @Subscribe(tags = {@Tag(BusAction.VIEW_BIGDAY)})
     public void viewBigday(Bigday bigday) {
         Log.d(TAG, "viewBigday: ");
-        Intent intent = new Intent(getContext(), CreateBigdayActivity.class);
-        intent.setAction(getString(R.string.action_view));
-        intent.putExtra(CreateBigdayActivity.EXTRA_BIGDAY_ID, bigday.getId());
+        Intent intent = NavigationUtils.viewBigday(getContext(), bigday);
         startActivity(intent);
     }
 }
