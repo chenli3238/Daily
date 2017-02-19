@@ -6,4 +6,11 @@
         android:icon="@drawable/ic_done_white_24dp"
         android:title="@string/cpunch_confirm"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/cbigday_edit"
+        android:icon="@drawable/ic_create_white_24dp"
+        android:title="@string/cdiary_edit"
+        app:showAsAction="ifRoom"/>
+
 </menu>

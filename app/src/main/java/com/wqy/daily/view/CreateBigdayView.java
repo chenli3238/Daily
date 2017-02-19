@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -131,6 +132,16 @@ public class CreateBigdayView extends ViewImpl {
     }
 
     @Override
+    public void setMenu(Menu menu) {
+        super.setMenu(menu);
+        if (mEditable) {
+            enableEditMenu(menu);
+        } else {
+            disableEditMenu(menu);
+        }
+    }
+
+    @Override
     public boolean onMenuItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -142,6 +153,9 @@ public class CreateBigdayView extends ViewImpl {
                     confirm();
                     return true;
                 }
+            case R.id.cbigday_edit:
+                enableEdit();
+                return true;
             default:
                 return false;
         }
@@ -165,15 +179,35 @@ public class CreateBigdayView extends ViewImpl {
         navigateUp();
     }
 
+    private void enableEditMenu(Menu menu) {
+        if (menu == null) return;
+        menu.findItem(R.id.cbigday_edit).setVisible(false);
+        menu.findItem(R.id.cbigday_confirm).setVisible(true);
+    }
+
+    private void disableEditMenu(Menu menu) {
+        if (menu == null) return;
+        menu.findItem(R.id.cbigday_edit).setVisible(true);
+        menu.findItem(R.id.cbigday_confirm).setVisible(false);
+    }
+
     public void enableEdit() {
+        mEditable = true;
+        enableEditMenu(getMenu());
         etTitle.setEnabled(true);
+        tilTitle.setHintEnabled(true);
+        tilDesc.setHintEnabled(true);
         etDesc.setEnabled(true);
         vTime.setClickable(true);
         vTags.setClickable(true);
     }
 
     public void disableEdit() {
+        mEditable = false;
+        disableEditMenu(getMenu());
         etTitle.setEnabled(false);
+        tilTitle.setHintEnabled(false);
+        tilDesc.setHintEnabled(false);
         etDesc.setEnabled(false);
         vTime.setClickable(false);
         vTags.setClickable(false);
@@ -181,8 +215,7 @@ public class CreateBigdayView extends ViewImpl {
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_EDITABLE)})
     public void setEditable(Boolean editable) {
-        mEditable = editable;
-        if (mEditable) {
+        if (editable) {
             enableEdit();
         } else {
             disableEdit();

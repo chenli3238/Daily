@@ -3,6 +3,7 @@ package com.wqy.daily.presenter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.WindowManager;
 
 import com.hwangjr.rxbus.Bus;
@@ -56,6 +57,7 @@ public class CreateBigdayActivity extends BaseActivity {
             bigday = new Bigday();
             bigday.setDate(new Date());
         } else {
+            RxBus.get().post(BusAction.CBIGDAY_EDITABLE, Boolean.FALSE);
             long id = getIntent().getLongExtra(EXTRA_BIGDAY_ID, 0);
             bigday = mDaoSession.getBigdayDao().load(id);
         }
