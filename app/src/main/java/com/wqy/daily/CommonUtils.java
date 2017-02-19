@@ -32,9 +32,29 @@ public class CommonUtils {
     }
 
     public static int forwardDays(Date date) {
-        Calendar today = Calendar.getInstance();
-        long delta = today.getTimeInMillis() - date.getTime();
-        return (int) (delta / (1000 * 3600 * 24));
+        int days = backwardDays(date);
+        if (days < 0) {
+            days = -days;
+        }
+        return days;
+    }
+
+    public static boolean isBackward(Date date) {
+        Calendar today = getTodayBegin();
+        long delta = (date.getTime() - today.getTimeInMillis());
+        return delta >= 0;
+    }
+
+    public static int deltaDayFromToday(Date date) {
+        Calendar today = getTodayBegin();
+        long delta = (date.getTime() - today.getTimeInMillis());
+        if (delta < 0) {
+            delta = delta / (1000 * 3600 * 24) - 1;
+        } else {
+            delta = delta / (1000 * 3600 * 24);
+        }
+
+        return (int) delta;
     }
 
     public static String getDayOfWeekString(Resources resources, int dayOfWeek) {

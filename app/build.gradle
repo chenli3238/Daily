@@ -26,10 +26,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -53,9 +53,9 @@ dependencies {
     compile 'liji.library.dev:multilinechooselib:1.4.0'
     compile 'com.splitwise:tokenautocomplete:2.0.8@aar'
     compile 'org.greenrobot:greendao:3.2.0'
-    compile project(':material-swipe-refresh-layout')
     androidTestCompile 'org.mockito:mockito-android:2.6.8'
-    testCompile "org.mockito:mockito-core:2.6.8"
+    testCompile 'org.mockito:mockito-core:2.6.8'
+    compile project(':material-refresh-layout')
 }
 
 greendao {

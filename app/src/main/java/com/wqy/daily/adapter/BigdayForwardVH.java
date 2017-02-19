@@ -31,6 +31,6 @@ public class BigdayForwardVH extends ViewHolder<Bigday> {
     public void bindView(Bigday data) {
         String format = tvTitle.getContext().getString(R.string.bigday_forward_title);
         tvTitle.setText(String.format(format, data.getTitle()));
-        tvDay.setText(String.valueOf(CommonUtils.forwardDays(data.getDate())));
+        tvDay.setText(String.valueOf(-CommonUtils.deltaDayFromToday(data.getDate())));
     }
 }

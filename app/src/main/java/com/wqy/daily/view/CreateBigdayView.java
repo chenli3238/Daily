@@ -2,13 +2,11 @@ package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,15 +24,11 @@ import com.wqy.daily.CommonUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
-import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
-import com.wqy.daily.presenter.BigdayFragment;
-import com.wqy.daily.presenter.MainActivity;
 import com.wqy.daily.widget.DateTimePickerFragment;
 import com.wqy.daily.widget.TagPickerFragment;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -75,6 +69,21 @@ public class CreateBigdayView extends ViewImpl {
     @BindView(R.id.cbigday_tags_value)
     TextView tvTags;
 
+    @BindView(R.id.cbigday_edit_bigday)
+    View vEditBigday;
+
+    @BindView(R.id.cbigday_view_bigday)
+    View vViewBigday;
+
+    @BindView(R.id.vbigday_title)
+    TextView tvVTitle;
+
+    @BindView(R.id.vbigday_day)
+    TextView tvVDay;
+
+    @BindView(R.id.vbigday_date)
+    TextView tvVDate;
+
     private Resources mResources;
 
     private boolean mEditable = true;
@@ -100,6 +109,8 @@ public class CreateBigdayView extends ViewImpl {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mResources = getContext().getResources();
+        tilTitle.setTag(tilTitle.getHint());
+        tilDesc.setTag(tilDesc.getHint());
         RxBus.get().register(this);
     }
 
@@ -191,26 +202,26 @@ public class CreateBigdayView extends ViewImpl {
         menu.findItem(R.id.cbigday_confirm).setVisible(false);
     }
 
+    private void setEditViewVisiblility(int visiblility) {
+        vEditBigday.setVisibility(visiblility);
+        tilTitle.setVisibility(visiblility);
+        tilDesc.setVisibility(visiblility);
+    }
+
     public void enableEdit() {
         mEditable = true;
         enableEditMenu(getMenu());
-        etTitle.setEnabled(true);
-        tilTitle.setHintEnabled(true);
-        tilDesc.setHintEnabled(true);
-        etDesc.setEnabled(true);
-        vTime.setClickable(true);
-        vTags.setClickable(true);
+
+        setEditViewVisiblility(View.VISIBLE);
+        vViewBigday.setVisibility(View.GONE);
     }
 
     public void disableEdit() {
         mEditable = false;
         disableEditMenu(getMenu());
-        etTitle.setEnabled(false);
-        tilTitle.setHintEnabled(false);
-        tilDesc.setHintEnabled(false);
-        etDesc.setEnabled(false);
-        vTime.setClickable(false);
-        vTags.setClickable(false);
+
+        setEditViewVisiblility(View.GONE);
+        vViewBigday.setVisibility(View.VISIBLE);
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_EDITABLE)})
@@ -289,6 +300,25 @@ public class CreateBigdayView extends ViewImpl {
         tvTime.setText(CommonUtils.getDateTimeString(getContext().getResources(),
                 mBigday.getDate()));
         tvTags.setText(mBigday.getTags());
+
+        tvVTitle.setText(mBigday.getTitle());
+
+        setupViewBigday();
+    }
+
+    private void setupViewBigday() {
+        int day = CommonUtils.deltaDayFromToday(mBigday.getDate());
+        String format;
+        if (CommonUtils.isBackward(mBigday.getDate())) {
+            format = mResources.getString(R.string.bigday_backward_title);
+        } else {
+            format = mResources.getString(R.string.bigday_forward_title);
+            day = -day;
+        }
+
+        tvVTitle.setText(String.format(format, mBigday.getTitle()));
+        tvTime.setText(tvTime.getText());
+        tvVDay.setText(String.valueOf(day));
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TIME)})
