@@ -16,9 +16,7 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView {
     public static final String TAG = RecyclerView.class.getSimpleName();
 
     private boolean mIsRefreshing;
-
-    private GestureDetectorCompat mGestureDetector;
-    private OnItemClickListener mOnItemClickListener = null;
+    private OnLoadMoreListener mOnLoadMoreListener;
 
     public RecyclerView(Context context) {
         this(context, null);
@@ -30,23 +28,6 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView {
 
     public RecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mGestureDetector = new GestureDetectorCompat(context, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                if (mOnItemClickListener != null) {
-                    View view = RecyclerView.this.findChildViewUnder(e.getX(), e.getY());
-                    mOnItemClickListener.onItemClick(view);
-                    return true;
-                }
-                return false;
-            }
-        });
-        addOnItemTouchListener(new SimpleOnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(android.support.v7.widget.RecyclerView rv, MotionEvent e) {
-                return mGestureDetector.onTouchEvent(e);
-            }
-        });
         setOnTouchListener((v, event) -> {
             if (mIsRefreshing) {
                 return true;
@@ -64,15 +45,28 @@ public class RecyclerView extends android.support.v7.widget.RecyclerView {
         mIsRefreshing = refreshing;
     }
 
-    public OnItemClickListener getOnItemClickListener() {
-        return mOnItemClickListener;
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        mOnLoadMoreListener = onLoadMoreListener;
     }
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        mOnItemClickListener = onItemClickListener;
+    public interface OnLoadMoreListener {
+        void onLoadMore();
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(View itemView);
+    @Override
+    public void onScrollStateChanged(int state) {
+        super.onScrollStateChanged(state);
+        if (mOnLoadMoreListener == null) return;
+        LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager.getChildCount() > 0) {
+            View lastChildView = layoutManager.getChildAt(layoutManager.getChildCount() - 1);
+            int lastPosition = layoutManager.getPosition(lastChildView);
+            if (state == SCROLL_STATE_IDLE &&
+                    lastPosition == layoutManager.getChildCount() - 1) {
+                if (getAdapter().getItemCount() > 0) {
+                    mOnLoadMoreListener.onLoadMore();
+                }
+            }
+        }
     }
 }

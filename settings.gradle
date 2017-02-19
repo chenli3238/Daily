@@ -1,1 +1,1 @@
-include ':app', ':material-refresh-layout'
+include ':app'

@@ -4,9 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:isLoadMore="true"
-    app:wave_show="true">
+    android:layout_height="match_parent">
 
     <com.wqy.daily.widget.RecyclerView
         android:id="@+id/swipe_refresh_rv"

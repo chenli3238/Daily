@@ -55,7 +55,6 @@ dependencies {
     compile 'org.greenrobot:greendao:3.2.0'
     androidTestCompile 'org.mockito:mockito-android:2.6.8'
     testCompile 'org.mockito:mockito-core:2.6.8'
-    compile project(':material-refresh-layout')
     compile 'joda-time:joda-time:2.9.7'
 }
 

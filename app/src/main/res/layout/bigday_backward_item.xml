@@ -11,28 +11,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/bigday_backward_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"
             android:text="距2017高考还有"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/bigday_title_size"/>
+            android:id="@+id/bigday_backward_title"
+            android:background="@color/colorPrimary"
+            style="@style/bigday_title"/>
 
         <TextView
-            android:id="@+id/bigday_backward_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingBottom="16dp"
-            android:paddingTop="8dp"
             android:text="100"
-            android:textColor="#dd000000"
-            android:textSize="34sp"
-            android:textStyle="bold"/>
+            android:id="@+id/bigday_backward_day"
+            style="@style/bigday_day"/>
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

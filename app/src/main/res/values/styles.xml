@@ -107,4 +107,25 @@
 
     </style>
 
+    <style name="bigday_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/margin_8</item>
+        <item name="android:paddingTop">@dimen/margin_8</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/bigday_title_size</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="bigday_day">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingBottom">@dimen/margin_16</item>
+        <item name="android:paddingTop">@dimen/margin_8</item>
+        <item name="android:textColor">@color/black_87</item>
+        <item name="android:textSize">34sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

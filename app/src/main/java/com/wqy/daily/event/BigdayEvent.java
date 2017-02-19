@@ -16,6 +16,7 @@ public class BigdayEvent {
     private int action;
 
     private boolean noMore = false;
+    private boolean hasMore = true;
 
     private List<Bigday> mBigdays;
 
@@ -48,5 +49,13 @@ public class BigdayEvent {
 
     public void setNoMore(boolean noMore) {
         this.noMore = noMore;
+    }
+
+    public boolean isHasMore() {
+        return hasMore;
+    }
+
+    public void setHasMore(boolean hasMore) {
+        this.hasMore = hasMore;
     }
 }

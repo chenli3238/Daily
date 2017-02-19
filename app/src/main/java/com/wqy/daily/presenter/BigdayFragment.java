@@ -76,6 +76,7 @@ public class BigdayFragment extends BaseFragment {
         List<Bigday> bigdays = mDaoSession.getBigdayDao().queryBuilder()
                 .where(BigdayDao.Properties.Date.gt(today))
 //                .where(BigdayDao.Properties.Id.gt(mBackwardPager.getLastId()))
+                .orderAsc(BigdayDao.Properties.Date)
                 .limit(mBackwardPager.getLimit())
                 .offset(mBackwardPager.getOffset())
                 .list();
@@ -108,6 +109,7 @@ public class BigdayFragment extends BaseFragment {
         List<Bigday> bigdays = mDaoSession.getBigdayDao().queryBuilder()
                 .where(BigdayDao.Properties.Date.lt(today))
 //                .where(BigdayDao.Properties.Id.gt(mForwardPager.getLastId()))
+                .orderDesc(BigdayDao.Properties.Date)
                 .limit(mForwardPager.getLimit())
                 .offset(mForwardPager.getOffset())
                 .list();
