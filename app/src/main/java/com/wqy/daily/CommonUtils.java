@@ -2,14 +2,19 @@ package com.wqy.daily;
 
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v4.util.TimeUtils;
 
 import com.wqy.daily.model.DayTime;
 import com.wqy.daily.event.NumberPickerEvent;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wqy on 17-2-7.
@@ -17,43 +22,46 @@ import java.util.List;
 
 public class CommonUtils {
 
+    public static Calendar getCalendar(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
+    }
+
+    public static Calendar getDateBegin(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
+    public static Date getDateBegin(Date date) {
+        Calendar c = getCalendar(date);
+        return getDateBegin(c).getTime();
+    }
+
     public static Calendar getTodayBegin() {
         Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        return c;
-    }
-
-    public static int backwardDays(Date date) {
-        Calendar today = Calendar.getInstance();
-        long delta = date.getTime() - today.getTimeInMillis();
-        return (int) (delta / (1000 * 3600 * 24));
-    }
-
-    public static int forwardDays(Date date) {
-        int days = backwardDays(date);
-        if (days < 0) {
-            days = -days;
-        }
-        return days;
+        return getDateBegin(c);
     }
 
     public static boolean isBackward(Date date) {
-        Calendar today = getTodayBegin();
-        long delta = (date.getTime() - today.getTimeInMillis());
+        Date today = new Date();
+        long delta = (date.getTime() - today.getTime());
         return delta >= 0;
     }
 
-    public static int deltaDayFromToday(Date date) {
-        Calendar today = getTodayBegin();
-        long delta = (date.getTime() - today.getTimeInMillis());
-        if (delta < 0) {
-            delta = delta / (1000 * 3600 * 24) - 1;
-        } else {
-            delta = delta / (1000 * 3600 * 24);
-        }
+    public static int deltaDayWithToday(Date date) {
+        return deltaDay(new Date(), date);
+    }
 
+    public static int deltaDay(Date start, Date end) {
+        Date d1 = getDateBegin(start);
+        Date d2 = getDateBegin(end);
+        long delta = d2.getTime() - d1.getTime();
+        if (delta < 0) delta = -delta;
+        delta = delta / (1000 * 3600 * 24);
         return (int) delta;
     }
 

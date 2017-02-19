@@ -297,8 +297,7 @@ public class CreateBigdayView extends ViewImpl {
         mBigday = bigday;
         etTitle.setText(mBigday.getTitle());
         etDesc.setText(mBigday.getDesc());
-        tvTime.setText(CommonUtils.getDateTimeString(getContext().getResources(),
-                mBigday.getDate()));
+        tvTime.setText(CommonUtils.getDateTimeString(mResources, mBigday.getDate()));
         tvTags.setText(mBigday.getTags());
 
         tvVTitle.setText(mBigday.getTitle());
@@ -307,18 +306,16 @@ public class CreateBigdayView extends ViewImpl {
     }
 
     private void setupViewBigday() {
-        int day = CommonUtils.deltaDayFromToday(mBigday.getDate());
         String format;
         if (CommonUtils.isBackward(mBigday.getDate())) {
             format = mResources.getString(R.string.bigday_backward_title);
         } else {
             format = mResources.getString(R.string.bigday_forward_title);
-            day = -day;
         }
 
         tvVTitle.setText(String.format(format, mBigday.getTitle()));
-        tvTime.setText(tvTime.getText());
-        tvVDay.setText(String.valueOf(day));
+        tvVDate.setText(tvTime.getText());
+        tvVDay.setText(String.valueOf(CommonUtils.deltaDayWithToday(mBigday.getDate())));
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TIME)})

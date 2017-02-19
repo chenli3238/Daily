@@ -71,7 +71,8 @@ public class BigdayFragment extends BaseFragment {
                 break;
         }
         Log.d(TAG,  String.format("limit = %d, offset = %d", mBackwardPager.getLimit(), mForwardPager.getOffset()));
-        Date today = CommonUtils.getTodayBegin().getTime();
+//        Date today = CommonUtils.getTodayBegin().getTime();
+        Date today = new Date();
         List<Bigday> bigdays = mDaoSession.getBigdayDao().queryBuilder()
                 .where(BigdayDao.Properties.Date.gt(today))
 //                .where(BigdayDao.Properties.Id.gt(mBackwardPager.getLastId()))
@@ -102,7 +103,8 @@ public class BigdayFragment extends BaseFragment {
                 break;
         }
         Log.d(TAG,  String.format("limit = %d, offset = %d", mForwardPager.getLimit(), mForwardPager.getOffset()));
-        Date today = CommonUtils.getTodayBegin().getTime();
+//        Date today = CommonUtils.getTodayBegin().getTime();
+        Date today = new Date();
         List<Bigday> bigdays = mDaoSession.getBigdayDao().queryBuilder()
                 .where(BigdayDao.Properties.Date.lt(today))
 //                .where(BigdayDao.Properties.Id.gt(mForwardPager.getLastId()))
