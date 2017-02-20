@@ -1,5 +1,8 @@
 package com.wqy.daily.model;
 
+import com.wqy.daily.NavigationUtils;
+import com.wqy.daily.ReminderUtils;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -35,9 +38,6 @@ public class Bigday {
     private String tags;
 
     private boolean remindme;
-
-    @Transient
-    private Reminder reminder;
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -88,14 +88,6 @@ public class Bigday {
 
     public void setRemindme(boolean remindme) {
         this.remindme = remindme;
-    }
-
-    public Reminder getReminder() {
-        return reminder;
-    }
-
-    public void setReminder(Reminder reminder) {
-        this.reminder = reminder;
     }
 
     public Long getId() {

@@ -3,6 +3,7 @@ package com.wqy.daily.presenter;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.model.DaoSession;
+import com.wqy.daily.model.Event;
+import com.wqy.daily.model.Reminder;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.CreateBigdayView;
 
@@ -102,29 +105,12 @@ public class CreateBigdayActivity extends BaseActivity {
     }
 
     private void setReminder(Bigday bigday) {
-        ReminderUtils.scheduleNotification(this, getNotification(bigday),
-                getNotificationId(bigday), bigday.getDate().getTime());
+        Reminder reminder = ReminderUtils.getReminder(this, bigday);
+        ReminderUtils.scheduleReminder(this, reminder);
     }
 
     private void removeReminder(Bigday bigday) {
-        ReminderUtils.cancelNotification(this, getNotification(bigday),
-                getNotificationId(bigday));
-    }
-
-    private Notification getNotification(Bigday bigday) {
-        Intent intent = NavigationUtils.viewBigday(CreateBigdayActivity.this, bigday);
-        PendingIntent pi = PendingIntent.getActivity(CreateBigdayActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setContentIntent(pi)
-                .setContentTitle(bigday.getTitle())
-                .setContentText(getString(R.string.reminder_info))
-//                .setAutoCancel(true)
-                .setSmallIcon(R.mipmap.ic_launcher);
-        return builder.build();
-    }
-
-    private int getNotificationId(Bigday bigday) {
-        int id = (int) (bigday.getDate().getTime() * 7 + bigday.getId() * 31);
-        return id;
+        Reminder reminder = ReminderUtils.getReminder(this, bigday);
+        ReminderUtils.cancelReminder(this, reminder);
     }
 }

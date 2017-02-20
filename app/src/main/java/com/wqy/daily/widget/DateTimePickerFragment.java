@@ -72,6 +72,7 @@ public class DateTimePickerFragment extends ViewPagerPickerFragment {
         mCalendar = Calendar.getInstance();
         LayoutInflater inflater = LayoutInflater.from(getContext());
         mTimePicker = (TimePicker) inflater.inflate(R.layout.time_picker, null);
+        mTimePicker.setIs24HourView(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             mTimePicker.setHour(0);
             mTimePicker.setMinute(0);

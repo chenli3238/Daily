@@ -1,5 +1,6 @@
 package com.wqy.daily;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
