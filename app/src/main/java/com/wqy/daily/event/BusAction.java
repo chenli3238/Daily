@@ -128,4 +128,11 @@ public class BusAction {
     // Set the bigday in CreateBigdayView
     public static final String CBIGDAY_SET_BIGDAY = "CBIGDAY_SET_BIGDAY";
     public static final String NOTIFY_DATASET_CHANGED = "NOTIFY_DATASET_CHANGED";
+
+    public static final String CMEMO_SET_MEMO = "CBIGDAY_SET_MEMO";
+
+    public static final String CMEMO_TIME = "CMEMO_TIME";
+
+    public static final String CMEMO_IMAGE = "CMEMO_IMAGE";
+    public static final String CMEMO_PICK_IMAGE = "CMEMO_PICK_IMAGE";
 }

@@ -111,8 +111,6 @@ public class CreateBigdayView extends ViewImpl {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mResources = getContext().getResources();
-        tilTitle.setTag(tilTitle.getHint());
-        tilDesc.setTag(tilDesc.getHint());
         RxBus.get().register(this);
     }
 
@@ -314,14 +312,15 @@ public class CreateBigdayView extends ViewImpl {
     public void setBigday(Bigday bigday) {
         Log.d(TAG, "setBigday: ");
         mBigday = bigday;
+        setupEditBigday();
+        setupViewBigday();
+    }
+
+    private void setupEditBigday() {
         etTitle.setText(mBigday.getTitle());
         etDesc.setText(mBigday.getDesc());
         tvTime.setText(CommonUtils.getDateTimeString(mResources, mBigday.getDate()));
         tvTags.setText(mBigday.getTags());
-
-        tvVTitle.setText(mBigday.getTitle());
-
-        setupViewBigday();
     }
 
     private void setupViewBigday() {
