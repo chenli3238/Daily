@@ -110,7 +110,7 @@ public class BigdayFragment extends BaseFragment {
         List<Bigday> bigdays = mDaoSession.getBigdayDao().queryBuilder()
                 .where(BigdayDao.Properties.Date.lt(today))
 //                .where(BigdayDao.Properties.Id.gt(mForwardPager.getLastId()))
-                .orderDesc(BigdayDao.Properties.Date)
+                .orderAsc(BigdayDao.Properties.Date)
                 .limit(mForwardPager.getLimit())
                 .offset(mForwardPager.getOffset())
                 .list();
@@ -135,5 +135,12 @@ public class BigdayFragment extends BaseFragment {
         Log.d(TAG, "viewBigday: ");
         Intent intent = NavigationUtils.viewBigday(getContext(), bigday);
         startActivity(intent);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.DELETE_ALL)})
+    public void deleteAll(String s) {
+        mDaoSession.getBigdayDao().deleteAll();
+        DatasetChangedEvent event = new DatasetChangedEvent(DatasetChangedEvent.DELETE);
+        RxBus.get().post(BusAction.BIGDAY_DATASET_CHANGED, event);
     }
 }

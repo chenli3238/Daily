@@ -121,6 +121,9 @@ public class BusAction {
 
     // Save bigday in CreateBigdayActivity
     public static final String SAVE_BIGDAY = "SAVE_BIGDAY";
+    public static final String DELETE_BIGDAY = "DELETE_BIGDAY";
+
+    public static final String DELETE_ALL = "DELETE_ALL";
 
     // Set the bigday in CreateBigdayView
     public static final String CBIGDAY_SET_BIGDAY = "CBIGDAY_SET_BIGDAY";

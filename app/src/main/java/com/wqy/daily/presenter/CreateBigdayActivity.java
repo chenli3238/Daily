@@ -1,15 +1,11 @@
 package com.wqy.daily.presenter;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.WindowManager;
 
 import com.hwangjr.rxbus.Bus;
@@ -19,20 +15,16 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseActivity;
-import com.wqy.daily.CommonUtils;
 import com.wqy.daily.NavigationUtils;
-import com.wqy.daily.NotificationPublisher;
 import com.wqy.daily.R;
+import com.wqy.daily.ReminderUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
-import com.wqy.daily.event.ShowDialogEvent;
 import com.wqy.daily.model.Bigday;
-import com.wqy.daily.model.DaoMaster;
 import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.CreateBigdayView;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class CreateBigdayActivity extends BaseActivity {
@@ -85,37 +77,54 @@ public class CreateBigdayActivity extends BaseActivity {
     @Subscribe(thread = EventThread.IO,
             tags = {@Tag(BusAction.SAVE_BIGDAY)})
     public void saveBigday(Bigday bigday) {
-        Log.d(TAG, "saveBigday: ");
-        DatasetChangedEvent<Long> event = new DatasetChangedEvent<>();
+        Log.d(TAG, "saveBigday: " + bigday.getId());
+        DatasetChangedEvent event = new DatasetChangedEvent();
         Long key = bigday.getId();
         if (key == null) {
             event.setAction(DatasetChangedEvent.INSERT);
         } else {
             event.setAction(DatasetChangedEvent.UPDATE);
         }
-        event.setKeys(new Long[]{key});
+
         mDaoSession.getBigdayDao().save(bigday);
         setReminder(bigday);
         RxBus.get().post(BusAction.BIGDAY_DATASET_CHANGED, event);
     }
 
+    @Subscribe(thread = EventThread.IO,
+            tags = {@Tag(BusAction.DELETE_BIGDAY)})
+    public void deleteBigday(Bigday bigday) {
+        Log.d(TAG, "deleteBigday: ");
+        removeReminder(bigday);
+        mDaoSession.getBigdayDao().delete(bigday);
+        DatasetChangedEvent event = new DatasetChangedEvent(DatasetChangedEvent.DELETE);
+        RxBus.get().post(BusAction.BIGDAY_DATASET_CHANGED, event);
+    }
+
     private void setReminder(Bigday bigday) {
-        Intent nIntent = new Intent(this, NotificationPublisher.class);
-        nIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, (int) (bigday.getId() * bigday.hashCode()));
-        nIntent.putExtra(NotificationPublisher.NOTIFICATION, getNotification(bigday));
-        PendingIntent pi = PendingIntent.getBroadcast(CreateBigdayActivity.this, 0, nIntent, 0);
-        AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        manager.set(AlarmManager.RTC_WAKEUP, bigday.getDate().getTime(), pi);
+        ReminderUtils.scheduleNotification(this, getNotification(bigday),
+                getNotificationId(bigday), bigday.getDate().getTime());
+    }
+
+    private void removeReminder(Bigday bigday) {
+        ReminderUtils.cancelNotification(this, getNotification(bigday),
+                getNotificationId(bigday));
     }
 
     private Notification getNotification(Bigday bigday) {
         Intent intent = NavigationUtils.viewBigday(CreateBigdayActivity.this, bigday);
-        PendingIntent pi = PendingIntent.getActivity(CreateBigdayActivity.this, 0, intent, 0);
+        PendingIntent pi = PendingIntent.getActivity(CreateBigdayActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setContentIntent(pi)
                 .setContentTitle(bigday.getTitle())
-                .setContentText("测试测试")
-                .setSmallIcon(R.drawable.ic_alarm_white_24dp);
+                .setContentText(getString(R.string.reminder_info))
+//                .setAutoCancel(true)
+                .setSmallIcon(R.mipmap.ic_launcher);
         return builder.build();
+    }
+
+    private int getNotificationId(Bigday bigday) {
+        int id = (int) (bigday.getDate().getTime() * 7 + bigday.getId() * 31);
+        return id;
     }
 }

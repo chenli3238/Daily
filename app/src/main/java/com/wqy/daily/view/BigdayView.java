@@ -244,7 +244,7 @@ public class BigdayView extends ViewImpl {
     }
 
     @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
-    public void onDatasetChanged(DatasetChangedEvent<Long> event) {
+    public void onDatasetChanged(DatasetChangedEvent event) {
         Log.d(TAG, "onDatasetChanged: ");
         refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
         refreshData(BusAction.LOAD_BIGDAY_FORWARD);

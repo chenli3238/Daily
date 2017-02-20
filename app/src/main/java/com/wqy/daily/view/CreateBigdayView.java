@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -26,6 +27,7 @@ import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.model.Bigday;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.widget.BooleanPickerFragment;
 import com.wqy.daily.widget.DateTimePickerFragment;
 import com.wqy.daily.widget.TagPickerFragment;
 
@@ -167,9 +169,21 @@ public class CreateBigdayView extends ViewImpl {
             case R.id.cbigday_edit:
                 enableEdit();
                 return true;
+            case R.id.cbigday_delete:
+                deleteBigday();
+                return true;
             default:
                 return false;
         }
+    }
+
+    private void deleteBigday() {
+        BooleanPickerFragment fragment = new BooleanPickerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(BooleanPickerFragment.ARG_EVENT_TAG, BusAction.DELETE_BIGDAY);
+        bundle.putString(BooleanPickerFragment.ARG_MESSAGE, mResources.getString(R.string.delete_bigday));
+        fragment.setArguments(bundle);
+        mIPresenter.showDialog(BooleanPickerFragment.TAG, fragment);
     }
 
     private void confirm() {
@@ -185,7 +199,8 @@ public class CreateBigdayView extends ViewImpl {
     }
 
     @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
-    public void onDatasetChanged(DatasetChangedEvent<Long> event) {
+    public void onDatasetChanged(DatasetChangedEvent event) {
+        Log.d(TAG, "onDatasetChanged: ");
         mProgressDialog.dismiss();
         navigateUp();
     }
@@ -193,12 +208,14 @@ public class CreateBigdayView extends ViewImpl {
     private void enableEditMenu(Menu menu) {
         if (menu == null) return;
         menu.findItem(R.id.cbigday_edit).setVisible(false);
+        menu.findItem(R.id.cbigday_delete).setVisible(false);
         menu.findItem(R.id.cbigday_confirm).setVisible(true);
     }
 
     private void disableEditMenu(Menu menu) {
         if (menu == null) return;
         menu.findItem(R.id.cbigday_edit).setVisible(true);
+        menu.findItem(R.id.cbigday_delete).setVisible(true);
         menu.findItem(R.id.cbigday_confirm).setVisible(false);
     }
 
@@ -214,6 +231,7 @@ public class CreateBigdayView extends ViewImpl {
 
         setEditViewVisiblility(View.VISIBLE);
         vViewBigday.setVisibility(View.GONE);
+        getSupportActionBar().setTitle(R.string.title_cbigday);
     }
 
     public void disableEdit() {
@@ -222,6 +240,7 @@ public class CreateBigdayView extends ViewImpl {
 
         setEditViewVisiblility(View.GONE);
         vViewBigday.setVisibility(View.VISIBLE);
+        getSupportActionBar().setTitle(R.string.title_bigday);
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_EDITABLE)})
@@ -327,6 +346,16 @@ public class CreateBigdayView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TAGS)})
     public void setTags(String[] tags) {
         tvTags.setText(CommonUtils.getTagString(mResources, tags));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.DELETE_BIGDAY)})
+    public void deleteBigday(Boolean b) {
+        Log.d(TAG, "deleteBigday: ");
+        if (b) {
+            mProgressDialog = ProgressDialog.show(getContext(), null, mResources.getString(R.string.deleting_data));
+            mProgressDialog.setCancelable(true);
+            RxBus.get().post(BusAction.DELETE_BIGDAY, mBigday);
+        }
     }
 
     private abstract class AfterTextChangeListener implements TextWatcher {

@@ -64,4 +64,7 @@
     <string name="action_view">com.wqy.action.VIEW</string>
     <string name="footer_no_more">没有更多了</string>
     <string name="saving_data">正在保存数据，请稍等...</string>
+    <string name="reminder_info">点击查看详情</string>
+    <string name="delete_bigday">删除后无法找回,您确定要删除吗</string>
+    <string name="deleting_data">正在删除...</string>
 </resources>

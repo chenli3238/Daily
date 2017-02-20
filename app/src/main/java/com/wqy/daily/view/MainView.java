@@ -74,6 +74,8 @@ public class MainView extends ViewImpl {
             return true;
         } if (id == R.id.main_test) {
             RxBus.get().post(BusAction.START_ACTIVITY, TestActivity.class);
+        } if (id == R.id.main_delete_all) {
+            RxBus.get().post(BusAction.DELETE_ALL, "");
         }
         return super.onMenuItemSelected(item);
     }

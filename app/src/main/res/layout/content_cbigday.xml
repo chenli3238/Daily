@@ -37,7 +37,7 @@
                     android:paddingTop="@dimen/margin_8"
                     android:text="距离开学还有"
                     android:textColor="@android:color/white"
-                    android:textSize="16sp"/>
+                    android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/vbigday_day"
