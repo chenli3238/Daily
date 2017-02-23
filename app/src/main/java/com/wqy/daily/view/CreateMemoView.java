@@ -2,31 +2,25 @@ package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.Scroller;
+import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
@@ -39,10 +33,9 @@ import com.wqy.daily.StringUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.interfaces.ImageLoader;
-import com.wqy.daily.interfaces.ImageSpanTarget;
 import com.wqy.daily.model.Memo;
-import com.wqy.daily.model.SpanInfo;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.widget.BooleanPickerFragment;
 import com.wqy.daily.widget.DateTimePickerFragment;
 
 import java.util.ArrayList;
@@ -66,6 +59,9 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     @BindView(R.id.cmemo_content)
     EditText etContent;
 
+    @BindView(R.id.cmemo_remind_time)
+    TextView tvRemindTime;
+
     private Memo mMemo;
 
     private List<Target> mImageHolders;
@@ -73,6 +69,8 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     private ProgressDialog mProgressDialog;
 
     private int imageMaxSize = 0;
+
+    private boolean creatingMemo = true;
 
     @Override
     public int getResId() {
@@ -116,8 +114,11 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
                 showDateTimeDialog();
                 return true;
             case R.id.cmemo_confirm:
-                // TODO: 17-2-8 create a memo
+                // TODO: 17-2-8 create a editMemo
                 confirm();
+                return true;
+            case R.id.cmemo_delete:
+                showDeleteDialog();
                 return true;
             default:
                 return false;
@@ -125,9 +126,49 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         }
     }
 
+    @Override
+    public void setMenu(Menu menu) {
+        super.setMenu(menu);
+        if (creatingMemo) {
+            setCreating();
+        } else {
+            setEditing();
+        }
+    }
+
     @Produce(tags = {@Tag(BusAction.SET_CMEMO_TITLE)})
     public String setActivityTitle() {
         return getContext().getString(R.string.title_cmemo);
+    }
+
+
+    @Subscribe(tags = {@Tag(BusAction.CMEMO_CREATING)})
+    public void setCreatingMemo(Boolean event) {
+        if (event) {
+            setCreating();
+        } else {
+            setEditing();
+        }
+    }
+
+    public void setCreating() {
+        creatingMemo = true;
+        disableMenu(getMenu());
+    }
+
+    public void setEditing() {
+        creatingMemo = false;
+        enableMenu(getMenu());
+    }
+
+    public void enableMenu(Menu menu) {
+        if (menu == null) return;
+        menu.findItem(R.id.cmemo_delete).setVisible(true);
+    }
+
+    public void disableMenu(Menu menu) {
+        if (menu == null) return;
+        menu.findItem(R.id.cmemo_delete).setVisible(false);
     }
 
     private void showDateTimeDialog() {
@@ -148,6 +189,32 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         mMemo.setContent(content);
         mProgressDialog = ProgressDialog.show(getContext(), null, getContext().getString(R.string.saving_data));
         RxBus.get().post(BusAction.SAVE_MEMO, mMemo);
+    }
+
+    public void showDeleteDialog() {
+        BooleanPickerFragment fragment = new BooleanPickerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(BooleanPickerFragment.ARG_EVENT_TAG, BusAction.DELETE_MEMO);
+        if (mMemo.getDeleted()) {
+            bundle.putString(BooleanPickerFragment.ARG_MESSAGE, mResources.getString(R.string.delete_bigday));
+        } else {
+            bundle.putString(BooleanPickerFragment.ARG_MESSAGE, mResources.getString(R.string.cmemo_set_deleted));
+        }
+
+        fragment.setArguments(bundle);
+        mIPresenter.showDialog(BooleanPickerFragment.TAG, fragment);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.DELETE_MEMO)})
+    public void deleteMemo(Boolean b) {
+        if (!b) return;
+        mProgressDialog = ProgressDialog.show(getContext(), null, mResources.getString(R.string.deleting_data));
+        if (mMemo.getDeleted()) {
+            RxBus.get().post(BusAction.DELETE_MEMO, mMemo);
+        } else {
+            mMemo.setDeleted(true);
+            RxBus.get().post(BusAction.SAVE_MEMO, mMemo);
+        }
     }
 
     @Subscribe(tags = {@Tag(BusAction.MEMO_DATASET_CHANGED)})
@@ -191,7 +258,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     }
 
     private void showText() {
-        if (mMemo == null || mMemo.getContent() == null) return;
+        if (mMemo == null || TextUtils.isEmpty(mMemo.getContent())) return;
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
         StringUtils.renderText(getContext(), mMemo.getContent(),

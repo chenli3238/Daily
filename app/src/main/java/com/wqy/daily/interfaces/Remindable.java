@@ -7,7 +7,7 @@ import java.util.Date;
  */
 
 public interface Remindable {
-    Long getId();
+    int getRemindId();
 
     Date getRemindTime();
 

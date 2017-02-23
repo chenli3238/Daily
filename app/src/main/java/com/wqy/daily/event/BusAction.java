@@ -106,7 +106,7 @@ public class BusAction {
 
     public static final String CREATE_MEMO = "CREATE_MEMO";
 
-    public static final String VIEW_MEMO = "VIEW_MEMO";
+    public static final String EDIT_MEMO = "EDIT_MEMO";
 
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 
@@ -146,6 +146,7 @@ public class BusAction {
 
     public static final String CMEMO_IMAGE = "CMEMO_IMAGE";
     public static final String CMEMO_PICK_IMAGE = "CMEMO_PICK_IMAGE";
+    public static final String CMEMO_CREATING = "CMEMO_CREATING";
 
     public static final String MEMO_DATASET_CHANGED = "MEMO_DATASET_CHANGED";
 }

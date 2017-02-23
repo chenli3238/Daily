@@ -100,6 +100,11 @@ public class Bigday implements Remindable {
     }
 
     @Override
+    public int getRemindId() {
+        return (int) (Bigday.class.getCanonicalName().hashCode() * 7 + id * 31);
+    }
+
+    @Override
     public Date getRemindTime() {
         return date;
     }

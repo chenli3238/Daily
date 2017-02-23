@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -56,8 +55,10 @@ public class CreateMemoActivity extends BaseActivity {
         long id = getIntent().getLongExtra(EXTRA_MEMO_ID, 0);
         if (id > 0) {
             memo = mDaoSession.getMemoDao().load(id);
+            RxBus.get().post(BusAction.CMEMO_CREATING, Boolean.FALSE);
         } else {
             memo = new Memo();
+            RxBus.get().post(BusAction.CMEMO_CREATING, Boolean.TRUE);
         }
         RxBus.get().post(BusAction.CMEMO_SET_MEMO, memo);
     }
@@ -111,13 +112,13 @@ public class CreateMemoActivity extends BaseActivity {
 
     private void setReminder(Memo memo) {
         Reminder reminder = ReminderUtils.getReminder(this, memo,
-                NavigationUtils.memo(this, memo));
+                NavigationUtils.editMemo(this, memo));
         ReminderUtils.scheduleReminder(this, reminder);
     }
 
     private void removeReminder(Memo memo) {
         Reminder reminder = ReminderUtils.getReminder(this, memo,
-                NavigationUtils.memo(this, memo));
+                NavigationUtils.editMemo(this, memo));
         ReminderUtils.cancelReminder(this, reminder);
     }
 }

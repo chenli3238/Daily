@@ -80,7 +80,7 @@ public class StringUtils {
     public static String parseTitle(String text) {
         int end = text.indexOf("\n");
         if (end < 0) {
-            end = TITLE_MAX_LEN;
+            end = TITLE_MAX_LEN > text.length() ? text.length() : TITLE_MAX_LEN;
         }
         if (end >= TITLE_MAX_LEN) {
             return text.substring(0, TITLE_MAX_LEN);

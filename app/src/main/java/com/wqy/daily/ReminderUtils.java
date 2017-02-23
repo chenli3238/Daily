@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.wqy.daily.interfaces.Remindable;
+import com.wqy.daily.model.Bigday;
+import com.wqy.daily.model.Memo;
 import com.wqy.daily.model.Reminder;
 
 
@@ -58,13 +60,9 @@ public class ReminderUtils {
         return builder.build();
     }
 
-    public static int getId(Remindable remindable) {
-        return (int) (remindable.getRemindTime().getTime() * 7 + remindable.getId() * 31);
-    }
-
     public static Reminder getReminder(Context context, Remindable remindable, Intent intent) {
         Reminder reminder = new Reminder();
-        reminder.setId(getId(remindable));
+        reminder.setId(remindable.getRemindId());
         reminder.setTime(remindable.getRemindTime().getTime());
         reminder.setIntent(intent);
         reminder.setTitle(remindable.getTitle());

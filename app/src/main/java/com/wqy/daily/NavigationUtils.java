@@ -28,8 +28,15 @@ public class NavigationUtils {
         return intent;
     }
 
-    public static Intent memo(Context context, Memo memo) {
+    public static Intent createMemo(Context context) {
         Intent intent = new Intent(context, CreateMemoActivity.class);
+        intent.setAction(context.getString(R.string.action_create));
+        return intent;
+    }
+
+    public static Intent editMemo(Context context, Memo memo) {
+        Intent intent = new Intent(context, CreateMemoActivity.class);
+        intent.setAction(context.getString(R.string.action_edit));
         intent.putExtra(CreateMemoActivity.EXTRA_MEMO_ID, memo.getId());
         return intent;
     }

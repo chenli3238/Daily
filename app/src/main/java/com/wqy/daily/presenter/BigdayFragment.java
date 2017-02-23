@@ -78,7 +78,7 @@ public class BigdayFragment extends BaseFragment {
                 .offset(mBackwardPager.getOffset())
                 .list();
         if (bigdays == null || bigdays.size() == 0) {
-            event.setNoMore(true);
+            event.setHasMore(false);
         } else  {
             // TODO: 17-2-11 Fix logical problem
 //            mBackwardPager.setLastId(bigdays.get(bigdays.size() - 1).getId());
@@ -111,7 +111,7 @@ public class BigdayFragment extends BaseFragment {
                 .offset(mForwardPager.getOffset())
                 .list();
         if (bigdays == null || bigdays.size() == 0) {
-            event.setNoMore(true);
+            event.setHasMore(false);
         } else  {
             mForwardPager.setLastId(bigdays.get(bigdays.size() - 1).getId());
             mForwardPager.addOffset(bigdays.size());

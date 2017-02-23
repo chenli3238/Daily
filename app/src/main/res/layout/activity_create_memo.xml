@@ -37,4 +37,16 @@
             android:background="@null"/>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:text="2015年8月4日"
+        android:id="@+id/cmemo_remind_time"
+        android:layout_margin="@dimen/margin_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black_54"
+        android:textSize="14sp"
+        android:gravity="end"
+        tools:context=".presenter.CreateDiaryActivity"
+        tools:showIn="@layout/activity_create_diary"/>
 </android.support.design.widget.CoordinatorLayout>

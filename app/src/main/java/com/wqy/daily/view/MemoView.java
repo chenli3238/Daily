@@ -1,6 +1,5 @@
 package com.wqy.daily.view;
 
-import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -26,8 +25,6 @@ import com.wqy.daily.adapter.ViewHolder;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
-import com.wqy.daily.event.MemoEvents;
-import com.wqy.daily.event.MemoInitEvent;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.widget.SwipeRefreshLayout;
@@ -115,10 +112,8 @@ public class MemoView extends ViewImpl {
         mViewPager.setAdapter(adapter);
     }
 
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(BusAction.SET_TAB_LAYOUT)}
-    )
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(BusAction.SET_TAB_LAYOUT)})
     public void setTabLayout(TabLayout tabLayout) {
         Log.d(TAG, "setTabLayout: ");
         tabLayout.setVisibility(View.VISIBLE);
@@ -133,13 +128,16 @@ public class MemoView extends ViewImpl {
     @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
     public void setFab(FloatingActionButton fab) {
         fab.setImageResource(R.drawable.ic_note_add_white_24dp);
-        fab.setOnClickListener(v -> RxBus.get().post(BusAction.START_ACTIVITY, CreateMemoActivity.class));
+        fab.setOnClickListener(v -> {
+            RxBus.get().post(BusAction.CREATE_MEMO, "");
+        });
     }
 
     @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
     public String getTitle() {
         return getContext().getString(R.string.title_memo);
     }
+
 
     private void initSwipeRefreshLayout(SwipeRefreshLayout layout) {
         layout.setColorSchemeColors(mResources.getColor(R.color.colorAccent),
@@ -156,7 +154,7 @@ public class MemoView extends ViewImpl {
                     Log.d(TAG, "onClick: ");
                     int position = mUnderwayRV.getChildAdapterPosition(v);
                     Memo memo = mUnderwayAdapter.getDataList().get(position);
-                    RxBus.get().post(BusAction.VIEW_MEMO, memo);
+                    RxBus.get().post(BusAction.EDIT_MEMO, memo);
                 });
                 return new MemoVH(itemView);
             }
@@ -183,6 +181,12 @@ public class MemoView extends ViewImpl {
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.memo_item, null);
+                itemView.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mFinishedRV.getChildAdapterPosition(v);
+                    Memo memo = mFinishedAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.EDIT_MEMO, memo);
+                });
                 return new MemoVH(itemView);
             }
         };
@@ -207,6 +211,12 @@ public class MemoView extends ViewImpl {
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.memo_item, null);
+                itemView.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mDeletedRV.getChildAdapterPosition(v);
+                    Memo memo = mDeletedAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.EDIT_MEMO, memo);
+                });
                 return new MemoVH(itemView);
             }
         };
@@ -267,7 +277,7 @@ public class MemoView extends ViewImpl {
                 break;
             case DataEvent.REFRESH:
                 mDeletedHasMore = true;
-                mFinishedAdapter.setDataList(event.getDatas());
+                mDeletedAdapter.setDataList(event.getDatas());
                 mDeletedLayout.setRefreshing(false);
                 break;
         }

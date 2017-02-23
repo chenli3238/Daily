@@ -15,7 +15,6 @@ public class DataEvent<T> {
 
     private int action;
 
-    private boolean noMore = false;
     private boolean hasMore = true;
 
     private List<T> mDatas;
@@ -41,14 +40,6 @@ public class DataEvent<T> {
 
     public void setAction(int action) {
         this.action = action;
-    }
-
-    public boolean isNoMore() {
-        return noMore;
-    }
-
-    public void setNoMore(boolean noMore) {
-        this.noMore = noMore;
     }
 
     public boolean isHasMore() {

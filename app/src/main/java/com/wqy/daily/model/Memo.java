@@ -58,6 +58,11 @@ public class Memo implements Remindable {
     }
 
     @Override
+    public int getRemindId() {
+        return (int) (Memo.class.getCanonicalName().hashCode() * 7 + id * 31);
+    }
+
+    @Override
     public Date getRemindTime() {
         return remindTime;
     }

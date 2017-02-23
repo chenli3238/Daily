@@ -13,7 +13,6 @@ import com.wqy.daily.BaseFragment;
 import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DataEvent;
-import com.wqy.daily.model.BigdayDao;
 import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.model.MemoDao;
@@ -21,8 +20,6 @@ import com.wqy.daily.model.Pager;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.MemoView;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class MemoFragment extends BaseFragment {
@@ -67,7 +64,7 @@ public class MemoFragment extends BaseFragment {
                 .offset(mUnderwayPager.getOffset())
                 .list();
         if (memos == null || memos.size() == 0) {
-            event.setNoMore(true);
+            event.setHasMore(false);
         } else {
             mUnderwayPager.addOffset(memos.size());
         }
@@ -90,6 +87,8 @@ public class MemoFragment extends BaseFragment {
                 .offset(mFinishedPager.getOffset())
                 .list();
         if (memos == null || memos.size() == 0) {
+            event.setHasMore(false);
+        } else {
             mFinishedPager.addOffset(memos.size());
         }
         event.setDatas(memos);
@@ -100,6 +99,9 @@ public class MemoFragment extends BaseFragment {
             tags = {@Tag(BusAction.LOAD_MEMO_DELETED)})
     public void getMemoDeleted(DataEvent<Memo> event) {
         Log.d(TAG, "getMemoDeleted: ");
+        if (event.getAction() == DataEvent.REFRESH) {
+            mDeletedPager.reset();
+        }
         List<Memo> memos = mDaoSession.getMemoDao().queryBuilder()
                 .where(MemoDao.Properties.Deleted.eq(true))
                 .orderDesc(MemoDao.Properties.CreatedAt)
@@ -107,15 +109,26 @@ public class MemoFragment extends BaseFragment {
                 .offset(mDeletedPager.getOffset())
                 .list();
         if (memos == null || memos.size() == 0) {
+            event.setHasMore(false);
+        } else {
             mDeletedPager.addOffset(memos.size());
         }
+
         event.setDatas(memos);
         RxBus.get().post(BusAction.SET_MEMO_DELETED, event);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.VIEW_MEMO)})
-    public void viewMemo(Memo memo) {
-        Intent intent = NavigationUtils.memo(getActivity(), memo);
+    @Subscribe(tags = {@Tag(BusAction.CREATE_MEMO)})
+    public void createMemo(String s) {
+        Intent intent = NavigationUtils.createMemo(getContext());
         startActivity(intent);
     }
+
+    @Subscribe(tags = {@Tag(BusAction.EDIT_MEMO)})
+    public void editMemo(Memo memo) {
+        Intent intent = NavigationUtils.editMemo(getActivity(), memo);
+        startActivity(intent);
+    }
+
+
 }
