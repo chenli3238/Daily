@@ -8,7 +8,7 @@ import java.util.List;
  * Created by wqy on 17-2-7.
  */
 
-public class BigdayEvent {
+public class DataEvent<T> {
 
     public static final int LOAD_MORE = 1;
     public static final int REFRESH = 2;
@@ -18,21 +18,21 @@ public class BigdayEvent {
     private boolean noMore = false;
     private boolean hasMore = true;
 
-    private List<Bigday> mBigdays;
+    private List<T> mDatas;
 
-    public BigdayEvent() {
+    public DataEvent() {
     }
 
-    public BigdayEvent(int action) {
+    public DataEvent(int action) {
         this.action = action;
     }
 
-    public List<Bigday> getBigdays() {
-        return mBigdays;
+    public List<T> getDatas() {
+        return mDatas;
     }
 
-    public void setBigdays(List<Bigday> bigdays) {
-        mBigdays = bigdays;
+    public void setDatas(List<T> datas) {
+        mDatas = datas;
     }
 
     public int getAction() {

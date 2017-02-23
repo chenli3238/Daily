@@ -6,9 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import com.wqy.daily.model.Bigday;
+import com.wqy.daily.interfaces.Remindable;
 import com.wqy.daily.model.Reminder;
 
 
@@ -40,7 +39,7 @@ public class ReminderUtils {
         // notification id
         nIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, reminder.getId());
         nIntent.putExtra(NotificationPublisher.NOTIFICATION,
-                getNotification(context, reminder.getIntent(), reminder.getTitle(), reminder.getContent()));
+                getNotification(context, reminder.getIntent(), reminder.getTitle(), reminder.getInfo()));
         // alarm id
         PendingIntent pi = PendingIntent.getBroadcast(context, reminder.getId(), nIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pi;
@@ -59,17 +58,18 @@ public class ReminderUtils {
         return builder.build();
     }
 
-    public static int getId(Bigday bigday) {
-        return (int) (bigday.getDate().getTime() * 7 + bigday.getId() * 31);
+    public static int getId(Remindable remindable) {
+        return (int) (remindable.getRemindTime().getTime() * 7 + remindable.getId() * 31);
     }
 
-    public static Reminder getReminder(Context context, Bigday bigday) {
+    public static Reminder getReminder(Context context, Remindable remindable, Intent intent) {
         Reminder reminder = new Reminder();
-        reminder.setId(ReminderUtils.getId(bigday));
-        reminder.setTime(bigday.getDate().getTime());
-        reminder.setIntent(NavigationUtils.viewBigday(context, bigday));
-        reminder.setTitle(bigday.getTitle());
-        reminder.setContent(context.getString(R.string.reminder_info));
+        reminder.setId(getId(remindable));
+        reminder.setTime(remindable.getRemindTime().getTime());
+        reminder.setIntent(intent);
+        reminder.setTitle(remindable.getTitle());
+        reminder.setInfo(context.getString(R.string.reminder_info));
         return reminder;
     }
+
 }

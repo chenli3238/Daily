@@ -1,6 +1,5 @@
 package com.wqy.daily.adapter;
 
-import android.os.StrictMode;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,6 +32,6 @@ public class BigdayBackwardVH extends ViewHolder<Bigday> {
     public void bindView(Bigday data) {
         String format = tvDay.getContext().getString(R.string.bigday_backward_title);
         tvTitle.setText(String.format(format, data.getTitle()));
-        tvDay.setText(String.valueOf(CommonUtils.deltaDayWithToday(data.getDate())));
+        tvDay.setText(String.valueOf(CommonUtils.deltaDayWithToday(data.getCreatedAt())));
     }
 }

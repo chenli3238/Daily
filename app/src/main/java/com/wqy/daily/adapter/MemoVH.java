@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wqy.daily.R;
+import com.wqy.daily.StringUtils;
 import com.wqy.daily.model.Memo;
 
 import java.text.SimpleDateFormat;
@@ -39,8 +40,12 @@ public class MemoVH extends ViewHolder<Memo> {
 
     @Override
     public void bindView(Memo data) {
-        tvTitle.setText(data.getTitle());
-        tvContent.setText(data.getContent());
-        tvDate.setText(format.format(data.getDate()));
+        String text = StringUtils.hideImages(data.getContent());
+        String titleOfText = StringUtils.parseTitle(text);
+        tvTitle.setText(titleOfText);
+        tvContent.setText(StringUtils.parseBody(titleOfText, text));
+        if (data.getCreatedAt() != null) {
+            tvDate.setText(format.format(data.getCreatedAt()));
+        }
     }
 }

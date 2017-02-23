@@ -25,6 +25,7 @@
             android:text="标题标题\n标题标题\n标题标题\n标题标题"
             android:id="@+id/memo_content"
             android:maxLines="4"
+            android:minLines="4"
             android:textSize="14sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

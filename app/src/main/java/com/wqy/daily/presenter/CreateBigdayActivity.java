@@ -16,6 +16,7 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseActivity;
+import com.wqy.daily.CommonUtils;
 import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.ReminderUtils;
@@ -105,12 +106,12 @@ public class CreateBigdayActivity extends BaseActivity {
     }
 
     private void setReminder(Bigday bigday) {
-        Reminder reminder = ReminderUtils.getReminder(this, bigday);
+        Reminder reminder = ReminderUtils.getReminder(this, bigday, NavigationUtils.viewBigday(this, bigday));
         ReminderUtils.scheduleReminder(this, reminder);
     }
 
     private void removeReminder(Bigday bigday) {
-        Reminder reminder = ReminderUtils.getReminder(this, bigday);
+        Reminder reminder = ReminderUtils.getReminder(this, bigday, NavigationUtils.viewBigday(this, bigday));
         ReminderUtils.cancelReminder(this, reminder);
     }
 }

@@ -47,6 +47,7 @@ public class CommonUtils {
     }
 
     public static boolean isBackward(Date date) {
+        if (date == null) return false;
         Date today = new Date();
         long delta = (date.getTime() - today.getTime());
         return delta >= 0;

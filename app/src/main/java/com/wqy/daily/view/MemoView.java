@@ -14,6 +14,7 @@ import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.event.DataEvent;
 import com.wqy.daily.presenter.CreateMemoActivity;
 import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
@@ -68,17 +69,23 @@ public class MemoView extends ViewImpl {
         mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
         mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
-
+        init();
         RxBus.get().register(this);
-        RxBus.get().post(BusAction.INIT_MEMO_UNDERWAY, new MemoInitEvent());
-        RxBus.get().post(BusAction.INIT_MEMO_FINISHED, new MemoInitEvent());
-        RxBus.get().post(BusAction.INIT_MEMO_DELETED, new MemoInitEvent());
+        RxBus.get().post(BusAction.LOAD_MEMO_UNDERWAY, new DataEvent<Memo>(DataEvent.REFRESH));
+        RxBus.get().post(BusAction.LOAD_MEMO_FINISHED, new DataEvent<Memo>(DataEvent.REFRESH));
+        RxBus.get().post(BusAction.LOAD_MEMO_DELETED, new DataEvent<Memo>(DataEvent.REFRESH));
     }
 
     @Override
     public void destroy() {
         RxBus.get().unregister(this);
         mUnbinder.unbind();
+    }
+
+    public void init() {
+        initUnderway();
+        initFinished();
+        initDeleted();
     }
 
     public void setViewPager() {
@@ -120,25 +127,28 @@ public class MemoView extends ViewImpl {
         return getContext().getString(R.string.title_memo);
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_UNDERWAY)})
-    public void initUnderway(MemoEvents events) {
+    public void initUnderway() {
         mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>(mUnderwayRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.memo_item, null);
+                itemView.setOnClickListener(v -> {
+                    Log.d(TAG, "onClick: ");
+                    int position = mUnderwayRV.getChildAdapterPosition(v);
+                    Memo memo = mUnderwayAdapter.getDataList().get(position);
+                    RxBus.get().post(BusAction.VIEW_MEMO, memo);
+                });
                 return new MemoVH(itemView);
             }
         };
-        mUnderwayAdapter.setDataList(events.getMemos());
         mUnderwayRV.setAdapter(mUnderwayAdapter);
         mUnderwayRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mUnderwayRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_FINISHED)})
-    public void initFinished(MemoEvents events) {
+    public void initFinished() {
         mFinishedAdapter = new ListRecyclerViewAdapter<Memo>(mFinishedRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -147,15 +157,13 @@ public class MemoView extends ViewImpl {
                 return new MemoVH(itemView);
             }
         };
-        mFinishedAdapter.setDataList(events.getMemos());
         mFinishedRV.setAdapter(mFinishedAdapter);
         mFinishedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mFinishedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
     }
 
-    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_DELETED)})
-    public void initDeleted(MemoEvents events) {
+    public void initDeleted() {
         mDeletedAdapter = new ListRecyclerViewAdapter<Memo>(mDeletedRV) {
             @Override
             public ViewHolder<Memo> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -164,10 +172,27 @@ public class MemoView extends ViewImpl {
                 return new MemoVH(itemView);
             }
         };
-        mDeletedAdapter.setDataList(events.getMemos());
         mDeletedRV.setAdapter(mDeletedAdapter);
         mDeletedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mDeletedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_UNDERWAY)})
+    public void setMemoUnderway(DataEvent<Memo> event) {
+        Log.d(TAG, "setMemoUnderway: ");
+        mUnderwayAdapter.setDataList(event.getDatas());
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_FINISHED)})
+    public void setMemoFinished(DataEvent<Memo> event) {
+        Log.d(TAG, "setMemoFinished: ");
+        mFinishedAdapter.setDataList(event.getDatas());
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_MEMO_DELETED)})
+    public void setMemoDeleted(DataEvent<Memo> event) {
+        Log.d(TAG, "setMemoDeleted: ");
+        mDeletedAdapter.setDataList(event.getDatas());
     }
 }

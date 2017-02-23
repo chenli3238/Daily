@@ -2,6 +2,7 @@ package com.wqy.daily.model;
 
 import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.ReminderUtils;
+import com.wqy.daily.interfaces.Remindable;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
@@ -16,7 +17,7 @@ import org.greenrobot.greendao.DaoException;
  * Created by wqy on 17-2-6.
  */
 @Entity(
-        nameInDb = "Bidday",
+        nameInDb = "Bigday",
         active = true,
         generateConstructors = false,
         generateGettersSetters = false,
@@ -24,7 +25,7 @@ import org.greenrobot.greendao.DaoException;
                 @Index(value = "date ASC")
         }
 )
-public class Bigday {
+public class Bigday implements Remindable {
 
     @Id(autoincrement = true)
     private Long id;
@@ -50,12 +51,16 @@ public class Bigday {
     public Bigday() {
     }
 
-    public Date getDate() {
+    public Date getCreatedAt() {
         return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public String getTitle() {
@@ -92,6 +97,11 @@ public class Bigday {
 
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public Date getRemindTime() {
+        return date;
     }
 
     public void setId(Long id) {

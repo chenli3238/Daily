@@ -46,6 +46,12 @@ public class BusAction {
 
     public static final String INIT_MEMO_DELETED = "INIT_MEMO_DELETED";
 
+    public static final String LOAD_MEMO_UNDERWAY = "LOAD_MEMO_UNDERWAY";
+
+    public static final String LOAD_MEMO_FINISHED = "LOAD_MEMO_FINISHED";
+
+    public static final String LOAD_MEMO_DELETED = "LOAD_MEMO_DELETED";
+
     public static final String SET_MEMO_UNDERWAY = "SET_MEMO_UNDERWAY";
 
     public static final String SET_MEMO_FINISHED = "SET_MEMO_FINISHED";
@@ -100,6 +106,8 @@ public class BusAction {
 
     public static final String CREATE_MEMO = "CREATE_MEMO";
 
+    public static final String VIEW_MEMO = "VIEW_MEMO";
+
     public static final String BIGDAY_TITLE_DESC = "BIGDAY_TITLE_DESC";
 
     public static final String BIGDAY_DATASET_CHANGED = "BIGDAY_DATASET_CHANGED";
@@ -123,6 +131,9 @@ public class BusAction {
     public static final String SAVE_BIGDAY = "SAVE_BIGDAY";
     public static final String DELETE_BIGDAY = "DELETE_BIGDAY";
 
+    public static final String SAVE_MEMO = "SAVE_MEMO";
+    public static final String DELETE_MEMO = "DELETE_MEMO";
+
     public static final String DELETE_ALL = "DELETE_ALL";
 
     // Set the bigday in CreateBigdayView
@@ -135,4 +146,6 @@ public class BusAction {
 
     public static final String CMEMO_IMAGE = "CMEMO_IMAGE";
     public static final String CMEMO_PICK_IMAGE = "CMEMO_PICK_IMAGE";
+
+    public static final String MEMO_DATASET_CHANGED = "MEMO_DATASET_CHANGED";
 }

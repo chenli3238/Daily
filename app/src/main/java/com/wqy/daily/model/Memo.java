@@ -1,5 +1,8 @@
 package com.wqy.daily.model;
 
+import com.wqy.daily.StringUtils;
+import com.wqy.daily.interfaces.Remindable;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
@@ -18,19 +21,19 @@ import org.greenrobot.greendao.DaoException;
         generateConstructors = false,
         generateGettersSetters = false,
         indexes = {
-                @Index(value = "date DESC", unique = true)
+                @Index(value = "createdAt DESC", unique = true)
         }
 )
-public class Memo {
+public class Memo implements Remindable {
 
     @Id(autoincrement = true)
     private Long id;
 
-    private String title;
-
     private String content;
 
-    private Date date;
+    private Date createdAt;
+
+    private Date remindTime;
 
     private boolean finished;
 
@@ -54,16 +57,21 @@ public class Memo {
         return id;
     }
 
+    @Override
+    public Date getRemindTime() {
+        return remindTime;
+    }
+
+    public void setRemindTime(Date remindTime) {
+        this.remindTime = remindTime;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+        return StringUtils.parseTitle(content);
     }
 
     public String getContent() {
@@ -74,12 +82,12 @@ public class Memo {
         this.content = content;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isFinished() {

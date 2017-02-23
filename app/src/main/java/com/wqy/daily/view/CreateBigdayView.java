@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.hwangjr.rxbus.Bus;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -190,7 +189,7 @@ public class CreateBigdayView extends ViewImpl {
             mBigday.setTitle(etTitle.getText().toString());
             mBigday.setDesc(etDesc.getText().toString());
             mBigday.setTags(tvTags.getText().toString());
-//            mBigday.setDate();
+//            mBigday.setCreatedAt();
             mProgressDialog = ProgressDialog.show(getContext(), null, getContext().getString(R.string.saving_data));
             RxBus.get().post(BusAction.SAVE_BIGDAY, mBigday);
         }
@@ -319,13 +318,13 @@ public class CreateBigdayView extends ViewImpl {
     private void setupEditBigday() {
         etTitle.setText(mBigday.getTitle());
         etDesc.setText(mBigday.getDesc());
-        tvTime.setText(CommonUtils.getDateTimeString(mResources, mBigday.getDate()));
+        tvTime.setText(CommonUtils.getDateTimeString(mResources, mBigday.getCreatedAt()));
         tvTags.setText(mBigday.getTags());
     }
 
     private void setupViewBigday() {
         String format;
-        if (CommonUtils.isBackward(mBigday.getDate())) {
+        if (CommonUtils.isBackward(mBigday.getCreatedAt())) {
             format = mResources.getString(R.string.bigday_backward_title);
         } else {
             format = mResources.getString(R.string.bigday_forward_title);
@@ -333,7 +332,7 @@ public class CreateBigdayView extends ViewImpl {
 
         tvVTitle.setText(String.format(format, mBigday.getTitle()));
         tvVDate.setText(tvTime.getText());
-        tvVDay.setText(String.valueOf(CommonUtils.deltaDayWithToday(mBigday.getDate())));
+        tvVDay.setText(String.valueOf(CommonUtils.deltaDayWithToday(mBigday.getCreatedAt())));
     }
 
     @Subscribe(tags = {@Tag(BusAction.CBIGDAY_TIME)})

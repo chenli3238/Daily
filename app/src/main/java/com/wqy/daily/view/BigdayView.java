@@ -22,7 +22,7 @@ import com.wqy.daily.adapter.BigdayForwardVH;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
 import com.wqy.daily.adapter.ListRecyclerViewAdapter;
 import com.wqy.daily.adapter.ViewHolder;
-import com.wqy.daily.event.BigdayEvent;
+import com.wqy.daily.event.DataEvent;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.R;
 import com.wqy.daily.adapter.ListPagerAdapter;
@@ -82,8 +82,8 @@ public class BigdayView extends ViewImpl {
         init();
 
         RxBus.get().register(this);
-        RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD, new BigdayEvent(BigdayEvent.REFRESH));
-        RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD, new BigdayEvent(BigdayEvent.REFRESH));
+        RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD, new DataEvent(DataEvent.REFRESH));
+        RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD, new DataEvent(DataEvent.REFRESH));
     }
 
     private void init() {
@@ -120,7 +120,7 @@ public class BigdayView extends ViewImpl {
             Log.d(TAG, "onLoadMore: ");
             if (!mBackwardHasMore) return;
             RxBus.get().post(BusAction.LOAD_BIGDAY_BACKWARD,
-                    new BigdayEvent(BigdayEvent.LOAD_MORE));
+                    new DataEvent(DataEvent.LOAD_MORE));
         });
         initSwipeRefreshLayout(mBackwardLayout);
         mBackwardLayout.setOnRefreshListener(() -> {
@@ -153,7 +153,7 @@ public class BigdayView extends ViewImpl {
             Log.d(TAG, "onLoadMore: ");
             if (!mForwardHasMore) return;
             RxBus.get().post(BusAction.LOAD_BIGDAY_FORWARD,
-                    new BigdayEvent(BigdayEvent.LOAD_MORE));
+                    new DataEvent(DataEvent.LOAD_MORE));
         });
         initSwipeRefreshLayout(mForwardLayout);
         mForwardLayout.setOnRefreshListener(() -> {
@@ -207,32 +207,32 @@ public class BigdayView extends ViewImpl {
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_BACKWARD)})
-    public void setBigdayBackward(BigdayEvent event) {
+    public void setBigdayBackward(DataEvent<Bigday> event) {
         Log.d(TAG, "setBigdayBackward: " + event.getAction());
         switch (event.getAction()) {
-            case BigdayEvent.LOAD_MORE:
+            case DataEvent.LOAD_MORE:
                 mBackwardHasMore = event.isHasMore();
-                mBackwardAdapter.appendData(event.getBigdays());
+                mBackwardAdapter.appendData(event.getDatas());
                 break;
-            case BigdayEvent.REFRESH:
+            case DataEvent.REFRESH:
                 mBackwardHasMore = true;
-                mBackwardAdapter.setDataList(event.getBigdays());
+                mBackwardAdapter.setDataList(event.getDatas());
                 mBackwardLayout.setRefreshing(false);
                 break;
         }
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_FORWARD)})
-    public void setBigdayForward(BigdayEvent event) {
+    public void setBigdayForward(DataEvent<Bigday> event) {
         Log.d(TAG, "setBigdayForward: " + event.getAction());
         switch (event.getAction()) {
-            case BigdayEvent.LOAD_MORE:
+            case DataEvent.LOAD_MORE:
                 mForwardHasMore = event.isHasMore();
-                mForwardAdapter.appendData(event.getBigdays());
+                mForwardAdapter.appendData(event.getDatas());
                 break;
-            case BigdayEvent.REFRESH:
+            case DataEvent.REFRESH:
                 mForwardHasMore = true;
-                mForwardAdapter.setDataList(event.getBigdays());
+                mForwardAdapter.setDataList(event.getDatas());
                 mForwardLayout.setRefreshing(false);
                 break;
         }
@@ -240,7 +240,7 @@ public class BigdayView extends ViewImpl {
 
     private void refreshData(String action) {
         RxBus.get().post(action,
-                new BigdayEvent(BigdayEvent.REFRESH));
+                new DataEvent(DataEvent.REFRESH));
     }
 
     @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})

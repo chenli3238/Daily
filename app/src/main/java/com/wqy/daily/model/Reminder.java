@@ -2,8 +2,6 @@ package com.wqy.daily.model;
 
 import android.content.Intent;
 
-import java.util.function.Supplier;
-
 /**
  * Created by wqy on 17-2-6.
  */
@@ -16,7 +14,7 @@ public class Reminder {
 
     private String title;
 
-    private String content;
+    private String info;
 
     private Intent mIntent;
 
@@ -44,12 +42,12 @@ public class Reminder {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getInfo() {
+        return info;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public Intent getIntent() {

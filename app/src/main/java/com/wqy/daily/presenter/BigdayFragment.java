@@ -10,10 +10,8 @@ import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.App;
 import com.wqy.daily.BaseFragment;
-import com.wqy.daily.CommonUtils;
 import com.wqy.daily.NavigationUtils;
-import com.wqy.daily.R;
-import com.wqy.daily.event.BigdayEvent;
+import com.wqy.daily.event.DataEvent;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.model.Bigday;
@@ -23,8 +21,6 @@ import com.wqy.daily.model.Pager;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.BigdayView;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -62,12 +58,12 @@ public class BigdayFragment extends BaseFragment {
 
     @Subscribe(thread = EventThread.IO,
             tags = {@Tag(BusAction.LOAD_BIGDAY_BACKWARD)})
-    public void getBigdayBackward(BigdayEvent event) {
+    public void getBigdayBackward(DataEvent<Bigday> event) {
         Log.d(TAG, "getBigdayBackward: " + event.getAction());
         switch (event.getAction()) {
-            case BigdayEvent.LOAD_MORE:
+            case DataEvent.LOAD_MORE:
                 break;
-            case BigdayEvent.REFRESH:
+            case DataEvent.REFRESH:
                 mBackwardPager.reset();
                 break;
         }
@@ -89,18 +85,18 @@ public class BigdayFragment extends BaseFragment {
             mBackwardPager.addOffset(bigdays.size());
         }
 
-        event.setBigdays(bigdays);
+        event.setDatas(bigdays);
         RxBus.get().post(BusAction.SET_BIGDAY_BACKWARD, event);
     }
 
     @Subscribe(thread = EventThread.IO,
             tags = {@Tag(BusAction.LOAD_BIGDAY_FORWARD)})
-    public void getBigdayForward(BigdayEvent event) {
+    public void getBigdayForward(DataEvent<Bigday> event) {
         Log.d(TAG, "getBigdayForward: " + event.getAction());
         switch (event.getAction()) {
-            case BigdayEvent.LOAD_MORE:
+            case DataEvent.LOAD_MORE:
                 break;
-            case BigdayEvent.REFRESH:
+            case DataEvent.REFRESH:
                 mForwardPager.reset();
                 break;
         }
@@ -120,7 +116,7 @@ public class BigdayFragment extends BaseFragment {
             mForwardPager.setLastId(bigdays.get(bigdays.size() - 1).getId());
             mForwardPager.addOffset(bigdays.size());
         }
-        event.setBigdays(bigdays);
+        event.setDatas(bigdays);
         RxBus.get().post(BusAction.SET_BIGDAY_FORWARD, event);
     }
 

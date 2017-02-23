@@ -1,15 +1,19 @@
 package com.wqy.daily.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.App;
 import com.wqy.daily.BaseFragment;
+import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.event.BusAction;
-import com.wqy.daily.event.MemoEvents;
-import com.wqy.daily.event.MemoInitEvent;
+import com.wqy.daily.event.DataEvent;
+import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.MemoView;
@@ -21,6 +25,7 @@ import java.util.List;
 public class MemoFragment extends BaseFragment {
 
     public static final String TAG = MemoFragment.class.getSimpleName();
+    DaoSession mDaoSession;
 
     public MemoFragment() {}
 
@@ -31,49 +36,40 @@ public class MemoFragment extends BaseFragment {
 
     @Override
     public void created(Bundle savedInstanceState) {
+        mDaoSession = ((App) getContext().getApplicationContext()).getDaoSession();
         RxBus.get().register(this);
     }
 
-    @Override
-    public void destroy() {
-        RxBus.get().unregister(this);
-    }
-
-    private Memo createMemo() {
-        Memo memo = new Memo();
-        memo.setTitle("备忘");
-        memo.setContent("如果你无法简洁的表达你的想法，那只说明你还不够了解它。\n" +
-                "-- 阿尔伯特·爱因斯坦");
-        memo.setDate(new Date());
-        return memo;
-    }
-
-    private List<Memo> createMemo(int n) {
-        List<Memo> memos = new ArrayList<>(n);
-        for (int i = 0; i < n; i++) {
-            memos.add(createMemo());
-        }
-        return memos;
+    @Subscribe(thread = EventThread.IO,
+            tags = {@Tag(BusAction.LOAD_MEMO_UNDERWAY)})
+    public void getMemoUnderway(DataEvent<Memo> event) {
+        Log.d(TAG, "getMemoUnderway: ");
+        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        event.setDatas(memos);
+        RxBus.get().post(BusAction.SET_MEMO_UNDERWAY, event);
     }
 
     @Subscribe(thread = EventThread.IO,
-            tags = {@Tag(BusAction.INIT_MEMO_UNDERWAY)})
-    public void getMemoUnderway(MemoInitEvent event) {
-        MemoEvents events = new MemoEvents(createMemo(10));
-        RxBus.get().post(BusAction.SET_MEMO_UNDERWAY, events);
+            tags = {@Tag(BusAction.LOAD_MEMO_FINISHED)})
+    public void getMemoFinished(DataEvent<Memo> event) {
+        Log.d(TAG, "getMemoFinished: ");
+        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        event.setDatas(memos);
+        RxBus.get().post(BusAction.SET_MEMO_FINISHED, event);
     }
 
     @Subscribe(thread = EventThread.IO,
-            tags = {@Tag(BusAction.INIT_MEMO_FINISHED)})
-    public void getMemoFinished(MemoInitEvent event) {
-        MemoEvents events = new MemoEvents(createMemo(10));
-        RxBus.get().post(BusAction.SET_MEMO_FINISHED, events);
+            tags = {@Tag(BusAction.LOAD_MEMO_DELETED)})
+    public void getMemoDeleted(DataEvent<Memo> event) {
+        Log.d(TAG, "getMemoDeleted: ");
+        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        event.setDatas(memos);
+        RxBus.get().post(BusAction.SET_MEMO_DELETED, event);
     }
 
-    @Subscribe(thread = EventThread.IO,
-            tags = {@Tag(BusAction.INIT_MEMO_DELETED)})
-    public void getMemoDeleted(MemoInitEvent event) {
-        MemoEvents events = new MemoEvents(createMemo(10));
-        RxBus.get().post(BusAction.SET_MEMO_DELETED, events);
+    @Subscribe(tags = {@Tag(BusAction.VIEW_MEMO)})
+    public void viewMemo(Memo memo) {
+        Intent intent = NavigationUtils.memo(getContext(), memo);
+        startActivity(intent);
     }
 }

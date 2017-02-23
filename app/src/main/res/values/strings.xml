@@ -67,4 +67,5 @@
     <string name="reminder_info">点击查看详情</string>
     <string name="delete_bigday">删除后无法找回,您确定要删除吗</string>
     <string name="deleting_data">正在删除...</string>
+    <string name="cmemo_empty_content">内容不能为空</string>
 </resources>
