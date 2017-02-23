@@ -1,6 +1,7 @@
 package com.wqy.daily.mvp;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,12 +21,15 @@ public abstract class ViewImpl implements IActivityView {
 
     protected View mRootView;
 
+    protected Resources mResources;
+
     protected Menu mMenu;
 
     @Override
     public View create(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(getResId(), container, false);
         mRootView = view;
+        mResources = getContext().getResources();
         return view;
     }
 

@@ -35,9 +35,9 @@ public class Memo implements Remindable {
 
     private Date remindTime;
 
-    private boolean finished;
+    private boolean finished = false;
 
-    private boolean deleted;
+    private boolean deleted = false;
 
     @Transient
     private Reminder reminder;

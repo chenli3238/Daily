@@ -1,5 +1,6 @@
 package com.wqy.daily.interfaces;
 
+import android.net.Uri;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 

@@ -2,22 +2,31 @@ package com.wqy.daily.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.Scroller;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
@@ -30,7 +39,9 @@ import com.wqy.daily.StringUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.interfaces.ImageLoader;
+import com.wqy.daily.interfaces.ImageSpanTarget;
 import com.wqy.daily.model.Memo;
+import com.wqy.daily.model.SpanInfo;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.widget.DateTimePickerFragment;
 
@@ -47,7 +58,7 @@ import butterknife.ButterKnife;
 
 public class CreateMemoView extends ViewImpl implements ImageLoader {
 
-    public static final String TAG = CreatePunchView.class.getSimpleName();
+    public static final String TAG = CreateMemoView.class.getSimpleName();
 
     @BindView(R.id.cmemo_toolbar)
     Toolbar mToolbar;
@@ -60,6 +71,8 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     private List<Target> mImageHolders;
 
     private ProgressDialog mProgressDialog;
+
+    private int imageMaxSize = 0;
 
     @Override
     public int getResId() {
@@ -77,6 +90,13 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mImageHolders = new ArrayList<>();
+        etContent.post(() -> {
+            imageMaxSize = getImageMaxWidth();
+            showText();
+        });
+//        etContent.setScroller(new Scroller(getContext()));
+//        etContent.setVerticalScrollBarEnabled(true);
+//        etContent.setMovementMethod(new ScrollingMovementMethod());
         RxBus.get().register(this);
     }
 
@@ -90,7 +110,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // TODO: 17-2-8 nav to parent activity and fragment
-                NavUtils.navigateUpFromSameTask((Activity) getContext());
+                ((Activity) getContext()).finish();
                 return true;
             case R.id.cmemo_image:
                 RxBus.get().post(BusAction.CMEMO_PICK_IMAGE, "");
@@ -142,8 +162,6 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     @Subscribe(tags = {@Tag(BusAction.CMEMO_SET_MEMO)})
     public void setMemo(Memo memo) {
         mMemo = memo;
-        StringUtils.renderText(getContext(), mMemo.getContent(),
-                mImageHolders, this);
     }
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_TIME)})
@@ -173,16 +191,33 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         load(uri, target);
     }
 
+    private void showText() {
+        if (mMemo == null || mMemo.getContent() == null) return;
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        StringUtils.renderText(getContext(), mMemo.getContent(),
+                builder, mImageHolders, this, etContent);
+        Log.d(TAG, "setMemo:\n" + builder);
+    }
+
+    private int getImageMaxWidth() {
+        if (etContent.getWidth() > 0) {
+            return etContent.getWidth();
+        }
+        int rootWidth = ((AppCompatActivity) getContext()).getWindow().getDecorView().getWidth();
+        int width = (int) (rootWidth - getContext().getResources().getDimension(R.dimen.margin_16) * 2);
+        return width;
+    }
+
     public void appendImage(Uri uri, Drawable d) {
         String s = StringUtils.encodeImageSpan(uri);
         SpannableString ss = new SpannableString(s);
         ImageSpan span = StringUtils.getSpan(d);
         ss.setSpan(span, 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        etContent.append("\n\n");
         etContent.append(ss);
-
-        if (d.getIntrinsicWidth() >= etContent.getWidth()) {
-            etContent.append("\n");
-        }
+        etContent.append("\n\n");
+        Log.d(TAG, "appendImage: " + etContent.getText());
     }
 
     @Override
@@ -191,8 +226,46 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
                 .load(uri)
                 .placeholder(R.drawable.ic_broken_image_black_24dp)
                 .error(R.drawable.ic_broken_image_black_24dp)
-                .resize(etContent.getWidth(), etContent.getWidth())
+                .resize(imageMaxSize, imageMaxSize)
                 .onlyScaleDown()
                 .into(target);
+    }
+
+    public CharSequence renderText(Context context, String text, List<Target> imageHolders, ImageLoader imageLoader) {
+        if (TextUtils.isEmpty(text)) return new SpannableString("");
+
+        List<SpanInfo> infos = StringUtils.extractImages(text);
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+
+        for (int i = 0; i < infos.size(); i++) {
+            SpanInfo info = infos.get(i);
+            String spanText = StringUtils.encodeImageSpan(info.getUri());
+            ImageSpanTarget target = new ImageSpanTarget(spanText) {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    ImageSpan newSpan = StringUtils.getSpan(new BitmapDrawable(context.getResources(), bitmap));
+//                    int start = builder.getSpanStart(mImageSpan);
+//                    int end = builder.getSpanEnd(mImageSpan);
+                    mSpannableString.setSpan(newSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    Log.d(TAG, "onPrepareLoad: ");
+                    mImageSpan = StringUtils.getSpan(placeHolderDrawable);
+                    mSpannableString.setSpan(mImageSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
+                }
+            };
+            imageHolders.add(target);
+            imageLoader.load(info.getUri(), target);
+        }
+        return builder;
     }
 }

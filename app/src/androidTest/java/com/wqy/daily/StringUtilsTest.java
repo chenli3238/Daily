@@ -3,6 +3,8 @@ package com.wqy.daily;
 import android.net.Uri;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.wqy.daily.model.SpanInfo;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,10 +38,25 @@ public class StringUtilsTest {
 
     @Test
     public void testExtractImages() {
-        String text = "<img>haha</img><img>haha</img><img>haha</img><img>haha</img><img>haha</img><img>haha</img>";
-        List<Uri> uris = StringUtils.extractImages(text);
-        assertNotNull(uris);
-        assertEquals(6, uris.size());
+        String sUri = "http://www.baidu.com";
+        String singleImg = StringUtils.encodeImageSpan(Uri.parse(sUri));
+        String text = new StringBuilder()
+                .append(singleImg)
+                .append(singleImg)
+                .append(singleImg)
+                .append(singleImg)
+                .append(singleImg)
+                .append(singleImg)
+                .toString();
+        List<SpanInfo> infos = StringUtils.extractImages(text);
+        assertNotNull(infos);
+        assertEquals(6, infos.size());
+        for (int i = 0; i < infos.size(); i++) {
+            SpanInfo info = infos.get(i);
+            assertEquals(sUri.length(), info.getUri().toString().length());
+            assertEquals(i * singleImg.length(), info.getStart());
+            assertEquals((i + 1) * singleImg.length(), info.getEnd());
+        }
     }
 
     @Test

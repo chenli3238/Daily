@@ -5,16 +5,20 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.wqy.daily.interfaces.ImageLoader;
 import com.wqy.daily.interfaces.ImageSpanTarget;
+import com.wqy.daily.model.SpanInfo;
 import com.wqy.daily.view.CreateMemoView;
 
 import java.util.ArrayList;
@@ -27,6 +31,8 @@ import java.util.regex.Pattern;
  */
 
 public class StringUtils {
+
+    public static final String IMAGE_PATTERN = "<img>([^<>]*)</img>";
 
     private static String CANDICATES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -47,24 +53,27 @@ public class StringUtils {
         return Uri.parse(uri);
     }
 
-    public static List<Uri> extractImages(String text) {
-        Pattern pattern = Pattern.compile("<img>([^<>]*)</img>");
+    public static List<SpanInfo> extractImages(String text) {
+        Pattern pattern = Pattern.compile(IMAGE_PATTERN);
         Matcher matcher = pattern.matcher(text);
-        List<Uri> uris = new ArrayList<>();
+        List<SpanInfo> infos = new ArrayList<>();
         while (matcher.find()) {
-            String s = matcher.group();
-            uris.add(Uri.parse(s));
+            String sUri = matcher.group(1);
+            int start = matcher.start();
+            int end = matcher.end();
+            SpanInfo info  = new SpanInfo(start, end, Uri.parse(sUri));
+            infos.add(info);
         }
-        return uris;
+        return infos;
     }
 
     public static String[] splitByImages(String text) {
-        String[] texts = text.split("<img>([^<>]*)</img>");
+        String[] texts = text.split(IMAGE_PATTERN);
         return texts;
     }
 
     public static String hideImages(String text) {
-        return text.replaceAll("<img>([^<>]*)</img>", "[image]");
+        return text.replaceAll(IMAGE_PATTERN, "[image]");
     }
 
     public static final int TITLE_MAX_LEN = 25;
@@ -97,25 +106,25 @@ public class StringUtils {
         return span;
     }
 
-    public static String renderText(Context context, String text, List<Target> imageHolders, ImageLoader imageLoader) {
-        if (TextUtils.isEmpty(text)) return "";
-        List<Uri> images = StringUtils.extractImages(text);
-        String[] texts = StringUtils.splitByImages(text);
-        SpannableStringBuilder builder = new SpannableStringBuilder();
-        int p = 0;
-        if (!StringUtils.startWithImage(text)) {
-            builder.append(texts[p++]);
-        }
-        for (int i = 0; i < images.size(); i++) {
-            Uri uri = images.get(i);
-            String spanText = StringUtils.encodeImageSpan(uri);
+    public static void renderText(Context context, String text, SpannableStringBuilder builder,
+                                  List<Target> imageHolders, ImageLoader imageLoader,
+                                  TextView editText) {
+        List<SpanInfo> infos = StringUtils.extractImages(text);
+        builder.append(text);
+
+        for (int i = 0; i < infos.size(); i++) {
+            SpanInfo info = infos.get(i);
+            String spanText = StringUtils.encodeImageSpan(info.getUri());
             ImageSpanTarget target = new ImageSpanTarget(spanText) {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    Log.d(TAG, "onBitmapLoaded: ");
                     ImageSpan newSpan = getSpan(new BitmapDrawable(context.getResources(), bitmap));
 //                    int start = builder.getSpanStart(mImageSpan);
 //                    int end = builder.getSpanEnd(mImageSpan);
                     mSpannableString.setSpan(newSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
+                    editText.setText(builder);
                 }
 
                 @Override
@@ -128,16 +137,12 @@ public class StringUtils {
                     Log.d(TAG, "onPrepareLoad: ");
                     mImageSpan = getSpan(placeHolderDrawable);
                     mSpannableString.setSpan(mImageSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    builder.append(mSpannableString);
+                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
+                    editText.setText(builder);
                 }
             };
             imageHolders.add(target);
-            imageLoader.load(uri, target);
-            builder.append(texts[p++]);
+            imageLoader.load(info.getUri(), target);
         }
-        while (texts[p] != null) {
-            builder.append(texts[p++]);
-        }
-        return builder.toString();
     }
 }

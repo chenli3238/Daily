@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
@@ -41,12 +42,16 @@ public class CreateMemoActivity extends BaseActivity {
     }
 
     @Override
+    public void prepared(Bundle savedInstanceState) {
+        setMemo();
+    }
+
+    @Override
     public void destroy() {
         RxBus.get().unregister(this);
     }
 
-    @Override
-    public void prepared(Bundle savedInstanceState) {
+    private void setMemo() {
         Memo memo;
         long id = getIntent().getLongExtra(EXTRA_MEMO_ID, 0);
         if (id > 0) {

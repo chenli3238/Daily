@@ -62,8 +62,6 @@ public class BigdayView extends ViewImpl {
     private boolean mBackwardHasMore = true;
     private boolean mForwardHasMore = true;
 
-    private Resources mResources;
-
     @Override
     public int getResId() {
         return R.layout.fragment_bigday;
@@ -78,7 +76,6 @@ public class BigdayView extends ViewImpl {
         mBackwardRV = (RecyclerView) mBackwardLayout.findViewById(R.id.swipe_refresh_rv);
         mForwardLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
         mForwardRV = (RecyclerView) mForwardLayout.findViewById(R.id.swipe_refresh_rv);
-        mResources = getContext().getResources();
         init();
 
         RxBus.get().register(this);

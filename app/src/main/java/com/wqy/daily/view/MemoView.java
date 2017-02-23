@@ -1,5 +1,6 @@
 package com.wqy.daily.view;
 
+import android.content.res.Resources;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -15,6 +16,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
 import com.wqy.daily.event.DataEvent;
+import com.wqy.daily.event.DatasetChangedEvent;
 import com.wqy.daily.presenter.CreateMemoActivity;
 import com.wqy.daily.widget.RecyclerView;
 import com.wqy.daily.adapter.GridItemMarginDecoration;
@@ -28,6 +30,7 @@ import com.wqy.daily.event.MemoEvents;
 import com.wqy.daily.event.MemoInitEvent;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.ViewImpl;
+import com.wqy.daily.widget.SwipeRefreshLayout;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +52,14 @@ public class MemoView extends ViewImpl {
 
     private Unbinder mUnbinder;
 
+    private boolean mUnderwayHasMore = true;
+    private boolean mFinishedHasMore = true;
+    private boolean mDeletedHasMore = true;
+
+    SwipeRefreshLayout mUnderwayLayout;
+    SwipeRefreshLayout mFinishedLayout;
+    SwipeRefreshLayout mDeletedLayout;
+
     RecyclerView mUnderwayRV;
     RecyclerView mFinishedRV;
     RecyclerView mDeletedRV;
@@ -66,14 +77,17 @@ public class MemoView extends ViewImpl {
     public void created() {
         mUnbinder = ButterKnife.bind(this, mRootView);
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        mUnderwayRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
-        mFinishedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
-        mDeletedRV = (RecyclerView) inflater.inflate(R.layout.recyclerview, null);
+        mUnderwayLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
+        mUnderwayRV = (RecyclerView) mUnderwayLayout.findViewById(R.id.swipe_refresh_rv);
+        mFinishedLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
+        mFinishedRV = (RecyclerView) mFinishedLayout.findViewById(R.id.swipe_refresh_rv);
+        mDeletedLayout = (SwipeRefreshLayout) inflater.inflate(R.layout.swipe_recyclerview, null);
+        mDeletedRV = (RecyclerView) mDeletedLayout.findViewById(R.id.swipe_refresh_rv);
         init();
         RxBus.get().register(this);
-        RxBus.get().post(BusAction.LOAD_MEMO_UNDERWAY, new DataEvent<Memo>(DataEvent.REFRESH));
-        RxBus.get().post(BusAction.LOAD_MEMO_FINISHED, new DataEvent<Memo>(DataEvent.REFRESH));
-        RxBus.get().post(BusAction.LOAD_MEMO_DELETED, new DataEvent<Memo>(DataEvent.REFRESH));
+        refreshData(BusAction.LOAD_MEMO_UNDERWAY);
+        refreshData(BusAction.LOAD_MEMO_FINISHED);
+        refreshData(BusAction.LOAD_MEMO_DELETED);
     }
 
     @Override
@@ -90,7 +104,7 @@ public class MemoView extends ViewImpl {
 
     public void setViewPager() {
         List<View> views = Arrays.asList(
-                mUnderwayRV, mFinishedRV, mDeletedRV
+                mUnderwayLayout, mFinishedLayout, mDeletedLayout
         );
         List<String> titles = Arrays.asList(
                 getContext().getString(R.string.tab_underway),
@@ -127,6 +141,11 @@ public class MemoView extends ViewImpl {
         return getContext().getString(R.string.title_memo);
     }
 
+    private void initSwipeRefreshLayout(SwipeRefreshLayout layout) {
+        layout.setColorSchemeColors(mResources.getColor(R.color.colorAccent),
+                mResources.getColor(R.color.colorPrimary));
+    }
+
     public void initUnderway() {
         mUnderwayAdapter = new ListRecyclerViewAdapter<Memo>(mUnderwayRV) {
             @Override
@@ -146,6 +165,16 @@ public class MemoView extends ViewImpl {
         mUnderwayRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mUnderwayRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mUnderwayRV.setOnLoadMoreListener(() -> {
+            Log.d(TAG, "onLoadMore: ");
+            if (!mUnderwayHasMore) return;
+            loadMoreData(BusAction.LOAD_MEMO_UNDERWAY);
+        });
+        initSwipeRefreshLayout(mUnderwayLayout);
+        mUnderwayLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: ");
+            refreshData(BusAction.LOAD_MEMO_UNDERWAY);
+        });
     }
 
     public void initFinished() {
@@ -161,6 +190,15 @@ public class MemoView extends ViewImpl {
         mFinishedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mFinishedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mFinishedRV.setOnLoadMoreListener(() -> {
+            Log.d(TAG, "onLoadMore: ");
+            if (!mFinishedHasMore) return;
+            loadMoreData(BusAction.LOAD_MEMO_FINISHED);
+        });
+        mFinishedLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: ");
+            refreshData(BusAction.LOAD_MEMO_FINISHED);
+        });
     }
 
     public void initDeleted() {
@@ -176,23 +214,81 @@ public class MemoView extends ViewImpl {
         mDeletedRV.setLayoutManager(new GridLayoutManager(getContext(), 2));
         int margin = (int) getContext().getResources().getDimension(R.dimen.card_margin);
         mDeletedRV.addItemDecoration(new GridItemMarginDecoration(2, margin));
+        mDeletedRV.setOnLoadMoreListener(() -> {
+            Log.d(TAG, "onLoadMore: ");
+            if (!mDeletedHasMore) return;
+            loadMoreData(BusAction.LOAD_MEMO_DELETED);
+        });
+        mDeletedLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: ");
+            refreshData(BusAction.LOAD_MEMO_DELETED);
+        });
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_UNDERWAY)})
     public void setMemoUnderway(DataEvent<Memo> event) {
         Log.d(TAG, "setMemoUnderway: ");
-        mUnderwayAdapter.setDataList(event.getDatas());
+        switch (event.getAction()) {
+            case DataEvent.LOAD_MORE:
+                mUnderwayHasMore = event.isHasMore();
+                mUnderwayAdapter.appendData(event.getDatas());
+                break;
+            case DataEvent.REFRESH:
+                mUnderwayHasMore = true;
+                mUnderwayAdapter.setDataList(event.getDatas());
+                mUnderwayLayout.setRefreshing(false);
+                break;
+        }
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_FINISHED)})
     public void setMemoFinished(DataEvent<Memo> event) {
         Log.d(TAG, "setMemoFinished: ");
-        mFinishedAdapter.setDataList(event.getDatas());
+        switch (event.getAction()) {
+            case DataEvent.LOAD_MORE:
+                mFinishedHasMore = event.isHasMore();
+                mFinishedAdapter.appendData(event.getDatas());
+                break;
+            case DataEvent.REFRESH:
+                mFinishedHasMore = true;
+                mFinishedAdapter.setDataList(event.getDatas());
+                mFinishedLayout.setRefreshing(false);
+                break;
+        }
     }
 
     @Subscribe(tags = {@Tag(BusAction.SET_MEMO_DELETED)})
     public void setMemoDeleted(DataEvent<Memo> event) {
         Log.d(TAG, "setMemoDeleted: ");
-        mDeletedAdapter.setDataList(event.getDatas());
+        switch (event.getAction()) {
+            case DataEvent.LOAD_MORE:
+                mDeletedHasMore = event.isHasMore();
+                mDeletedAdapter.appendData(event.getDatas());
+                break;
+            case DataEvent.REFRESH:
+                mDeletedHasMore = true;
+                mFinishedAdapter.setDataList(event.getDatas());
+                mDeletedLayout.setRefreshing(false);
+                break;
+        }
+    }
+
+    private void loadMoreData(String action) {
+        RxBus.get().post(action,
+                new DataEvent(DataEvent.LOAD_MORE));
+    }
+
+    private void refreshData(String action) {
+        RxBus.get().post(action,
+                new DataEvent(DataEvent.REFRESH));
+    }
+
+    @Subscribe(thread = EventThread.IO,
+            tags = {@Tag(BusAction.MEMO_DATASET_CHANGED)})
+    public void onDatasetChanged(DatasetChangedEvent event) {
+        Log.d(TAG, "onDatasetChanged: ");
+        refreshData(BusAction.LOAD_MEMO_UNDERWAY);
+        refreshData(BusAction.LOAD_MEMO_FINISHED);
+        refreshData(BusAction.LOAD_MEMO_DELETED);
     }
 }

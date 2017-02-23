@@ -13,8 +13,11 @@ import com.wqy.daily.BaseFragment;
 import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DataEvent;
+import com.wqy.daily.model.BigdayDao;
 import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.model.Memo;
+import com.wqy.daily.model.MemoDao;
+import com.wqy.daily.model.Pager;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.MemoView;
 
@@ -25,7 +28,13 @@ import java.util.List;
 public class MemoFragment extends BaseFragment {
 
     public static final String TAG = MemoFragment.class.getSimpleName();
-    DaoSession mDaoSession;
+
+    public static final int PAGE_SIZE = 10;
+
+    private DaoSession mDaoSession;
+    private Pager mUnderwayPager;
+    private Pager mFinishedPager;
+    private Pager mDeletedPager;
 
     public MemoFragment() {}
 
@@ -37,6 +46,9 @@ public class MemoFragment extends BaseFragment {
     @Override
     public void created(Bundle savedInstanceState) {
         mDaoSession = ((App) getContext().getApplicationContext()).getDaoSession();
+        mUnderwayPager = new Pager(PAGE_SIZE);
+        mFinishedPager = new Pager(PAGE_SIZE);
+        mDeletedPager = new Pager(PAGE_SIZE);
         RxBus.get().register(this);
     }
 
@@ -44,7 +56,21 @@ public class MemoFragment extends BaseFragment {
             tags = {@Tag(BusAction.LOAD_MEMO_UNDERWAY)})
     public void getMemoUnderway(DataEvent<Memo> event) {
         Log.d(TAG, "getMemoUnderway: ");
-        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        if (event.getAction() == DataEvent.REFRESH) {
+            mUnderwayPager.reset();
+        }
+        List<Memo> memos = mDaoSession.getMemoDao().queryBuilder()
+                .where(MemoDao.Properties.Finished.eq(false),
+                        MemoDao.Properties.Deleted.eq(false))
+                .orderDesc(MemoDao.Properties.CreatedAt)
+                .limit(mUnderwayPager.getLimit())
+                .offset(mUnderwayPager.getOffset())
+                .list();
+        if (memos == null || memos.size() == 0) {
+            event.setNoMore(true);
+        } else {
+            mUnderwayPager.addOffset(memos.size());
+        }
         event.setDatas(memos);
         RxBus.get().post(BusAction.SET_MEMO_UNDERWAY, event);
     }
@@ -53,7 +79,19 @@ public class MemoFragment extends BaseFragment {
             tags = {@Tag(BusAction.LOAD_MEMO_FINISHED)})
     public void getMemoFinished(DataEvent<Memo> event) {
         Log.d(TAG, "getMemoFinished: ");
-        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        if (event.getAction() == DataEvent.REFRESH) {
+            mFinishedPager.reset();
+        }
+        List<Memo> memos = mDaoSession.getMemoDao().queryBuilder()
+                .where(MemoDao.Properties.Deleted.eq(false),
+                        MemoDao.Properties.Finished.eq(true))
+                .orderDesc(MemoDao.Properties.CreatedAt)
+                .limit(mFinishedPager.getLimit())
+                .offset(mFinishedPager.getOffset())
+                .list();
+        if (memos == null || memos.size() == 0) {
+            mFinishedPager.addOffset(memos.size());
+        }
         event.setDatas(memos);
         RxBus.get().post(BusAction.SET_MEMO_FINISHED, event);
     }
@@ -62,14 +100,22 @@ public class MemoFragment extends BaseFragment {
             tags = {@Tag(BusAction.LOAD_MEMO_DELETED)})
     public void getMemoDeleted(DataEvent<Memo> event) {
         Log.d(TAG, "getMemoDeleted: ");
-        List<Memo> memos = mDaoSession.getMemoDao().loadAll();
+        List<Memo> memos = mDaoSession.getMemoDao().queryBuilder()
+                .where(MemoDao.Properties.Deleted.eq(true))
+                .orderDesc(MemoDao.Properties.CreatedAt)
+                .limit(mDeletedPager.getLimit())
+                .offset(mDeletedPager.getOffset())
+                .list();
+        if (memos == null || memos.size() == 0) {
+            mDeletedPager.addOffset(memos.size());
+        }
         event.setDatas(memos);
         RxBus.get().post(BusAction.SET_MEMO_DELETED, event);
     }
 
     @Subscribe(tags = {@Tag(BusAction.VIEW_MEMO)})
     public void viewMemo(Memo memo) {
-        Intent intent = NavigationUtils.memo(getContext(), memo);
+        Intent intent = NavigationUtils.memo(getActivity(), memo);
         startActivity(intent);
     }
 }
