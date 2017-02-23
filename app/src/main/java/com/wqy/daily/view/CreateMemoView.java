@@ -94,9 +94,6 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
             imageMaxSize = getImageMaxWidth();
             showText();
         });
-//        etContent.setScroller(new Scroller(getContext()));
-//        etContent.setVerticalScrollBarEnabled(true);
-//        etContent.setMovementMethod(new ScrollingMovementMethod());
         RxBus.get().register(this);
     }
 
@@ -137,6 +134,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         DialogFragment fragment = new DateTimePickerFragment();
         Bundle bundle = new Bundle();
         bundle.putString(DateTimePickerFragment.ARG_EVENT_TAG, BusAction.CMEMO_TIME);
+        fragment.setArguments(bundle);
         mIPresenter.showDialog(DateTimePickerFragment.TAG, fragment);
     }
 
@@ -166,6 +164,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_TIME)})
     public void setRemindTime(Date event) {
+        Log.d(TAG, "setRemindTime: ");
         mMemo.setRemindTime(event);
     }
 
@@ -229,43 +228,5 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
                 .resize(imageMaxSize, imageMaxSize)
                 .onlyScaleDown()
                 .into(target);
-    }
-
-    public CharSequence renderText(Context context, String text, List<Target> imageHolders, ImageLoader imageLoader) {
-        if (TextUtils.isEmpty(text)) return new SpannableString("");
-
-        List<SpanInfo> infos = StringUtils.extractImages(text);
-        SpannableStringBuilder builder = new SpannableStringBuilder(text);
-
-        for (int i = 0; i < infos.size(); i++) {
-            SpanInfo info = infos.get(i);
-            String spanText = StringUtils.encodeImageSpan(info.getUri());
-            ImageSpanTarget target = new ImageSpanTarget(spanText) {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    ImageSpan newSpan = StringUtils.getSpan(new BitmapDrawable(context.getResources(), bitmap));
-//                    int start = builder.getSpanStart(mImageSpan);
-//                    int end = builder.getSpanEnd(mImageSpan);
-                    mSpannableString.setSpan(newSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    Log.d(TAG, "onPrepareLoad: ");
-                    mImageSpan = StringUtils.getSpan(placeHolderDrawable);
-                    mSpannableString.setSpan(mImageSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
-                }
-            };
-            imageHolders.add(target);
-            imageLoader.load(info.getUri(), target);
-        }
-        return builder;
     }
 }
