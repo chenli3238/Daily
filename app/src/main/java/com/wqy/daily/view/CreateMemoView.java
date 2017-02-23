@@ -28,6 +28,7 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.wqy.daily.CommonUtils;
 import com.wqy.daily.R;
 import com.wqy.daily.StringUtils;
 import com.wqy.daily.event.BusAction;
@@ -70,7 +71,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
 
     private int imageMaxSize = 0;
 
-    private boolean creatingMemo = true;
+    private boolean mCreatingMemo = true;
 
     @Override
     public int getResId() {
@@ -98,6 +99,9 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     @Override
     public void destroy() {
         RxBus.get().unregister(this);
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.cancel();
+        }
     }
 
     @Override
@@ -129,10 +133,15 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     @Override
     public void setMenu(Menu menu) {
         super.setMenu(menu);
-        if (creatingMemo) {
+        if (mCreatingMemo) {
             setCreating();
         } else {
             setEditing();
+        }
+        if (mMemo.getDeleted()) {
+            disableEdit();
+        } else {
+            enableEdit();
         }
     }
 
@@ -152,18 +161,36 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     }
 
     public void setCreating() {
-        creatingMemo = true;
+        mCreatingMemo = true;
         disableMenu(getMenu());
     }
 
     public void setEditing() {
-        creatingMemo = false;
+        mCreatingMemo = false;
         enableMenu(getMenu());
     }
 
     public void enableMenu(Menu menu) {
         if (menu == null) return;
         menu.findItem(R.id.cmemo_delete).setVisible(true);
+    }
+
+    public void disableEdit() {
+        if (mMenu != null) {
+            mMenu.findItem(R.id.cmemo_image).setVisible(false);
+            mMenu.findItem(R.id.cmemo_remind).setVisible(false);
+            mMenu.findItem(R.id.cmemo_confirm).setVisible(false);
+        }
+        etContent.setEnabled(false);
+    }
+
+    public void enableEdit() {
+        if (mMenu != null) {
+            mMenu.findItem(R.id.cmemo_image).setVisible(true);
+            mMenu.findItem(R.id.cmemo_remind).setVisible(true);
+            mMenu.findItem(R.id.cmemo_confirm).setVisible(true);
+        }
+        etContent.setEnabled(true);
     }
 
     public void disableMenu(Menu menu) {
@@ -187,7 +214,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         }
         mMemo.setCreatedAt(new Date());
         mMemo.setContent(content);
-        mProgressDialog = ProgressDialog.show(getContext(), null, getContext().getString(R.string.saving_data));
+        mProgressDialog = ProgressDialog.show(getContext(), null, mResources.getString(R.string.saving_data));
         RxBus.get().post(BusAction.SAVE_MEMO, mMemo);
     }
 
@@ -217,22 +244,33 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         }
     }
 
+    private void navigateUp() {
+        ((Activity) getContext()).finish();
+    }
+
     @Subscribe(tags = {@Tag(BusAction.MEMO_DATASET_CHANGED)})
     public void onDatasetChanged(DatasetChangedEvent event) {
         Log.d(TAG, "onDatasetChanged: ");
         mProgressDialog.dismiss();
-        ((Activity) getContext()).finish();
+        navigateUp();
     }
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_SET_MEMO)})
     public void setMemo(Memo memo) {
         mMemo = memo;
+        tvRemindTime.setText(CommonUtils.getDateTimeString(mResources, mMemo.getRemindTime()));
+        if (mMemo.getDeleted()) {
+            disableEdit();
+        } else {
+            enableEdit();
+        }
     }
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_TIME)})
     public void setRemindTime(Date event) {
         Log.d(TAG, "setRemindTime: ");
         mMemo.setRemindTime(event);
+        tvRemindTime.setText(CommonUtils.getDateTimeString(mResources, mMemo.getRemindTime()));
     }
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_IMAGE)})

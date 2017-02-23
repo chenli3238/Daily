@@ -140,7 +140,8 @@ public class CommonUtils {
         return tags.split(divider);
     }
 
-    public static String getDateTimeString(@NonNull Resources resources, @NonNull Date date) {
+    public static String getDateTimeString(@NonNull Resources resources, Date date) {
+        if (date == null) return null;
         SimpleDateFormat format = new SimpleDateFormat(resources.getString(R.string.format_date_time));
         return format.format(date);
     }

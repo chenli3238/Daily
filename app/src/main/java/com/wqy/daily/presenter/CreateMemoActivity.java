@@ -94,10 +94,10 @@ public class CreateMemoActivity extends BaseActivity {
         } else {
             event.setAction(DatasetChangedEvent.INSERT);
         }
+        mDaoSession.getMemoDao().save(memo);
         if (CommonUtils.isBackward(memo.getRemindTime())) {
             setReminder(memo);
         }
-        mDaoSession.getMemoDao().save(memo);
         RxBus.get().post(BusAction.MEMO_DATASET_CHANGED, event);
     }
 
@@ -111,12 +111,14 @@ public class CreateMemoActivity extends BaseActivity {
     }
 
     private void setReminder(Memo memo) {
+        if (memo.getRemindTime() == null) return;
         Reminder reminder = ReminderUtils.getReminder(this, memo,
                 NavigationUtils.editMemo(this, memo));
         ReminderUtils.scheduleReminder(this, reminder);
     }
 
     private void removeReminder(Memo memo) {
+        if (memo.getRemindTime() == null) return;
         Reminder reminder = ReminderUtils.getReminder(this, memo,
                 NavigationUtils.editMemo(this, memo));
         ReminderUtils.cancelReminder(this, reminder);
