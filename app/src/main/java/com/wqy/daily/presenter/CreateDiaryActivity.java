@@ -17,7 +17,8 @@ import com.wqy.daily.view.CreateDiaryView;
 import java.util.Calendar;
 
 public class CreateDiaryActivity extends BaseActivity {
-
+    public static final String TAG = CreateDiaryActivity.class.getSimpleName();
+    public static final String EXTRA_DIARY_ID = "EXTRA_DIARY_ID";
 
     @Override
     public IView createIView() {

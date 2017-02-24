@@ -66,6 +66,8 @@ public class BusAction {
 
     public static final String SET_BIGDAY_FORWARD = "SET_BIGDAY_FORWARD";
 
+    public static final String LOAD_DIARY = "LOAD_DIARY";
+
     public static final String INIT_DIARY = "INIT_DIARY";
 
     public static final String SET_DIARY = "SET_DIARY";
@@ -103,6 +105,8 @@ public class BusAction {
     public static final String VIEW_BIGDAY = "VIEW_BIGDAY";
 
     public static final String CREATE_DIARY = "CREATE_DIARY";
+
+    public static final String VIEW_DIARY = "VIEW_DIARY";
 
     public static final String CREATE_MEMO = "CREATE_MEMO";
 

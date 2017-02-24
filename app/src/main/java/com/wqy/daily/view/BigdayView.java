@@ -88,6 +88,87 @@ public class BigdayView extends ViewImpl {
         initForward();
     }
 
+    @Override
+    public void destroy() {
+        RxBus.get().unregister(this);
+        mUnbinder.unbind();
+    }
+
+    public void setViewPager() {
+        List<View> views = Arrays.asList(
+                mBackwardLayout, mForwardLayout
+        );
+        List<String> titles = Arrays.asList(
+                getContext().getString(R.string.tab_backward),
+                getContext().getString(R.string.tab_forward)
+        );
+        ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
+        mViewPager.setAdapter(adapter);
+    }
+
+    @Subscribe(thread = EventThread.MAIN_THREAD,
+            tags = {@Tag(BusAction.SET_TAB_LAYOUT)})
+    public void setTabLayout(TabLayout tabLayout) {
+        Log.d(TAG, "setTabLayout: ");
+        tabLayout.setVisibility(View.VISIBLE);
+        tabLayout.removeAllTabs();
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+        setViewPager();
+        tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
+    public void setFab(FloatingActionButton fab) {
+        fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
+        fab.setOnClickListener(v -> RxBus.get().post(BusAction.CREATE_BIGDAY, ""));
+    }
+
+    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
+    public String getTitle() {
+        return getContext().getString(R.string.title_bigday);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_BACKWARD)})
+    public void setBigdayBackward(DataEvent<Bigday> event) {
+        Log.d(TAG, "setBigdayBackward: " + event.getAction());
+        switch (event.getAction()) {
+            case DataEvent.LOAD_MORE:
+                mBackwardHasMore = event.isHasMore();
+                mBackwardAdapter.appendData(event.getDatas());
+                break;
+            case DataEvent.REFRESH:
+                mBackwardHasMore = true;
+                mBackwardAdapter.setDataList(event.getDatas());
+                mBackwardLayout.setRefreshing(false);
+                break;
+        }
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_FORWARD)})
+    public void setBigdayForward(DataEvent<Bigday> event) {
+        Log.d(TAG, "setBigdayForward: " + event.getAction());
+        switch (event.getAction()) {
+            case DataEvent.LOAD_MORE:
+                mForwardHasMore = event.isHasMore();
+                mForwardAdapter.appendData(event.getDatas());
+                break;
+            case DataEvent.REFRESH:
+                mForwardHasMore = true;
+                mForwardAdapter.setDataList(event.getDatas());
+                mForwardLayout.setRefreshing(false);
+                break;
+        }
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
+    public void onDatasetChanged(DatasetChangedEvent event) {
+        Log.d(TAG, "onDatasetChanged: ");
+        refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
+        refreshData(BusAction.LOAD_BIGDAY_FORWARD);
+    }
+
     private void initSwipeRefreshLayout(SwipeRefreshLayout layout) {
         layout.setColorSchemeColors(mResources.getColor(R.color.colorAccent),
                 mResources.getColor(R.color.colorPrimary));
@@ -159,91 +240,8 @@ public class BigdayView extends ViewImpl {
         });
     }
 
-    @Override
-    public void destroy() {
-        RxBus.get().unregister(this);
-        mUnbinder.unbind();
-    }
-
-    public void setViewPager() {
-        List<View> views = Arrays.asList(
-                mBackwardLayout, mForwardLayout
-        );
-        List<String> titles = Arrays.asList(
-                getContext().getString(R.string.tab_backward),
-                getContext().getString(R.string.tab_forward)
-        );
-        ListPagerAdapter adapter = new ListPagerAdapter(views, titles);
-        mViewPager.setAdapter(adapter);
-    }
-
-    @Subscribe(
-            thread = EventThread.MAIN_THREAD,
-            tags = {@Tag(BusAction.SET_TAB_LAYOUT)}
-    )
-    public void setTabLayout(TabLayout tabLayout) {
-        Log.d(TAG, "setTabLayout: ");
-        tabLayout.setVisibility(View.VISIBLE);
-        tabLayout.removeAllTabs();
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        setViewPager();
-        tabLayout.setupWithViewPager(mViewPager);
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.SET_FAB)})
-    public void setFab(FloatingActionButton fab) {
-        fab.setImageResource(R.drawable.ic_insert_invitation_white_24dp);
-        fab.setOnClickListener(v -> RxBus.get().post(BusAction.CREATE_BIGDAY, ""));
-    }
-
-    @Produce(tags = {@Tag(BusAction.SET_MAIN_ACTIVITY_TITLE)})
-    public String getTitle() {
-        return getContext().getString(R.string.title_bigday);
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_BACKWARD)})
-    public void setBigdayBackward(DataEvent<Bigday> event) {
-        Log.d(TAG, "setBigdayBackward: " + event.getAction());
-        switch (event.getAction()) {
-            case DataEvent.LOAD_MORE:
-                mBackwardHasMore = event.isHasMore();
-                mBackwardAdapter.appendData(event.getDatas());
-                break;
-            case DataEvent.REFRESH:
-                mBackwardHasMore = true;
-                mBackwardAdapter.setDataList(event.getDatas());
-                mBackwardLayout.setRefreshing(false);
-                break;
-        }
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.SET_BIGDAY_FORWARD)})
-    public void setBigdayForward(DataEvent<Bigday> event) {
-        Log.d(TAG, "setBigdayForward: " + event.getAction());
-        switch (event.getAction()) {
-            case DataEvent.LOAD_MORE:
-                mForwardHasMore = event.isHasMore();
-                mForwardAdapter.appendData(event.getDatas());
-                break;
-            case DataEvent.REFRESH:
-                mForwardHasMore = true;
-                mForwardAdapter.setDataList(event.getDatas());
-                mForwardLayout.setRefreshing(false);
-                break;
-        }
-    }
-
     private void refreshData(String action) {
         RxBus.get().post(action,
                 new DataEvent(DataEvent.REFRESH));
-    }
-
-    @Subscribe(tags = {@Tag(BusAction.BIGDAY_DATASET_CHANGED)})
-    public void onDatasetChanged(DatasetChangedEvent event) {
-        Log.d(TAG, "onDatasetChanged: ");
-        refreshData(BusAction.LOAD_BIGDAY_BACKWARD);
-        refreshData(BusAction.LOAD_BIGDAY_FORWARD);
     }
 }

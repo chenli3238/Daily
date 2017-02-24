@@ -8,13 +8,17 @@ public class Pager {
 
     public static final long MIN_ID = 0;
 
+    public static final int DEFAULT_PAGE_SIZE = 10;
+
     private int limit;
 
     private int offset;
 
     private long lastId;
 
-    public Pager() {}
+    public Pager() {
+        this(DEFAULT_PAGE_SIZE);
+    }
 
     public Pager(int limit) {
         this.limit = limit;

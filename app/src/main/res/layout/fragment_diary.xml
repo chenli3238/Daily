@@ -3,10 +3,18 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <com.wqy.daily.widget.RecyclerView
-        android:id="@+id/diary_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<com.wqy.daily.widget.SwipeRefreshLayout-->
+        <!--android:id="@+id/diary_swipe_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
-    </com.wqy.daily.widget.RecyclerView>
+        <!--<com.wqy.daily.widget.RecyclerView-->
+            <!--android:id="@+id/diary_rv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</com.wqy.daily.widget.RecyclerView>-->
+        <!---->
+    <!--</com.wqy.daily.widget.SwipeRefreshLayout>-->
+
+    <include layout="@layout/swipe_recyclerview"/>
 </FrameLayout>

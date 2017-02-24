@@ -42,6 +42,7 @@
         app:dotPosition="36dp"/>
 
     <com.daasuu.bl.BubbleLayout
+        android:id="@+id/diary_item_bubble"
         android:padding="@dimen/margin_16"
         android:paddingBottom="@dimen/margin_8"
         android:layout_margin="@dimen/margin_8"

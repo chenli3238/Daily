@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.wqy.daily.model.Bigday;
+import com.wqy.daily.model.Diary;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.presenter.CreateBigdayActivity;
+import com.wqy.daily.presenter.CreateDiaryActivity;
 import com.wqy.daily.presenter.CreateMemoActivity;
 
 /**
@@ -38,6 +40,19 @@ public class NavigationUtils {
         Intent intent = new Intent(context, CreateMemoActivity.class);
         intent.setAction(context.getString(R.string.action_edit));
         intent.putExtra(CreateMemoActivity.EXTRA_MEMO_ID, memo.getId());
+        return intent;
+    }
+
+    public static Intent createDiary(Context context) {
+        Intent intent = new Intent(context, CreateDiaryActivity.class);
+        intent.setAction(context.getString(R.string.action_create));
+        return intent;
+    }
+
+    public static Intent viewDiary(Context context, Diary diary) {
+        Intent intent = new Intent(context, CreateDiaryActivity.class);
+        intent.setAction(context.getString(R.string.action_view));
+        intent.putExtra(CreateDiaryActivity.EXTRA_DIARY_ID, diary.getId());
         return intent;
     }
 }

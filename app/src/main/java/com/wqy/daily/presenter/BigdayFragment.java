@@ -26,8 +26,6 @@ import java.util.List;
 
 public class BigdayFragment extends BaseFragment {
 
-    public static final int PAGE_SIZE = 10;
-
     private DaoSession mDaoSession;
     private Pager mBackwardPager;
     private Pager mForwardPager;
@@ -46,8 +44,8 @@ public class BigdayFragment extends BaseFragment {
     @Override
     public void created(Bundle savedInstanceState) {
         mDaoSession = ((App) getActivity().getApplicationContext()).getDaoSession();
-        mBackwardPager = new Pager(PAGE_SIZE);
-        mForwardPager = new Pager(PAGE_SIZE);
+        mBackwardPager = new Pager();
+        mForwardPager = new Pager();
         RxBus.get().register(this);
     }
 

@@ -1,15 +1,23 @@
 package com.wqy.daily.presenter;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 import com.hwangjr.rxbus.thread.EventThread;
+import com.wqy.daily.App;
 import com.wqy.daily.BaseFragment;
+import com.wqy.daily.NavigationUtils;
 import com.wqy.daily.event.BusAction;
+import com.wqy.daily.event.DataEvent;
 import com.wqy.daily.event.DiaryEvent;
+import com.wqy.daily.model.DaoSession;
 import com.wqy.daily.model.Diary;
+import com.wqy.daily.model.DiaryDao;
+import com.wqy.daily.model.Pager;
 import com.wqy.daily.mvp.IView;
 import com.wqy.daily.view.DiaryView;
 
@@ -25,6 +33,9 @@ public class DiaryFragment extends BaseFragment {
 
     public static final String TAG = DiaryFragment.class.getSimpleName();
 
+    private DaoSession mDaoSession;
+    private Pager mPager;
+
     public DiaryFragment() {}
 
     @Override
@@ -34,6 +45,8 @@ public class DiaryFragment extends BaseFragment {
 
     @Override
     public void created(Bundle savedInstanceState) {
+        mDaoSession = ((App) getActivity().getApplicationContext()).getDaoSession();
+        mPager = new Pager();
         RxBus.get().register(this);
     }
 
@@ -63,9 +76,36 @@ public class DiaryFragment extends BaseFragment {
     }
 
     @Subscribe(thread = EventThread.IO,
-            tags = {@Tag(BusAction.INIT_DIARY)})
-    public void initDiary(String s) {
-        List<Diary> diaries = createDiary(10);
-        RxBus.get().post(BusAction.SET_DIARY, new DiaryEvent(diaries));
+            tags = {@Tag(BusAction.LOAD_DIARY)})
+    public void getDiary(DataEvent<Diary> event) {
+        Log.d(TAG, "getDiary: ");
+        if (event.getAction() == DataEvent.REFRESH) {
+            mPager.reset();
+        }
+        List<Diary> diaries = mDaoSession.getDiaryDao().queryBuilder()
+                .orderDesc(DiaryDao.Properties.Date)
+                .limit(mPager.getLimit())
+                .offset(mPager.getOffset())
+                .list();
+        if (diaries == null || diaries.size() == 0) {
+            event.setHasMore(false);
+        } else {
+            mPager.addOffset(diaries.size());
+        }
+        event.setDatas(diaries);
+
+        RxBus.get().post(BusAction.SET_DIARY, event);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.CREATE_DIARY)})
+    public void createDiary(String s) {
+        Intent intent = NavigationUtils.createDiary(getActivity());
+        startActivity(intent);
+    }
+
+    @Subscribe(tags = {@Tag(BusAction.VIEW_DIARY)})
+    public void viewDiary(Diary diary) {
+        Intent intent = NavigationUtils.viewDiary(getActivity(), diary);
+        startActivity(intent);
     }
 }
