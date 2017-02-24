@@ -11,11 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +30,7 @@ import com.wqy.daily.R;
 import com.wqy.daily.StringUtils;
 import com.wqy.daily.event.BusAction;
 import com.wqy.daily.event.DatasetChangedEvent;
-import com.wqy.daily.interfaces.ImageLoader;
+import com.wqy.daily.interfaces.ImageSpanTarget;
 import com.wqy.daily.model.Memo;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.widget.BooleanPickerFragment;
@@ -50,7 +47,7 @@ import butterknife.ButterKnife;
  * Created by wqy on 17-2-8.
  */
 
-public class CreateMemoView extends ViewImpl implements ImageLoader {
+public class CreateMemoView extends ViewImpl {
 
     public static final String TAG = CreateMemoView.class.getSimpleName();
 
@@ -73,6 +70,8 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
 
     private boolean mCreatingMemo = true;
 
+    private SpannableStringBuilder mBuilder;
+
     @Override
     public int getResId() {
         return R.layout.activity_create_memo;
@@ -89,6 +88,7 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mImageHolders = new ArrayList<>();
+        mBuilder = new SpannableStringBuilder();
         etContent.post(() -> {
             imageMaxSize = getImageMaxWidth();
             showText();
@@ -274,34 +274,17 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
     }
 
     @Subscribe(tags = {@Tag(BusAction.CMEMO_IMAGE)})
-    public void setImage(Uri uri) {
-        Target target = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                appendImage(uri, new BitmapDrawable(getContext().getResources(), bitmap));
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                appendImage(uri, errorDrawable);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                appendImage(uri, placeHolderDrawable);
-            }
-        };
-        mImageHolders.add(target);
-        load(uri, target);
+    public void appendImage(Uri uri) {
+        StringUtils.renderImage(getContext(), uri, mImageHolders, etContent,
+                imageMaxSize, imageMaxSize);
     }
 
     private void showText() {
         if (mMemo == null || TextUtils.isEmpty(mMemo.getContent())) return;
-        SpannableStringBuilder builder = new SpannableStringBuilder();
 
         StringUtils.renderText(getContext(), mMemo.getContent(),
-                builder, mImageHolders, this, etContent);
-        Log.d(TAG, "setMemo:\n" + builder);
+                mBuilder, mImageHolders, etContent,
+                imageMaxSize, imageMaxSize);
     }
 
     private int getImageMaxWidth() {
@@ -311,27 +294,5 @@ public class CreateMemoView extends ViewImpl implements ImageLoader {
         int rootWidth = ((AppCompatActivity) getContext()).getWindow().getDecorView().getWidth();
         int width = (int) (rootWidth - getContext().getResources().getDimension(R.dimen.margin_16) * 2);
         return width;
-    }
-
-    public void appendImage(Uri uri, Drawable d) {
-        String s = StringUtils.encodeImageSpan(uri);
-        SpannableString ss = new SpannableString(s);
-        ImageSpan span = StringUtils.getSpan(d);
-        ss.setSpan(span, 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        etContent.append("\n\n");
-        etContent.append(ss);
-        etContent.append("\n\n");
-        Log.d(TAG, "appendImage: " + etContent.getText());
-    }
-
-    @Override
-    public void load(Uri uri, Target target) {
-        Picasso.with(getContext())
-                .load(uri)
-                .placeholder(R.drawable.ic_broken_image_black_24dp)
-                .error(R.drawable.ic_broken_image_black_24dp)
-                .resize(imageMaxSize, imageMaxSize)
-                .onlyScaleDown()
-                .into(target);
     }
 }

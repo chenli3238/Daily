@@ -1,6 +1,7 @@
 package com.wqy.daily.interfaces;
 
 import android.net.Uri;
+import android.text.style.ImageSpan;
 
 import com.squareup.picasso.Target;
 
@@ -9,5 +10,5 @@ import com.squareup.picasso.Target;
  */
 
 public interface ImageLoader {
-    void load(Uri uri, Target target);
+    void load(Uri uri, ImageSpanTarget target);
 }

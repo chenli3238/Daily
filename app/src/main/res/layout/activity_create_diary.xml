@@ -29,11 +29,12 @@
         tools:showIn="@layout/activity_create_diary">
 
         <EditText
-            android:layout_margin="@dimen/margin_16"
             android:id="@+id/cdiary_text"
+            android:layout_margin="@dimen/margin_16"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"/>
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:paddingBottom="@dimen/margin_16"/>
 
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

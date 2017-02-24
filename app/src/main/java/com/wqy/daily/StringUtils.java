@@ -61,7 +61,7 @@ public class StringUtils {
             String sUri = matcher.group(1);
             int start = matcher.start();
             int end = matcher.end();
-            SpanInfo info  = new SpanInfo(start, end, Uri.parse(sUri));
+            SpanInfo info = new SpanInfo(start, end, Uri.parse(sUri));
             infos.add(info);
         }
         return infos;
@@ -77,6 +77,7 @@ public class StringUtils {
     }
 
     public static final int TITLE_MAX_LEN = 25;
+
     public static String parseTitle(String text) {
         int end = text.indexOf("\n");
         if (end < 0) {
@@ -107,42 +108,66 @@ public class StringUtils {
     }
 
     public static void renderText(Context context, String text, SpannableStringBuilder builder,
-                                  List<Target> imageHolders, ImageLoader imageLoader,
-                                  TextView editText) {
-        List<SpanInfo> infos = StringUtils.extractImages(text);
+                                  List<Target> imageHolders, TextView editText,
+                                  int imageMaxWidth, int imageMaxHeight) {
+        builder.clear();
         builder.append(text);
+        List<SpanInfo> infos = StringUtils.extractImages(text);
 
         for (int i = 0; i < infos.size(); i++) {
             SpanInfo info = infos.get(i);
-            String spanText = StringUtils.encodeImageSpan(info.getUri());
-            ImageSpanTarget target = new ImageSpanTarget(spanText) {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Log.d(TAG, "onBitmapLoaded: ");
-                    ImageSpan newSpan = getSpan(new BitmapDrawable(context.getResources(), bitmap));
-//                    int start = builder.getSpanStart(mImageSpan);
-//                    int end = builder.getSpanEnd(mImageSpan);
-                    mSpannableString.setSpan(newSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
-                    editText.setText(builder);
-                }
-
-                @Override
-                public void onBitmapFailed(Drawable errorDrawable) {
-
-                }
-
-                @Override
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    Log.d(TAG, "onPrepareLoad: ");
-                    mImageSpan = getSpan(placeHolderDrawable);
-                    mSpannableString.setSpan(mImageSpan, 0, mText.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-                    builder.replace(info.getStart(), info.getEnd(), mSpannableString);
-                    editText.setText(builder);
-                }
-            };
+            ImageSpanTarget target = getTarget(context, info.getUri());
+            target.setMaxWidth(imageMaxWidth);
+            target.setMaxHeight(imageMaxHeight);
+            target.setOnImageSetListener(target2 -> {
+                builder.replace(info.getStart(), info.getEnd(), target2.getSpannableString());
+                editText.setText(builder);
+            });
             imageHolders.add(target);
-            imageLoader.load(info.getUri(), target);
+            loadImage(context, info.getUri(), target);
         }
+    }
+
+    public static ImageSpanTarget getTarget(Context context, Uri uri) {
+        String spanText = StringUtils.encodeImageSpan(uri);
+        ImageSpanTarget target = new ImageSpanTarget(context, spanText);
+        return target;
+    }
+
+    public static ImageSpanTarget getAppendImageTarget(Context context, Uri uri) {
+        String spanText = StringUtils.encodeImageSpan(uri);
+        ImageSpanTarget target = new ImageSpanTarget(context, spanText) {
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        return target;
+    }
+
+    public static void renderImage(Context context, Uri uri, List<Target> imageHolders, TextView editText,
+                                                     int imageMaxWidth, int imageMaxHeight) {
+        ImageSpanTarget target = getAppendImageTarget(context, uri);
+        target.setMaxWidth(imageMaxWidth);
+        target.setMaxHeight(imageMaxHeight);
+        target.setOnImageSetListener(target1 -> {
+            editText.append("\n\n");
+            editText.append(target1.getSpannableString());
+            editText.append("\n\n");
+        });
+
+        imageHolders.add(target);
+        loadImage(context, uri, target);
+    }
+
+
+    public static void loadImage(Context context, Uri uri, ImageSpanTarget target) {
+        Picasso.with(context)
+                .load(uri)
+                .placeholder(R.drawable.ic_broken_image_black_24dp)
+                .error(R.drawable.ic_broken_image_black_24dp)
+                .resize(target.getMaxWidth(), target.getMaxHeight())
+                .onlyScaleDown()
+                .into(target);
     }
 }

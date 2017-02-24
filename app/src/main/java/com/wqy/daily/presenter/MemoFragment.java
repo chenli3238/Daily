@@ -120,7 +120,7 @@ public class MemoFragment extends BaseFragment {
 
     @Subscribe(tags = {@Tag(BusAction.CREATE_MEMO)})
     public void createMemo(String s) {
-        Intent intent = NavigationUtils.createMemo(getContext());
+        Intent intent = NavigationUtils.createMemo(getActivity());
         startActivity(intent);
     }
 

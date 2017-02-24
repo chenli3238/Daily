@@ -1,6 +1,7 @@
 package com.wqy.daily.view;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,14 @@ import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Produce;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
+import com.squareup.picasso.Target;
 import com.wqy.daily.R;
 import com.wqy.daily.event.BusAction;
+import com.wqy.daily.model.Diary;
 import com.wqy.daily.mvp.ViewImpl;
 import com.wqy.daily.widget.DateTimePickerFragment;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +38,14 @@ public class CreateDiaryView extends ViewImpl {
 
     @BindView(R.id.cdiary_text)
     EditText etText;
+
+    private Diary mDiary;
+
+    private List<Target> mImageHolders;
+
+    private ProgressDialog mProgressDialog;
+
+    private int imageMaxSize = 0;
 
     @Override
     public int getResId() {

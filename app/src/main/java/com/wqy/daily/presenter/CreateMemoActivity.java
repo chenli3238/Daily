@@ -95,7 +95,9 @@ public class CreateMemoActivity extends BaseActivity {
             event.setAction(DatasetChangedEvent.INSERT);
         }
         mDaoSession.getMemoDao().save(memo);
-        if (CommonUtils.isBackward(memo.getRemindTime())) {
+        if (memo.getDeleted()) {
+            removeReminder(memo);
+        } else if (CommonUtils.isBackward(memo.getRemindTime())) {
             setReminder(memo);
         }
         RxBus.get().post(BusAction.MEMO_DATASET_CHANGED, event);
